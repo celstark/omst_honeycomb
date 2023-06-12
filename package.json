@@ -1,10 +1,10 @@
 {
-  "name": "honeycomb",
-  "description": "all-in-one task starter app with jsPsych + React + Electron + psiturk ",
+  "name": "omst",
+  "description": "desktop version of the online omst",
   "author": {
-    "name": "Brown CCV",
-    "email": "ccv-bot@brown.edu",
-    "url": "https://ccv.brown.edu"
+    "name": "Stark Lab",
+    "email": "starklab@uci.edu",
+    "url": "https://faculty.sites.uci.edu/starklab/"
   },
   "version": "3.0.1",
   "license": "MIT",
