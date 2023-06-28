@@ -1,6 +1,7 @@
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import htmlButtonResponse from '@jspsych/plugin-html-button-response';
-import { lang, taskName, config } from '../config/main';
+import { /*lang,*/ taskName, config } from '../config/main';
+import { lang } from '../trials/selectLanguage';
 import { photodiodeGhostBox } from '../lib/markup/photodiode';
 import { baseStimulus } from '../lib/markup/stimuli';
 

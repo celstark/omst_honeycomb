@@ -3,11 +3,12 @@
 // These settins can then be imported anywhere in the app as they are exported at the botom of the file.
 
 import { initJsPsych } from 'jspsych';
-import _ from 'lodash';
+//import _ from 'lodash';
 import { eventCodes } from './trigger';
 import { init } from '@brown-ccv/behavioral-task-trials';
 import { getProlificId } from '../lib/utils';
 import packageInfo from '../../package.json';
+//import { trial_stim } from '../config/contOmstset';
 
 // Access package name and version so we can store these as facts with task data.
 const taskName = packageInfo.name;
@@ -59,15 +60,15 @@ const USE_EEG = process.env.REACT_APP_USE_EEG === 'true' && USE_ELECTRON;
 const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === 'true' && USE_ELECTRON;
 
 // get language file
-const lang = require('../language/en_us.json');
-if (!USE_ELECTRON) {
-  // if this is mturk, merge in the mturk specific language
-  const mlang = require('../language/en_us.mturk.json');
-  _.merge(lang, mlang);
-}
+//var lang = require(language); ///CHANGED TO OMST
+  // if (!USE_ELECTRON) {
+  //   // if this is mturk, merge in the mturk specific language
+  //   var mlang = require('../language/en_us.mturk.json');
+  //   _.merge(lang, mlang);
+  // }
 
 const defaultBlockSettings = {
-  conditions: ['a', 'b', 'c'],
+  conditions: ['a', 'b', 'c'], 
   repeats_per_condition: 1, // number of times every condition is repeated
   is_practice: false,
   is_tutorial: false,
@@ -91,7 +92,7 @@ export {
   taskVersion,
   keys,
   defaultBlockSettings,
-  lang,
+  //lang,
   eventCodes,
   config,
   audioCodes,
