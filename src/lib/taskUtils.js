@@ -9,7 +9,7 @@ const generateStartingOpts = (blockSettings) => {
     return _.range(blockSettings.repeats_per_condition).map(() => c);
   });
 
-  return _.shuffle(_.flatten(startingOptions));
+  return /*_.shuffle*/(_.flatten(startingOptions));
 };
 
 export { generateStartingOpts };
