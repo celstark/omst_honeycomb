@@ -1,0 +1,132 @@
+{
+    
+    "task": {
+        "name": "Optimized Mnemonic Similarity Task",
+        "end": "This experiment has ended."
+    },
+
+    "resp": {
+        "prompt": "Please select if you prefer to use your device's keyboard or if you prefer to use your mouse to click buttons on your screen",
+        "choices": {
+            "keyboard": "Keyboard",
+            "buttons": "Buttons"
+        }
+    },
+
+    "demog": {
+        "preamble": "The National Institute of Health (NIH) mandates that we collect demographic information from participants and that we collect it <i>in this specific format</i>.",
+        "name": "Full name:",
+        "dob": "Date of birth (DD/MM/YYYY):",
+        "gender": { 
+            "prompt": "Gender:",
+            "m": "Male",
+            "f": "Female"
+        },
+        "ethnicity": {
+            "prompt": "Ethnicity:",
+            "h": "Hispanic or Latino",
+            "nh": "Not Hispanic or Latino"
+        },
+        "race": {
+            "prompt": "Race with which you identify most:",
+            "ai": "American Indian or Alaska Native",
+            "a": "Asian",
+            "b": "Black or African American",
+            "nh": "Native Hawaiian or Pacific Islander",
+            "w": "White",
+            "m": "More than one race or Other"
+        }
+    },
+
+    "instructions": {
+            "text0": "당신은 한 번에 하나씩 일상용품의 사진을 볼것입니다. 각각 사진을 본후 선택해주세요. 만약 당신이 이전의 사진과 똑같은 사진을 보았다면, <b>이전 사진</b>을 선택하세요. 만약 사진이 이전에 본것과 비슷하지만 똑같이 일치하지 않으면 <b>비슷한 사진</b>을 선택하세요. 만약 완전히 새로운 사진을 보면 <b>새로운 사진</b>을 선택하세요 . <p> <i>비슷한 사진</i>은 같은 이름으로 구별되지만, 한가지 이상 다른점이 있습니다. <p>몇번의 연습이 이해를 도울것입니다.",
+            "cor_new": "<p> 잘했습니다! 당신은 이사진을 본적이 없어서 맞게 <b>새로운 사진</b>을 선택했습니다. </p>",
+            "cor_rep": "<p> 잘했습니다! 당신은 이전에 이미 똑같은 사진을 보았음으로, 맞게 <b>이전 사진</b>을 선택했습니다. </p>",
+            "cor_lure": "<p> 잘했습니다! 당신은 <i>똑같은</i> 사진을 본적이 없으므로, 맞게 <b>비슷한 사진</b>을 선택했습니다. </p>",
+            "prompt_test": "<p> 이제 당신 차례입니다. 이사진을 본적이 있습니까? </p>",
+            "side_by_side": "<p> 보는것 처럼, 이사진들은 비슷하지만 완전이 똑같지는 않습니다. 이런경우의 사진들은 <b>비슷한 사진</b>을 선택해주세요. 왜냐하면, <b>비슷한 사진</b> 선택은 이번 시험에서 닮았지만 똑같이 않은 이미지를 보았다 라는것을 표시하는 것입니다. </p>",
+            "end": "바로 그것입니다. 이제 진짜 시험을 시작하겠습니다. <p><i>시험을 볼때에 대답하기전에 사진이 사라져도, 걱정하지 마세요. 단지 답변을 선택 해주세요.</i>",
+
+        "key": {
+            "instr_choice": " ",
+            "trial_text": "<i>이전 사진</i> (<b>v</b>), <i>비슷한 사진</i> (<b>b</b>), or <i>새로운 사진</i> (<b>n</b>)?",
+            "trial_choices": {
+                "old": "v",
+                "sim": "b",
+                "new": "n"
+            },
+            "prompt0": "<p>시작 하시려면 <i>스페이스 바</i>를 눌러주세요 </p>",
+            "prompt_new": "<p> 당신은 이사진을 본적이 없으므로 여기에서 <i>새로운 사진</i>을 선택하세요.(<b>n</b>) </p>",
+            "inc_new": "<p> 이사진을 본적이 없으므로 여기에서 <i>새로운 사진</i>을 선택하세요. (<b>n</b>) </p>",
+            "prompt_rep": "<p> 당신은 이사진을 이전에 이미 보았습니다. 그러므로 <i>이전 사진</i>을 선택하세요 (<b>v</b>) </p>",
+            "inc_rep": "<p> 당신은 이전에 이미 똑같은 사진을 보았음으로 <i>이전 사진/i>을 선택하세요 (<b>v</b>) </p>",
+            "prompt_lure": "<p> 이사진은 당신이 이전에 보았던 사진과 비슷하지만 완전히 똑같이 않습니다. 그러므로 <i>비슷한 사진</i> (<b>b</b>)을 선택하세요. </p>",
+            "inc_lure": "<p> 당신은 전에 <i>비슷한 사진을 보았습니다. 그러나 똑같은 사진이 아닙니다</i>. 그러므로 <i>비슷한 사진</i>을 선택하세요. (<b>b</b>) </p>",
+            "continue": "<p>(Press <i>spacebar</i> to continue)</p>"
+        },
+
+        "button": {
+            "instr_choice": "OK",
+            "trial_text": "<i>이전 사진</i>, <i>비슷한 사진</i>, or <i>새로운 사진</i>?",
+            "trial_choices": {
+                "old": "이전 사진",
+                "sim": "비슷한 사진",
+                "new": "새로운 사진"
+            },
+            "prompt0": "<p> 시작 하시려면 <i>OK</i> 눌러주세요 </p>",
+            "prompt_new": "<p> 당신은 이사진을 본적이 없으므로 여기에서 <b>새로운 사진</b>을 선택하세요. </p>",
+            "inc_new": "<p> 이사진을 본적이 없으므로 여기에서 <b>새로운 사진</b>을 선택하세요. </p>",
+            "prompt_rep": "<p> 당신은 이사진을 이전에 이미 보았습니다. 그러므로 <b>이전 사진</b>을 선택하세요 </p>",
+            "inc_rep": "<p> 당신은 이전에 이미 똑같은 사진을 보았음으로 <b>이전 사진</b>을 선택하세요 </p>",
+            "prompt_lure": "<p> 이사진은 당신이 이전에 보았던 사진과 비슷하지만 완전히 똑같이 않습니다. 그러므로 <b>>비슷한 사진<</b>을 선택하세요. </p>",
+            "inc_lure": "<p> 당신은 전에 <i>비슷한 사진을 보았습니다. 그러나 똑같은 사진이 아닙니다</i>. 그러므로 정확한 대답은 <b>비슷한 사진</b>입니다 </p>"
+        }
+    },
+
+    "cont": {
+        "key": {
+            "instr_choice": " ",
+            "instr_prompt": "<p>Press <i>spacebar</i> to begin this next task</p>",
+            "threechoice": {
+                "instr_stim": "<p> Continuous Old (<b>v</b>), Similar (<b>b</b>), or New (<b>n</b>) task </p>",
+                "trial_prompt": "<p> Did you see this before? Is it Old (<b>v</b>), Similar (<b>b</b>), or New (<b>n</b>)? </p>",
+                "trial_choices": {
+                    "old": "v",
+                    "sim": "b",
+                    "new": "n"
+                }
+            },
+            "twochoice": {
+                "instr_stim": "<p> Continuous Old (<b>v</b>) or New (<b>n</b>) task </p>",
+                "trial_prompt": "<p> Did you see this before? Is it Old (<b>v</b>) or New (<b>n</b>)? </p>",
+                "trial_choices": {
+                    "old": "v",
+                    "new": "n"
+                }
+            }
+        },
+        "button": {
+            "instr_choice": "OK",
+            "instr_prompt": "<p>Press <i>OK</i> to begin this next task</p>",
+            "threechoice": {
+                "instr_stim": "<p> Continuous <i>Old</i>, <i>Similar</i>, or <i>New</i> task </p>",
+                "trial_prompt": "<p> Did you see this before? Is it <i>Old</i>, <i>Similar</i>, or <i>New</i>? </p>",
+                "trial_choices": {
+                    "old": "Old",
+                    "sim": "Similar",
+                    "new": "New"
+                }
+            },
+            "twochoice": {
+                "instr_stim": "<p> Continuous <i>Old</i> or <i>New</i> task </p>",
+                "trial_prompt": "<p> Did you see this before? Is it <i>Old</i> or <i>New</i>? </p>",
+                "trial_choices": {
+                    "old": "Old",
+                    "new": "New"
+                }
+            }
+        },
+        "ty": "Thank You"
+
+    }
+}
