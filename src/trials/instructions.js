@@ -66,9 +66,9 @@ import { jsPsychCategorizeMultipleImageKeyboard }  from './uniquePlugins/plugin-
 import { jsPsychCategorizeMultipleImageButtons } from './uniquePlugins/plugin-categorize-multiple-image-buttons.js';
 
 // importing languages, images object, and response-mode
-import { lang } from '../trials/selectLanguage';
-import { images } from '../lib/utils';
-import { resp_mode } from '../trials/selectRespType';
+import { lang } from './selectLanguage.js';
+import { images } from '../lib/utils.js';
+import { resp_mode } from './selectRespType.js';
 
 
 // jatos.onLoad(function() {

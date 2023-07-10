@@ -13,7 +13,7 @@
 //   img-src 'self' data: content:;">
 
 // imports here
-import { lang } from '../trials/selectLanguage';
+import { lang } from './selectLanguage';
 import jsPsychSurveyHtmlForm from '@jspsych/plugin-survey-html-form';
 
 //   <script type="text/javascript" src="jatos.js"></script>
@@ -75,8 +75,8 @@ import jsPsychSurveyHtmlForm from '@jspsych/plugin-survey-html-form';
 
   var demogform = {
     type: jsPsychSurveyHtmlForm,
-    preamble: function() {return lang.demog.preamble},
-    html: function() {return '<div style="text-align: left; font-size: 16px; line-height: 110%"> \
+    preamble: function() {return '<div id ="demogpramble">' + lang.demog.preamble + '</div>'},
+    html: function() {return '<div id ="demogform"> \
     <p><b>' + lang.demog.name + '</b> <input name="fullname" type="text" required /></p> \
     <p> <b>' + lang.demog.dob + '</b> <input name="dob" type="text" required /></p> \
     <p> <b>' + lang.demog.gender.prompt + '</b>\
