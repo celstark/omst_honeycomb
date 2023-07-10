@@ -202,7 +202,16 @@ const getSavePath = (participantID, studyID) => {
     const desktop = app.getPath('desktop');
     const name = app.getName();
     const date = today.toISOString().slice(0, 10);
-    return path.join(desktop, studyID, participantID, date, name);
+    // This section was added for the omst to ensure that data was saved on the first iteration of a studyID and participant ID 
+    const folderPath = path.join(desktop, studyID, participantID, date, name);
+
+    // Create the folders if they don't exist
+    fs.mkdirSync(path.join(desktop, studyID), { recursive: true });
+    fs.mkdirSync(path.join(desktop, studyID, participantID), { recursive: true });
+    fs.mkdirSync(path.join(desktop, studyID, participantID, date), { recursive: true });
+
+    return folderPath;
+    // end of added section
   }
 };
 
