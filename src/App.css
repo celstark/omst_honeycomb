@@ -137,6 +137,7 @@ html, body, #root, .App {
   display: inline-block;
   padding: 6px 12px;
   margin: 0px;
+  margin-bottom: 50px;
   font-size: 14px;
   font-weight: 400;
   font-family: 'Open Sans', 'Arial', sans-serif;
@@ -200,4 +201,55 @@ html, body, #root, .App {
 #jspsych-data-display {
   text-align: left;
 }
+
+/* Demographics form formatting */ 
+
+#demogpramble {
+  font-size: 125%;
+}
+
+#demogform {
+  text-align: left;
+  font-size: 16px;
+  margin-top: 50px;
+  margin-left: 50px;
+}
+
+#demogform p {
+  text-align: left;
+  font-size: 16px;
+  line-height: 1.6em;
+}
+
+/* Consent form formatting */
+
+#consenttext {
+  font-family: 'Open Sans', 'Arial', sans-serif;
+  text-align: left;
+  font-size: 16px;
+  color: #666;
+  margin: 50px;
+}
+
+#consenttext li, ul {
+  font-family: 'Open Sans', 'Arial', sans-serif;
+  text-align: left;
+  font-size: 16px;
+  color: #666;
+  margin: 10px;
+}
+
+#agreeButton, #cancelButton {
+  color: #555;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #ccc;
+  border: solid 4px #ddd;
+  border-radius: 4px;
+  padding: 0.5em 2em;
+}
+
+
+
+
 
