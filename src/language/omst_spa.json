@@ -5,6 +5,27 @@
         "end": "El experimento ha terminado."
     },
 
+    "consent": {
+        "title": "IRB Formulario de Consentimiento",
+        "study": {
+            "uni": "University of California, Irvine <br>",
+            "sis": "Hoja Informativa del Estudio <br>",
+            "num": "UC Reliance #1857: fMRI Studies of Memory Encoding and Retrieval <br>"
+        },
+        "researcher": {
+            "title": "Investigador Líder  <br>",
+            "name": "Craig Stark, Professor <br>",
+            "dept": "Department of Neurobiology and Behavior <br>",
+            "tele": "949-824-4230 / ",
+            "email": "cestark@uci.edu <br>"
+        },
+        "text": "<li>Le estamos pidiendo que participe en un estudio realizado por investigadores de la Universidad de California en Irvine. Participación en este estudio es opcional. </li> <li> Si elige participar en el estudio, completará un experimento de memoria con imágenes de objetos comunes. Además, podrá participar en una encuesta que nos ayudará a aprender más sobre cómo los hábitos alimenticios, la actividad física, el estado de ánimo, los patrones de sueño, y el estrés pueden influir el desempeño de la memoria. La sesión tardará unos 30 minutos en completarse. </li> <li> Puede omitir las preguntas que no quiere contestar o parar la encuesta en cualquier momento. Mantendremos la confidencialidad de sus respuestas y no compartiremos su información personal con nadie fuera del equipo del estudio. </li> <li> Este investigación es solo para participantes mayores de 18 años de edad; si usted es menor de 18 años, por favor no participe en esta encuesta</li> <li>Algunas preguntas pueden causar vergüenza o ansiedad. Si no desea contestar una pregunta, puede omitirla y pasar a las siguientes preguntas. Si no desea participar, puede parar.</li> <li>Como en la mayoría de las investigaciones, existe la posibilidad de que la confidencialidad se vea comprometida. Tomamos precauciones para minimizar este riesgo, incluido la codificación de sus datos con un numero en vez de su nombre y el almacenamiento en una base de datos protegida con una contraseña.  </li> <li>Recibirá crédito adicional para un curso elegible mediante el UCI Ciencias Sociales grupo de sujetos humanos. Recibirá media unidad de crédito del curso por cada media hora de participación en este estudio. La cantidad total de crédito que puede ganar por este estudio es una unidad de crédito. El instructor del curso que ofrece crédito adicional para participación en una investigación debe ofrecer alternativas para ganar crédito adicional del curso. La asignación alternativa debe requerir el tiempo y el esfuerzo igual o menor a la cantidad del crédito adicional que puede ganar por participación en una investigación. </li> <li>Si tiene comentarios, inquietudes o preguntas con respecto a la realización de esta investigación por favor consulte los investigadores enumerados en la parte superior de esta autorización.</li> <li> Si tiene preguntas o inquietudes sobre sus derechos como participante en una investigación, puede comunicarse con el Consejo de Revisión Institucional (IRB) de UCI por teléfono, (949) 824-0665, por correo electrónico en IRB@research.uci.edu o a 141 Innovation, Suite 250, Irvine, CA 92697. </li> <br><b>¿Qué es un IRB?</b>  Un Consejo de Revisión Institucional (IRB) es un comité de científicos y no científicos. El papel del IRB es proteger los derechos y bienestar de sujetos humanos en la investigación. Además, el IRB asegura que la investigación cumple con las reglamentaciones, leyes, y políticas institucionales aplicables. </li> ",
+        "buttons": {
+            "agree": "Acepto",
+            "cancel": "Cancelar"
+        }
+    },
+
     "resp": {
         "prompt": "Por Favor seleccione si prefiere usar el teclado de su dispositivo o si prefiere usar el ratón de computadora para hacer clic en los botones en su pantalla.",
         "choices": {
@@ -79,7 +100,8 @@
             "prompt_rep": "<p> Usted ya ha visto este objeto antes, presione <b>Viejo</b> </p>",
             "inc_rep": "<p> Usted ya ha visto esta imagen exacta, así que presione <b>Viejo</b> </p>",
             "prompt_lure": "<p> Este objeto es similar a uno que ya ha visto antes, pero no es exactamente igual, así que debería seleccionar <b>Similar</b> aquí. </p>",
-            "inc_lure": "<p> Usted ya ha visto un objeto que era <i>similar a este, pero no era exactamente igual</i>. Así que, la respuesta correcta es <b>Similar</b> </p>"
+            "inc_lure": "<p> Usted ya ha visto un objeto que era <i>similar a este, pero no era exactamente igual</i>. Así que, la respuesta correcta es <b>Similar</b> </p>",
+            "continue": "<p>(Presione <i>OK</i> para continuar)</p>"
         }
     },
 
@@ -128,5 +150,10 @@
         },
         "ty": "Muchas Gracias"
 
+    },
+
+    "end": {
+        "nc": "No se ha prestado consentimiento. El experimento ha terminado.",
+        "ty": "Gracias por su participación en el experimento. Puede cerrar esta ventana si no es redirigido"
     }
 }
