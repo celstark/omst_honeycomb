@@ -45,6 +45,7 @@ const testTrial = (blockSettings, blockDetails, condition) => {
                 return set6Images[condition.stimulus];
             }
         },
+        data: function() {return condition.data; },
      }),
     // showMessage(config, {
     //     message: tlv.length,

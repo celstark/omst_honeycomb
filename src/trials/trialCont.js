@@ -5,8 +5,7 @@ import $ from "jquery";
 
 import { resp_mode } from '../trials/selectRespType';
 import { lang } from '../trials/selectLanguage';
-import { twochoice/*, selfpaced, trial_stim*/} from '../config/contOmstset';
-import { selfpaced } from '../config/contOmstset';
+import { twochoice, selfpaced /*, trial_stim*/} from '../config/contOmstset';
 
 
 // helper methods that allow selection of language and twochoice 
@@ -34,7 +33,7 @@ var trial_prompt = function () {
       if (twochoice == 0) {
         return [
           `${lang.cont.button.threechoice.trial_choices.old}`,
-          `${lang.cont.button.threechoice.trial_choices.simiar}`,
+          `${lang.cont.button.threechoice.trial_choices.sim}`,
           `${lang.cont.button.threechoice.trial_choices.new}`,
         ];
       }
@@ -49,7 +48,7 @@ var trial_prompt = function () {
       if (twochoice == 0) {
         return [
           `${lang.cont.key.threechoice.trial_choices.old}`,
-          `${lang.cont.key.threechoice.trial_choices.simiar}`,
+          `${lang.cont.key.threechoice.trial_choices.sim}`,
           `${lang.cont.key.threechoice.trial_choices.new}`,
         ];
       }
@@ -76,6 +75,7 @@ export function contTrial(config, options) {
       prompt: trial_prompt,
       responseEndsTrial: true,
       image: '',
+      data: '',
     };
     const {
       stimulusDuration,
@@ -89,6 +89,7 @@ export function contTrial(config, options) {
       prompt,
       responseEndsTrial,
       image,
+      data,
     } = { ...defaults, ...options };
 
     return {
@@ -129,6 +130,7 @@ export function contTrial(config, options) {
         data.correct =  resp == data.correct_response;
         data.resp = resp;
       },
+      data: data,
     };
   };
   
