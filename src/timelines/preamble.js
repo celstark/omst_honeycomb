@@ -6,7 +6,7 @@ import startCode from '../trials/startCode';
 import { config } from '../config/main';
 import { select_pref_lang } from '../trials/selectLanguage'
 import { select_resp_type } from '../trials/selectRespType';
-import { demogform } from '../trials/cmstDemographics';
+import { demogform } from '../trials/demographics';
 
 const timeline = [
   select_pref_lang,

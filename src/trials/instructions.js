@@ -218,7 +218,7 @@ import { resp_mode } from './selectRespType.js';
 
   var side_by_side = function() {
     if (resp_mode == 'button') {
-      return lang.instructions.side_by_side;
+      return lang.instructions.side_by_side + lang.instructions.button.continue;
      }
      else {
       return lang.instructions.side_by_side + lang.instructions.key.continue;
