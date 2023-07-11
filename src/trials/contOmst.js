@@ -113,7 +113,7 @@ import jsPsychHtmlButtonResponse from '@jspsych/plugin-html-button-response';
 //import jsPsychImageButtonResponse from '@jspsych/plugin-image-button-response';
 //import jsPsychVideoButtonResponse from '@jspsych/plugin-html-video-button-response';
 //import jsPsychVideoKeyboardResponse from '@jspsych/plugin-html-video-keyboard-response';
-import jsPsychPreload from '@jspsych/plugin-preload';
+//import jsPsychPreload from '@jspsych/plugin-preload';
 import { initJsPsych } from 'jspsych';
 //import { images } from '../lib/utils';
 //import { set1Images, set2Images, set3Images, set4Images, set5Images, set6Images } from '../lib/utils';
@@ -542,25 +542,25 @@ var baseurl=''; // How we'll get images, videos, etc.  Set to empty string to us
   }
 
   // END OF CONSTANT CODE
-  var preload = {
-    type: jsPsychPreload,
-    images: preload_fnames, // since we use a timeline variable, we can't use the simple "trials"
-    show_progress_bar: true,
-    show_detailed_errors: true, // added r to erroRs
-    continue_after_error: true,
-    on_error: function(fname) {
-      console.log('FAILED  '+fname)
-    },
-    on_finish: function(data) {
-      console.log('Preload success? ' + data.success)
-      console.log('Failed on ' + data.failed_images.length)
-    }
-  }
+  // var preload = {
+  //   type: jsPsychPreload,
+  //   images: preload_fnames, // since we use a timeline variable, we can't use the simple "trials"
+  //   show_progress_bar: true,
+  //   show_detailed_errors: true, // added r to erroRs
+  //   continue_after_error: true,
+  //   on_error: function(fname) {
+  //     console.log('FAILED  '+fname)
+  //   },
+  //   on_finish: function(data) {
+  //     console.log('Preload success? ' + data.success)
+  //     console.log('Failed on ' + data.failed_images.length)
+  //   }
+  // }
   
   // var timeline = [preload, instr1_trial, test_trials, debrief_block];
   // jsPsych.run(timeline);
 
-  export { preload, instr1_trial, /*test_trials,*/ debrief_block }
+  export { /*preload,*/ instr1_trial, /*test_trials,*/ debrief_block }
       
 // });
 // </script>
