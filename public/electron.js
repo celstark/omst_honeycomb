@@ -32,6 +32,32 @@ if (activeProductId) {
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
+// ADDED: this function was added to allow the application to save data if the window is
+// closed before the completion of the experiment
+const saveDataAndQuit = () => {
+  if (stream) {
+    stream.end(']');
+    stream.on('finish', () => {
+      if (preSavePath && savePath) {
+        const filename = `pid_${participantID}_${today.getTime()}.json`; // Generate a unique filename using the current timestamp
+        const fullPath = getFullPath(filename); // Set the full path for the data file
+
+        fs.rename(preSavePath, fullPath, (err) => {
+          if (err) {
+            console.error('Error renaming data file:', err);
+          } else {
+            console.log('Data file saved:', fullPath);
+          }
+        });
+      }
+      app.quit();
+    });
+  } else {
+    app.quit();
+  }
+};
+// END OF ADDED SECTION
+
 function createWindow() {
   // Create the browser window.
   if (process.env.ELECTRON_START_URL) {
@@ -73,6 +99,7 @@ function createWindow() {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
+    saveDataAndQuit(); // ADDED
     mainWindow = null;
   });
 }
@@ -202,7 +229,7 @@ const getSavePath = (participantID, studyID) => {
     const desktop = app.getPath('desktop');
     const name = app.getName();
     const date = today.toISOString().slice(0, 10);
-    // This section was added for the omst to ensure that data was saved on the first iteration of a studyID and participant ID 
+    // ADDED: This section was added for the omst to ensure that data was saved on the first iteration of a studyID and participant ID 
     const folderPath = path.join(desktop, studyID, participantID, date, name);
 
     // Create the folders if they don't exist
@@ -211,7 +238,7 @@ const getSavePath = (participantID, studyID) => {
     fs.mkdirSync(path.join(desktop, studyID, participantID, date), { recursive: true });
 
     return folderPath;
-    // end of added section
+    // END OF ADDED SECTION
   }
 };
 
