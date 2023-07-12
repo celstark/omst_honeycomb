@@ -1,8 +1,31 @@
+//*******************************************************************
+//
+//   File: experiment.js               Folder: config
+//
+//   Author: Honeycomb, Craig Stark, Audrey Hempel
+//   --------------------
+// 
+//   Changes:
+//        6/?/23 (AGH): moved the timeline variables for contOMST
+//                     test_trials
+//
+//   --------------------
+//   This file defines the experiment changing conditions in repeated 
+//   trials (stimulus and data).
+//   
+//*******************************************************************
+
+//----------------------- 1 ----------------------
+//-------------------- IMPORTS -------------------
+
 import { defaultBlockSettings } from './main';
 import { deepCopy } from '../lib/utils';
 import { twochoice, trial_stim } from '../config/contOmstset';
 
-//  Build up my actual trial timeline
+//----------------------- 2 ----------------------
+//-------------- TIMELINE VARIABLES --------------
+
+//  sets up the tlv array to include the appropriate info from the seleced jsOrders file
 var tlv = [];
 var ntrials = trial_stim.length;
 let DEBUGMODE=0;
@@ -44,20 +67,15 @@ for (var i=0; i<ntrials; i++) {
 }
 
 
-// FIRST EXPERIMENT BLOCK SETTINGS
+//----------------------- 3 ----------------------
+//-------------- EXPERIMENT BLOCK ----------------
 
 // create copy of default settings
 const exptBlock1 = deepCopy(defaultBlockSettings);
 
 exptBlock1.conditions = tlv; //set the conditions of the trials to the array
 
+//----------------------- 4 ----------------------
+//-------------------- EXPORTS -------------------
 
-// SECOND EXPERIMENT BLOCK SETTINGS
-
-// create copy of default settings
-const exptBlock2 = deepCopy(defaultBlockSettings);
-
-exptBlock2.conditions = ['e', 'f'];
-exptBlock2.repeats_per_condition = 2;
-
-export { tlv, exptBlock1, exptBlock2 };
+export { tlv, exptBlock1 };

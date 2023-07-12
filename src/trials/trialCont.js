@@ -1,3 +1,26 @@
+//*******************************************************************
+//
+//   File: trialCont.js               Folder: trials
+//
+//   Author: Craig Stark, Audrey Hempel
+//   --------------------
+//
+//   Changes:
+//        6/?/23 (AGH): adapted from cont_omst.html into honeycomb 
+//                      looping format
+//        7/11/23 (AGH): added data parameter
+//
+//   --------------------
+//
+//   This sets the basic defaults for continuous oMST trial (every 
+//   parameter except stimulus and data specifications that vary 
+//   trial to trial) the contTrial is exported as a function and 
+//   looped in ../timelines/testTrial.js
+//
+//*******************************************************************
+
+//----------------------- 1 ----------------------
+//-------------------- IMPORTS -------------------
 
 import jsPsychImageKeyboardResponse from '@jspsych/plugin-image-keyboard-response';
 
@@ -5,10 +28,12 @@ import $ from "jquery";
 
 import { resp_mode } from '../trials/selectRespType';
 import { lang } from '../trials/selectLanguage';
-import { twochoice, selfpaced /*, trial_stim*/} from '../config/contOmstset';
+import { twochoice, selfpaced/*, trial_stim*/} from '../config/contOmstset';
 
-
+//----------------------- 2 ----------------------
+//----------------- HELPER METHODS ---------------
 // helper methods that allow selection of language and twochoice 
+
 var trial_prompt = function () {
     if (resp_mode == 'button'){
       if (twochoice == 0) {
@@ -60,6 +85,9 @@ var trial_prompt = function () {
       }
     }  
   }
+
+//----------------------- 3 ----------------------
+//--------------------- TRIAL --------------------
  
 export function contTrial(config, options) {
     const defaults = {

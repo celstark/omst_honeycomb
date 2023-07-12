@@ -12,10 +12,6 @@
 //   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/css; media-src *; 
 //   img-src 'self' data: content:;">
 
-// imports here
-import { lang } from './selectLanguage';
-import jsPsychSurveyHtmlForm from '@jspsych/plugin-survey-html-form';
-
 //   <script type="text/javascript" src="jatos.js"></script>
 //   <script type="text/javascript" src="js/index.js"></script>
 //   <script src="js/jspsych_731/dist/jspsych.js"></script>
@@ -72,6 +68,29 @@ import jsPsychSurveyHtmlForm from '@jspsych/plugin-survey-html-form';
 //        urlid: jatos.urlQueryParameters.sid,
 //   });
 
+//*******************************************************************
+//
+//   File: demographics.js               Folder: trials
+//
+//   Author: Craig Stark, Audrey Hempel
+//   --------------------
+// 
+//   Changes:
+//        6/?/23 (AGH): 
+//
+//   --------------------
+//   This trial displays the demographics survey
+//
+//*******************************************************************
+
+//----------------------- 1 ----------------------
+//-------------------- IMPORTS -------------------
+
+import { lang } from './selectLanguage';
+import jsPsychSurveyHtmlForm from '@jspsych/plugin-survey-html-form';
+
+//----------------------- 2 ----------------------
+//--------------------- TRIAL --------------------
 
   var demogform = {
     type: jsPsychSurveyHtmlForm,
@@ -95,6 +114,9 @@ import jsPsychSurveyHtmlForm from '@jspsych/plugin-survey-html-form';
     </div>'
    }
   }
+
+//----------------------- 3 ----------------------
+//--------------------- EXPORT -------------------
 
 export { demogform };
   

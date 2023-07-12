@@ -1,5 +1,28 @@
+//*******************************************************************
+//
+//   File: selectRespType.js               Folder: trials
+//
+//   Author: Audrey Hempel
+//   --------------------
+// 
+//   Changes:
+//        6/?/23 (AGH): 
+//
+//   --------------------
+//   This trial allows the participant to choose between respondings
+//   with a computer keyboard or on-screen buttons. Value is assigned
+//   to the var resp_mode to be used in other files.
+//
+//*******************************************************************
+
+//----------------------- 1 ----------------------
+//-------------------- IMPORTS -------------------
+
 import surveyMultiChoice from '@jspsych/plugin-survey-multi-choice';
 import { lang } from '../trials/selectLanguage';
+
+//----------------------- 2 ----------------------
+//--------------------- TRIAL --------------------
 
 var resp_mode = null;
 
@@ -20,5 +43,8 @@ var select_resp_type = {
     };
   }
 };
+
+//----------------------- 3 ----------------------
+//-------------------- EXPORTS -------------------
 
 export { select_resp_type, resp_mode };

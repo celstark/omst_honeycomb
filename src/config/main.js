@@ -1,6 +1,22 @@
-// config/main.js
-// This is the main configuration file where universal and default settings should be placed.
-// These settins can then be imported anywhere in the app as they are exported at the botom of the file.
+//*******************************************************************
+//
+//   File: main.js               Folder: config
+//
+//   Author: Honeycomb, Audrey Hempel
+//   --------------------
+// 
+//   Changes:
+//        6/?/23 (AGH): removed language selection to /trials/selectLanguage.js
+//
+//   --------------------
+//   This is the main configuration file where universal and default settings
+//   should be placed. These settins can then be imported anywhere in the app
+//   as they are exported at the botom of the file.
+//   
+//*******************************************************************
+
+//----------------------- 1 ----------------------
+//-------------------- IMPORTS -------------------
 
 import { initJsPsych } from 'jspsych';
 //import _ from 'lodash';
@@ -8,7 +24,9 @@ import { eventCodes } from './trigger';
 import { init } from '@brown-ccv/behavioral-task-trials';
 import { getProlificId } from '../lib/utils';
 import packageInfo from '../../package.json';
-//import { trial_stim } from '../config/contOmstset';
+
+//----------------------- 2 ----------------------
+//--------------- HONEYCOMB CONFIGS --------------
 
 // Access package name and version so we can store these as facts with task data.
 const taskName = packageInfo.name;
@@ -59,13 +77,6 @@ const USE_EEG = process.env.REACT_APP_USE_EEG === 'true' && USE_ELECTRON;
 // whether or not the photodiode is in use
 const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === 'true' && USE_ELECTRON;
 
-// get language file
-//var lang = require(language); ///CHANGED TO OMST
-  // if (!USE_ELECTRON) {
-  //   // if this is mturk, merge in the mturk specific language
-  //   var mlang = require('../language/en_us.mturk.json');
-  //   _.merge(lang, mlang);
-  // }
 
 const defaultBlockSettings = {
   conditions: ['a', 'b', 'c'], 
@@ -86,6 +97,9 @@ const config = init({
   USE_PROLIFIC,
   USE_FIREBASE,
 });
+
+//----------------------- 3 ----------------------
+//-------------------- EXPORTS -------------------
 
 export {
   taskName,

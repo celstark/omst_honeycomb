@@ -1,4 +1,23 @@
-//imports here
+//*******************************************************************
+//
+//   File: contOmstset.js               Folder: config
+//
+//   Author: Craig Stark, Audrey Hempel
+//   --------------------
+// 
+//   Changes:
+//        7/?/23 (AGH): 
+//
+//   --------------------
+//   This file defines all of the continuous trial config variables that set
+//   up the stimuli and experiment settings.
+//   
+//*******************************************************************
+
+//----------------------- 1 ----------------------
+//-------------------- IMPORTS -------------------
+
+// importing each unique trial stimulus sets
 import { ts1_1_1 } from "./jsOrders/cMST_Imbal2_orders_1_1_1";
 import { ts1_2_1 } from "./jsOrders/cMST_Imbal2_orders_1_2_1";
 import { ts2_1_1 } from "./jsOrders/cMST_Imbal2_orders_2_1_1";
@@ -11,6 +30,9 @@ import { ts5_1_1 } from "./jsOrders/cMST_Imbal2_orders_5_1_1";
 import { ts5_2_1 } from "./jsOrders/cMST_Imbal2_orders_5_2_1";
 import { ts6_1_1 } from "./jsOrders/cMST_Imbal2_orders_6_1_1";
 import { ts6_2_1 } from "./jsOrders/cMST_Imbal2_orders_6_2_1";
+
+//----------------------- 2 ----------------------
+//------------------- VARIABLES ------------------
 
 var stim_set = '1';
 
@@ -66,6 +88,9 @@ else if (orderfile == "./jsOrders/cMST_Imbal2_orders_6_1_1") {
 else if (orderfile == "./jsOrders/cMST_Imbal2_orders_6_2_1") {
     trial_stim = ts6_2_1;
 }
+
+//----------------------- 3 ----------------------
+//-------------------- EXPORTS -------------------
 
 export { 
     stim_set,

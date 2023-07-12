@@ -1,4 +1,26 @@
+//*******************************************************************
+//
+//   File: selectLanguage.js               Folder: trials
+//
+//   Author: Audrey Hempel
+//   --------------------
+// 
+//   Changes:
+//        6/?/23 (AGH): 
+//
+//   --------------------
+//   This trial allows the participant to choose between language 
+//   options. 
+//
+//*******************************************************************
+
+//----------------------- 1 ----------------------
+//-------------------- IMPORTS -------------------
+
 import surveyMultiChoice from '@jspsych/plugin-survey-multi-choice';
+
+//----------------------- 2 ----------------------
+//--------------------- TRIAL --------------------
 
 // language file direct holder
 var lang = null; 
@@ -24,5 +46,8 @@ var select_pref_lang = {
     }
   }
 };
+
+//----------------------- 3 ----------------------
+//-------------------- EXPORTS -------------------
 
 export { lang, select_pref_lang };

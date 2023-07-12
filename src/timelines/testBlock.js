@@ -1,6 +1,29 @@
+//*******************************************************************
+//
+//   File: testBlock.js               Folder: timelines
+//
+//   Author: Honeycomb, Audrey Hempel
+//   --------------------
+// 
+//   Changes:
+//        7/?/23 (AGH):
+//
+//   --------------------
+//   This file loops through testTrial (/timelines/testTrial.js) using
+//   the conditions (trial variables) passed into it (exptBlock1) in 
+//   /timelines/main.js.
+//   
+//*******************************************************************
+
+//----------------------- 1 ----------------------
+//-------------------- IMPORTS -------------------
+
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import testTrial from './testTrial';
 import { generateStartingOpts } from '../lib/taskUtils';
+
+//----------------------- 2 ----------------------
+//-------------------- TIMELINE ------------------
 
 // testBlock
 
@@ -35,5 +58,8 @@ const testBlock = (blockSettings) => {
     timeline,
   };
 };
+
+//----------------------- 3 ----------------------
+//--------------------- EXPORT -------------------
 
 export default testBlock;

@@ -1,7 +1,31 @@
+//*******************************************************************
+//
+//   File: consent_trial.js               Folder: trials
+//
+//   Author: Craig Stark, Audrey Hempel
+//   --------------------
+// 
+//   Changes:
+//        7/?/23 (AGH): 
+//
+//   --------------------
+//   This file creates a consent trial that displays a formatted 
+//   consent form and stores the participant's response in the var
+//   consentGiven (for a conditional timeline in the main
+//   timeline). It also creates a not_consented trial that runs if 
+//   the participant does not consent.
+//   
+//*******************************************************************
+
+//----------------------- 1 ----------------------
+//-------------------- IMPORTS -------------------
+
 import { lang } from './selectLanguage';
 import jsPsychHtmlButtonResponse from '@jspsych/plugin-html-button-response';
 import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 
+//----------------------- 2 ----------------------
+//----------------- HELPER METHODS ---------------
 
 // functions for formatted stimulus and button choices
 var irb_stim = function () {
@@ -11,6 +35,9 @@ var irb_stim = function () {
 var buttons = function() {
     return ['<div id="agreeButton">' + lang.consent.buttons.agree + '</div>', '<div id="cancelButton">' + lang.consent.buttons.cancel + '</div>']
 };
+
+//----------------------- 3 ----------------------
+//--------------------- TRIALS -------------------
 
 // consent trial settup
 var consentGiven = null;
@@ -37,5 +64,8 @@ var not_consented = {
       return lang.end.nc;
     }
 }
+
+//----------------------- 4 ----------------------
+//-------------------- EXPORTS -------------------
 
 export { consent_trial, consentGiven, not_consented };

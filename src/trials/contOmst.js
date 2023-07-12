@@ -107,22 +107,38 @@
 // </head>
 // <body></body>
 
+//*******************************************************************
+//
+//   File: contOmst.js               Folder: trials
+//
+//   Author: Craig Stark, Audrey Hempel
+//   --------------------
+// 
+//   Changes:
+//        6/?/23 (AGH): moved config variables (stim_set, orderfile...)
+//                     to /config/contOmstset.js  
+//        6/?/23 (AGH): moved repeat test_trials to /trials/trialCont.js +
+//                     /timelines/testTrial.js + /timelines/testBlock.js
+//        6/?/23 (AGH): moved timeline variables set up of test_trials 
+//                     as the condition of exptBlock1 in /config/experiment.js 
+//                     (gets called in main timeline as testBlock(exptBlock1))
+//
+//   --------------------
+//   This file includes the continuous oMST instructions and debrief
+//   (it no longer contains the looped trials or preload).
+//
+//*******************************************************************
+
+//----------------------- 1 ----------------------
+//-------------------- IMPORTS -------------------
+
 import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-//import jsPsychImageKeyboardResponse from '@jspsych/plugin-image-keyboard-response';
 import jsPsychHtmlButtonResponse from '@jspsych/plugin-html-button-response';
-//import jsPsychImageButtonResponse from '@jspsych/plugin-image-button-response';
-//import jsPsychVideoButtonResponse from '@jspsych/plugin-html-video-button-response';
-//import jsPsychVideoKeyboardResponse from '@jspsych/plugin-html-video-keyboard-response';
-//import jsPsychPreload from '@jspsych/plugin-preload';
 import { initJsPsych } from 'jspsych';
-//import { images } from '../lib/utils';
-//import { set1Images, set2Images, set3Images, set4Images, set5Images, set6Images } from '../lib/utils';
-//import { $ } from 'jquery';
 
 import { lang } from '../trials/selectLanguage';
 import { resp_mode } from '../trials/selectRespType';
-import { twochoice, /*selfpaced, stim_set,*/ trial_stim } from '../config/contOmstset';
-
+import { twochoice, /*selfpaced, stim_set, trial_stim*/ } from '../config/contOmstset';
 
 
 // <script>
@@ -180,7 +196,7 @@ function invNormcdf(p) { // https://stackoverflow.com/questions/8816729/javascri
 
 // jatos.onLoad(async function() {
 //   //baseurl='https://starklab.bio.uci.edu/mst/'; // How we'll get images, videos, etc.  Set to empty string to use local folders
-var baseurl=''; // How we'll get images, videos, etc.  Set to empty string to use local folders
+// var baseurl=''; // How we'll get images, videos, etc.  Set to empty string to use local folders
 //   var sid=jatos.studySessionData['sid'];
 //   if (typeof sid === 'undefined') {
 //     sid=1234;
@@ -223,344 +239,168 @@ var baseurl=''; // How we'll get images, videos, etc.  Set to empty string to us
 //     console.log('Order prefix forced via JSON component to ' + orderprefix);
 //   }
 
-  // console.log('loading ' + orderfile)
-  // $.getScript(orderfile,function( data, textStatus, jqxhr) {
-  //   //console.log( data ); // Data returned
-  //   console.log( textStatus ); // Success
-  //   console.log( jqxhr.status ); // 200
-  //   console.debug(orderfile + ' loaded...ish');
-  // });
-  // console.log('did the load... running await')
-  // await waitFor(_ => typeof trial_stim !== 'undefined');
-  // console.log('we are set')
-  // console.log(trial_stim.length)
-  const preload_fnames = new Array(trial_stim.length)
-  for (var j=0; j<trial_stim.length; j++) {  // Make our Set X_rs be SetX_rs
-    trial_stim[j].image = baseurl+trial_stim[j].image.replace("Set ", "../assets/images/Set");
-    preload_fnames[j]=trial_stim[j].image;
-  }
-  
+
   
   // // START OF CODE THAT SHOULD BE CONSTANT REGARDLESS OF JATOS / CORDOVA
-  //const phasename='oMSTCont';
+  // const phasename='oMSTCont';
 
   var jsPsych = initJsPsych();
 
-  /*({on_finish: function() {
-  //   if (0) { jsPsych.data.displayData(); }
-  //     else {
-  //       var order=jatos.studySessionData["order"];
-  //       jatos.studySessionData["taskindex"] += 1;
-  //       var expdata = jsPsych.data.get().json();
-  //       // Submit results to JATOS and queue the end or next task
-  //       if (typeof order === 'undefined' || order.length == jatos.studySessionData["taskindex"]) { 
-  //         // we're done
-  //         // Check if this came from SONA - should have URL.sid and .sona
-  //         if (typeof jatos.urlQueryParameters.sid === 'undefined' || typeof jatos.urlQueryParameters.sona === 'undefined' ||
-  //             typeof jatos.studyJsonInput['experiment_id'] === 'undefined' || typeof jatos.studyJsonInput['credit_token'] === 'undefined') {
-  //           jatos.submitResultData(expdata,jatos.endStudy);
-  //         }
-  //         else {
-  //           // This is here for SONA experiments.  You'll want to tweak it for your own online setup, but this gives you the return to them for credit
-  //           var redirect='https://uci.sona-systems.com/webstudy_credit.aspx?experiment_id='+jatos.studyJsonInput['experiment_id']+
-  //             '&credit_token='+jatos.studyJsonInput['credit_token']+'&survey_code='+jatos.urlQueryParameters.sid;
-  //           jatos.endStudyAndRedirect(redirect,expdata);
-  //         }
-  //       }
-  //       else {
-  //         // submit and start the next
-  //         jatos.submitResultData(expdata, () => { jatos.startComponentByPos(order[jatos.studySessionData["taskindex"]]) });
-  //       }
-  //     }
-  //   }
-  // }); */
-
   // jsPsych.data.addProperties({
   //   task: phasename,
-  //    subject: sid,
+  //   subject: sid,
   //   set: stim_set,
   //   selfpaced: selfpaced,
   //   orderfile: orderfile
   // });
 
+//----------------------- 2 ----------------------
+//---------------- HELPER METHODS ----------------
+// helper methods that setup prompts and response options based on keyboard/button and 2/3 choices
 
-  // Setup prompts and response options based on keyboard/button and 2/3 choices
-  // var instr_choice=[' ']; // 32 is space
-  // var instr_txt='<i>spacebar</i>';
-  // var trial_txt='Old (<b>v</b>), Similar (<b>b</b>), or New? (<b>n</b>)';
-  // var trial_choices=['v','b','n'];
-  //if (twochoice == 1) {
-    // trial_txt='Old (<b>v</b>) or New? (<b>n</b>)';
-    // trial_choices=['v','n'];
-  //}
-  // if (resp_mode == 'button') {
-  //   instr_choice=['OK'];
-  //   instr_txt='<i>OK</i>';
-  //   if (twochoice == 1) {
-  //     trial_txt='<i>Old</i> or <i>New</i>';
-  //     trial_choices=['Old','New'];
-  //   }
-  //   else {
-  //     trial_txt='<i>Old</i>, <i>Similar</i>, or <i>New</i>';
-  //     trial_choices=['Old','Similar','New'];
-  //   }
-  // }
+var instr_choice = function() {
+  if (resp_mode == 'button'){
+      return lang.cont.button.instr_choice;
+    }
+  else {
+      return lang.cont.key.instr_choice;
+  }  
+}
 
-  // helper methods that setup prompts and response options based on keyboard/button and 2/3 choices
-  var instr_choice = function() {
-    if (resp_mode == 'button'){
-        return lang.cont.button.instr_choice;
-      }
-    else {
-        return lang.cont.key.instr_choice;
-    }  
-  }
+var instr_prompt = function() {
+  if (resp_mode == 'button'){
+      return lang.cont.button.instr_prompt;
+    }
+  else {
+      return lang.cont.key.instr_prompt;
+  }  
+}
 
-  var instr_prompt = function() {
-    if (resp_mode == 'button'){
-        return lang.cont.button.instr_prompt;
-      }
-    else {
-        return lang.cont.key.instr_prompt;
-    }  
-  }
-
-  var instr_stim = function () {
-    if (resp_mode == 'button'){
-      if (twochoice == 0) {
-        return lang.cont.button.threechoice.instr_stim;
-      }
-      else {
-        return lang.cont.button.twochoice.instr_stim;
-      }
+var instr_stim = function () {
+  if (resp_mode == 'button'){
+    if (twochoice == 0) {
+      return lang.cont.button.threechoice.instr_stim;
     }
     else {
-      if (twochoice == 0) {
-        return lang.cont.key.threechoice.instr_stim;
-      }
-      else {
-        return lang.cont.key.twochoice.instr_stim;
-      }
-    }  
+      return lang.cont.button.twochoice.instr_stim;
+    }
   }
+  else {
+    if (twochoice == 0) {
+      return lang.cont.key.threechoice.instr_stim;
+    }
+    else {
+      return lang.cont.key.twochoice.instr_stim;
+    }
+  }  
+}
 
+//----------------------- 3 ----------------------
+//--------------------- TRIALS -------------------
 
-  //instructions trial
-  var instr1_trial = {  
-    type: (resp_mode == 'button' ? jsPsychHtmlButtonResponse : jsPsychHtmlKeyboardResponse),
-    choices: instr_choice,
-    prompt: instr_prompt,
-    margin_horizontal: '40px', margin_vertical: '20px',
+//instructions trial
+var instr1_trial = {  
+  type: (resp_mode == 'button' ? jsPsychHtmlButtonResponse : jsPsychHtmlKeyboardResponse),
+  choices: instr_choice,
+  prompt: instr_prompt,
+  margin_horizontal: '40px', margin_vertical: '20px',
 //        button_html: '<button style="font-size: 150%" class="jspsych-btn">%choice%</button>',
-    stimulus: instr_stim,
-  }
-  
-  // // Build up my actual trial timeline
-  // var tlv = [];
-  // var ntrials = trial_stim.length;
-  // let DEBUGMODE=0;
-  // if (DEBUGMODE == 1) { ntrials = 20; }
-  // console.log('Building up the ' + ntrials + ' trials')
-  // for (var i = 0; i <ntrials; i++) {
-  //   // in corr_resp: 0=old, 1=sim, 2=new
-  //   let trial_info = trial_stim[i]  // added "let"
-  //   let tr_type =' foil';
-  //   let cresp = 'n'; // added ;
-  //   if (trial_info.correct_resp == 0) {
-  //     tr_type = 'target';
-  //     cresp='o';
-  //   }
-  //   else if (trial_info.correct_resp == 1) {
-  //     tr_type='lure';
-  //     if (twochoice == 1) {
-  //       cresp='n';
-  //     }
-  //     else {
-  //       cresp='s';
-  //     }
-  //   }
-  //   let lure_bin = 0;  // We may or may not have this in the order file
-  //   if (trial_info.lbin && trial_info.lbin !== 'undefined') {
-  //     lure_bin = trial_info.lbin;
-  //   }
-  //   // keycode 'n' (for 1 and 2) = 78, 'y' (for 0)=89
-  //   // keycode 'n' (for 1 and 2) = 78, 'y' (for 0)=89, i=73, o=79
-  //   //let obj={stimulus: trial_info.image, data: {condition: tr_type, correct_response: cresp, lbin:lure_bin}}
-  //   let obj = {stimulus: trial_info.image, data: {condition: tr_type, correct_response: cresp, lbin: lure_bin}}
-  //   //console.log(i + '  bin: ' + lure_bin)
-  //   tlv.push(obj)
-  // }
-  //console.log(JSON.stringify(tlv))
+  stimulus: instr_stim,
+}
 
-  // var test_trials = {
-  //   timeline: [
-  //     {
-  //     type: (resp_mode == 'button' ? jsPsychImageButtonResponse : jsPsychImageKeyboardResponse),
-  //     prompt: trial_prompt,
-  //     choices: trial_choices,
-  //     stimulus_duration: 2000,
-  //     trial_duration: (selfpaced==1 ? null : 2500),
-  //     post_trial_gap: 500,
-  //     margin_horizontal: '40px', margin_vertical: '20px',
-  //     stimulus: function() {
-  //       return images[trial_stim[1].image];
-  //       // if (stim_set == 1){
-  //       // return set1Images[tlv[1].stimulus]; //jsPsych.timelineVariable not working
-  //       // }
-  //       // else if (stim_set == 2){
-  //       //   return set2Images[jsPsych.timelineVariable('stimulus')];
-  //       // }
-  //       // else if (stim_set == 3){
-  //       //   return set3Images[jsPsych.timelineVariable('stimulus')];
-  //       // }
-  //       // else if (stim_set == 4){
-  //       //   return set4Images[jsPsych.timelineVariable('stimulus')];
-  //       // }
-  //       // else if (stim_set == 5){
-  //       //   return set5Images[jsPsych.timelineVariable('stimulus')];
-  //       // }
-  //       // else if (stim_set == 6){
-  //       //   return set6Images[jsPsych.timelineVariable('stimulus')];
-  //       // }
-  //     },
-  //     //'/static/media/foil_1032.1442292374d36c17ba7f.jpg', // works
-  //     //function() {return images['foil_1032.jpg']; }, // added images and function
-  //     data: function() { return jsPsych.timelineVariable('data'); },  // added function
-  //     stimulus_height: 400,
-  //     stimulus_width: 400,
-  //     on_finish: function(data) {
-  //       // yes = button 0 = 'y' = keycode 89
-  //       // no = button 1 = 'n' = keycode 78 
-  //       // let resp = 'n';
-  //       // if (resp_mode == 'button' && data.button_pressed == 0) { resp = 'y' }
-  //       // if (resp_mode == 'keyboard' && data.key_press == 89 ) { resp = 'y' }
-  //       let resp = null;
-  //       if (resp_mode == 'button') {
-  //           if (data.response == 0) { resp = 'o' }
-  //           else if (data.response == 2 ) { resp = 'n' }
-  //           else if (data.response == 1 ) { resp = (twochoice==1 ? 'n' : 's') }
-  //       } 
-  //       else {
-  //           if (data.response == 'v') { resp = 'o' }
-  //           else if (data.response == 'b' ) { resp = 's' }
-  //           else if (data.response == 'n') { resp = 'n' }
-  //       } 
- 
-  //       data.correct =  resp == data.correct_response;
-  //       data.resp = resp;
-  //     }
-  //   }],
-  //   timeline_variables: tlv
-  // }
+// thank you message
+var debrief_block = {
+  type: jsPsychHtmlKeyboardResponse,
+  trial_duration: 500,
+  stimulus: function() {
+    return lang.cont.ty;
+  },
+  on_finish: function (data) {
+    let validtrials=jsPsych.data.get().filterCustom(function(trial) {
+      return trial.resp !== null; 
+    })
+    let targets=validtrials.filter({condition: 'target'});
+    let lures=validtrials.filter({condition: 'lure'});
+    let foils=validtrials.filter({condition: 'foil'});
 
-  // thank you message
-  var debrief_block = {
-    type: jsPsychHtmlKeyboardResponse,
-    trial_duration: 500,
-    stimulus: function() {
-      return lang.cont.ty;
-    },
-    on_finish: function (data) {
-      let validtrials=jsPsych.data.get().filterCustom(function(trial) {
-        return trial.resp !== null; 
-      })
-      let targets=validtrials.filter({condition: 'target'});
-      let lures=validtrials.filter({condition: 'lure'});
-      let foils=validtrials.filter({condition: 'foil'});
+    if (twochoice==1) {
+      let corr_targs = targets.filter({correct: true});
+      let corr_lures = lures.filter({correct: true});
+      let corr_foils = foils.filter({correct: true});
+      let hits=Math.round(corr_targs.count() / targets.count() * 100);
+      let cr_lure=Math.round(corr_lures.count() / lures.count() * 100);
+      let cr_foil=Math.round(corr_foils.count() / foils.count() * 100);
+      let p_fa_foil = 0.0;
+      let p_fa_lure = 0.0;
+      let p_hit = 0.0;
+      if (corr_targs.count() == 0) { p_hit = 0.5 / targets.count(); }
+      else if (corr_targs.count() == targets.count() ) { p_hit = (targets.count() - 0.5) / targets.count(); }
+      else { p_hit=corr_targs.count() / targets.count(); }
 
-      if (twochoice==1) {
-        let corr_targs = targets.filter({correct: true});
-        let corr_lures = lures.filter({correct: true});
-        let corr_foils = foils.filter({correct: true});
-        let hits=Math.round(corr_targs.count() / targets.count() * 100);
-        let cr_lure=Math.round(corr_lures.count() / lures.count() * 100);
-        let cr_foil=Math.round(corr_foils.count() / foils.count() * 100);
-        let p_fa_foil = 0.0;
-        let p_fa_lure = 0.0;
-        let p_hit = 0.0;
-        if (corr_targs.count() == 0) { p_hit = 0.5 / targets.count(); }
-        else if (corr_targs.count() == targets.count() ) { p_hit = (targets.count() - 0.5) / targets.count(); }
-        else { p_hit=corr_targs.count() / targets.count(); }
+      if (corr_lures.count() == lures.count()) { p_fa_lure = 0.5 / lures.count(); }
+      else if (corr_lures.count() == 0 ) { p_fa_lure = (lures.count() - 0.5) / lures.count(); }
+      else { p_fa_lure=1-(corr_lures.count() / lures.count());}
 
-        if (corr_lures.count() == lures.count()) { p_fa_lure = 0.5 / lures.count(); }
-        else if (corr_lures.count() == 0 ) { p_fa_lure = (lures.count() - 0.5) / lures.count(); }
-        else { p_fa_lure=1-(corr_lures.count() / lures.count());}
+      if (corr_foils.count() == foils.count()) { p_fa_foil = 0.5 / foils.count(); }
+      else if (corr_foils.count() ==0 ) {p_fa_foil = (foils.count() - 0.5) / foils.count(); }
+      else { p_fa_foil=1-(corr_foils.count() / foils.count()); }
 
-        if (corr_foils.count() == foils.count()) { p_fa_foil = 0.5 / foils.count(); }
-        else if (corr_foils.count() ==0 ) {p_fa_foil = (foils.count() - 0.5) / foils.count(); }
-        else { p_fa_foil=1-(corr_foils.count() / foils.count()); }
+      console.log(corr_targs.count() + " " + targets.count() + " " + p_hit)
+      console.log(corr_lures.count() + " " + lures.count() + " " + p_fa_lure)
+      console.log(corr_foils.count() + " " + foils.count() + " " + p_fa_foil)
+      console.log(invNormcdf(p_hit))
+      console.log(invNormcdf(p_fa_lure))
+      console.log(invNormcdf(p_fa_foil))
 
-        console.log(corr_targs.count() + " " + targets.count() + " " + p_hit)
-        console.log(corr_lures.count() + " " + lures.count() + " " + p_fa_lure)
-        console.log(corr_foils.count() + " " + foils.count() + " " + p_fa_foil)
-        console.log(invNormcdf(p_hit))
-        console.log(invNormcdf(p_fa_lure))
-        console.log(invNormcdf(p_fa_foil))
+      let dpTF = invNormcdf(p_hit) - invNormcdf(p_fa_foil); 
+      let dpTL = invNormcdf(p_hit) - invNormcdf(p_fa_lure); 
 
-        let dpTF = invNormcdf(p_hit) - invNormcdf(p_fa_foil); 
-        let dpTL = invNormcdf(p_hit) - invNormcdf(p_fa_lure); 
-
-        var retstr = 'HR, ' + hits + ', CR-L, ' + cr_lure + ', CR-F rate, ' + cr_foil + ", d'T:F, " + dpTF.toFixed(3) + ", d'T:L, " + dpTL.toFixed(3) 
-      }
-      else { // OSN
-        let targ_old=targets.filter({resp: 'o'});
-        let targ_sim=targets.filter({resp: 's'});
-        let targ_new=targets.filter({resp: 'n'});
-        let lure_old=lures.filter({resp: 'o'});
-        let lure_sim=lures.filter({resp: 's'});
-        let lure_new=lures.filter({resp: 'n'});
-        let foil_old=foils.filter({resp: 'o'});
-        let foil_sim=foils.filter({resp: 's'});
-        let foil_new=foils.filter({resp: 'n'});
-
-        let rec=(targ_old.count() / targets.count()) - (foil_old.count() / foils.count());
-        let ldi=(lure_sim.count() / lures.count()) - (foil_sim.count() / foils.count());
-// removed var
-        retstr='Valid, ' + targets.count() + ", " + lures.count() + ', ' + foils.count() + '\n';
-        retstr += 'Old, ' + targ_old.count() + ", " + lure_old.count() + ', ' + foil_old.count() + '\n';
-        retstr += 'Similar, ' + targ_sim.count() + ", " + lure_sim.count() + ', ' + foil_sim.count() + '\n';
-        retstr += 'New, ' + targ_new.count() + ", " + lure_new.count() + ', ' + foil_new.count() + '\n';
-        retstr += 'REC, ' + rec.toFixed(3) + ', LDI, ' + ldi.toFixed(3);
-
-      }
-      
-      // let date = new Date(); 
-      // let dcode = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + (date.getDate()+1) + 
-      //   "-" + date.getHours() + "-" + date.getMinutes() + "-" + date.getSeconds();
-      
-      // if (!jatos.batchSession.defined("/" + sid)) {  // Should have this by now, but to be safe -- make sure to create this as an array
-      //   jatos.batchSession.add("/" + sid,[phasename+"_"+dcode+"_"+retstr]);
-      // }
-      // else { // Append to array
-      //   jatos.batchSession.add("/" + sid + "/-",phasename+"_"+dcode+"_"+retstr);
-      // }
-      data.summary = retstr;
-      //jatos.batchSession.add("/"+idcode,{ [phasename + "_results"]: data.summary });
-      //return '<p>Hit rate: ' + hits + '</p><p>CR-L rate: ' + cr_lure + '</p><p>CR-F rate: ' + cr_foil + '</p>'
-      //return 'HR, ' + hits + ', CR-L, ' + cr_lure + ', CR-F rate, ' + cr_foil + ", d'T:F, " + dpTF.toFixed(3) + ", d'T:L, " + dpTL.toFixed(3) 
+      var retstr = 'HR, ' + hits + ', CR-L, ' + cr_lure + ', CR-F rate, ' + cr_foil + ", d'T:F, " + dpTF.toFixed(3) + ", d'T:L, " + dpTL.toFixed(3) 
     }
+    else { // OSN
+      let targ_old=targets.filter({resp: 'o'});
+      let targ_sim=targets.filter({resp: 's'});
+      let targ_new=targets.filter({resp: 'n'});
+      let lure_old=lures.filter({resp: 'o'});
+      let lure_sim=lures.filter({resp: 's'});
+      let lure_new=lures.filter({resp: 'n'});
+      let foil_old=foils.filter({resp: 'o'});
+      let foil_sim=foils.filter({resp: 's'});
+      let foil_new=foils.filter({resp: 'n'});
+
+      let rec=(targ_old.count() / targets.count()) - (foil_old.count() / foils.count());
+      let ldi=(lure_sim.count() / lures.count()) - (foil_sim.count() / foils.count());
+// removed var
+      retstr='Valid, ' + targets.count() + ", " + lures.count() + ', ' + foils.count() + '\n';
+      retstr += 'Old, ' + targ_old.count() + ", " + lure_old.count() + ', ' + foil_old.count() + '\n';
+      retstr += 'Similar, ' + targ_sim.count() + ", " + lure_sim.count() + ', ' + foil_sim.count() + '\n';
+      retstr += 'New, ' + targ_new.count() + ", " + lure_new.count() + ', ' + foil_new.count() + '\n';
+      retstr += 'REC, ' + rec.toFixed(3) + ', LDI, ' + ldi.toFixed(3);
+
+    }
+    
+    // let date = new Date(); 
+    // let dcode = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + (date.getDate()+1) + 
+    //   "-" + date.getHours() + "-" + date.getMinutes() + "-" + date.getSeconds();
+    
+    // if (!jatos.batchSession.defined("/" + sid)) {  // Should have this by now, but to be safe -- make sure to create this as an array
+    //   jatos.batchSession.add("/" + sid,[phasename+"_"+dcode+"_"+retstr]);
+    // }
+    // else { // Append to array
+    //   jatos.batchSession.add("/" + sid + "/-",phasename+"_"+dcode+"_"+retstr);
+    // }
+    data.summary = retstr;
+    //jatos.batchSession.add("/"+idcode,{ [phasename + "_results"]: data.summary });
+    //return '<p>Hit rate: ' + hits + '</p><p>CR-L rate: ' + cr_lure + '</p><p>CR-F rate: ' + cr_foil + '</p>'
+    //return 'HR, ' + hits + ', CR-L, ' + cr_lure + ', CR-F rate, ' + cr_foil + ", d'T:F, " + dpTF.toFixed(3) + ", d'T:L, " + dpTL.toFixed(3) 
   }
+}
 
-  // END OF CONSTANT CODE
-  // var preload = {
-  //   type: jsPsychPreload,
-  //   images: preload_fnames, // since we use a timeline variable, we can't use the simple "trials"
-  //   show_progress_bar: true,
-  //   show_detailed_errors: true, // added r to erroRs
-  //   continue_after_error: true,
-  //   on_error: function(fname) {
-  //     console.log('FAILED  '+fname)
-  //   },
-  //   on_finish: function(data) {
-  //     console.log('Preload success? ' + data.success)
-  //     console.log('Failed on ' + data.failed_images.length)
-  //   }
-  // }
-  
-  // var timeline = [preload, instr1_trial, test_trials, debrief_block];
-  // jsPsych.run(timeline);
 
-  export { /*preload,*/ instr1_trial, /*test_trials,*/ debrief_block }
+//----------------------- 4 ----------------------
+//--------------------- EXPORTS -------------------
+
+export { /*preload,*/ instr1_trial, /*test_trials,*/ debrief_block }
       
 // });
 // </script>

@@ -54,22 +54,7 @@
 // </head>
 // <script>
 
-// imports here
-// importing jspysch plugins
-import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-import jsPsychHtmlButtonResponse from '@jspsych/plugin-html-button-response';
-import jsPsychCategorizeImage from '@jspsych/plugin-categorize-image';
-
-// importing unique plugins
-import { jsPsychCategorizeImageButtons } from './uniquePlugins/plugin-categorize-image-buttons.js';
-import { jsPsychCategorizeMultipleImageKeyboard }  from './uniquePlugins/plugin-categorize-multiple-image-keyboard.js';
-import { jsPsychCategorizeMultipleImageButtons } from './uniquePlugins/plugin-categorize-multiple-image-buttons.js';
-
-// importing languages, images object, and response-mode
-import { lang } from './selectLanguage.js';
-import { images } from '../lib/utils.js';
-import { resp_mode } from './selectRespType.js';
-
+//was below
 
 // jatos.onLoad(function() {
 //   const phasename='cmst_instr_contOSN';
@@ -111,286 +96,303 @@ import { resp_mode } from './selectRespType.js';
 //     subject: sid,
 //   });
 
-  //Default is keyboard here - override if buttons
-  // var instr_choice=[' ']; // 32 is space
-  // var instr_txt='<i>spacebar</i>';
-  // // var trial_type='';
-  // var trial_txt='<i>Old</i> (<b>v</b>), <i>Similar</i> (<b>b</b>), or <i>New</i> (<b>n</b>)?';
-  // var trial_choices=['v','b','n'];
-  // var extra_html='';
-  // if (resp_mode == 'button') {
-  //   instr_choice=['OK'];
-  //   instr_txt='<i>OK</i>';
-  //   // trial_type='-buttons';
-  //   trial_txt='<i>Old</i>, <i>Similar</i>, or <i>New</i>';
-  //   trial_choices=['Old','Similar','New'];
-  //   extra_html='style="margin-top:112px;"';
-  //   extra_html='';
-  // }
+//*******************************************************************
+//
+//   File: instructions.js               Folder: trials
+//
+//   Author: Gavin Stark, Craig Stark, Audrey Hempel
+//   --------------------
+// 
+//   Changes:
+//        6/?/23 (AGH): 
+//
+//   --------------------
+//   These trials are the instruction trials that explain to the  
+//   participant how to partake in the experiment and provide user
+//   feedback.
+//
+//*******************************************************************
 
+//----------------------- 1 ----------------------
+//-------------------- IMPORTS -------------------
 
+// importing jspysch plugins
+import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
+import jsPsychHtmlButtonResponse from '@jspsych/plugin-html-button-response';
+import jsPsychCategorizeImage from '@jspsych/plugin-categorize-image';
 
-  //////////////////////////                //////////////////////////
-  ////////////////////////// Helper Methods //////////////////////////
-  //////////////////////////                //////////////////////////
-  // These methods house the dynamic parameters of the trials below. Each is a function that 
-  // when called will determine the values of lang and resp_type to incorporate different 
-  // languages and response types. EVERYTIME lang OR resp_type ARE USED, THEY MUST BE INSIDE
-  // A FUNCTION.
+// importing unique plugins
+import { jsPsychCategorizeImageButtons } from './uniquePlugins/plugin-categorize-image-buttons.js';
+import { jsPsychCategorizeMultipleImageKeyboard }  from './uniquePlugins/plugin-categorize-multiple-image-keyboard.js';
+import { jsPsychCategorizeMultipleImageButtons } from './uniquePlugins/plugin-categorize-multiple-image-buttons.js';
 
-  var instr_choice = function() {
-    if (resp_mode == 'button') {
-      return lang.instructions.button.instr_choice;
-    }
-    else {
-      return lang.instructions.key.instr_choice;
-    }
+// importing languages, images object, and response-mode
+import { lang } from './selectLanguage.js';
+import { images } from '../lib/utils.js';
+import { resp_mode } from './selectRespType.js';
+
+//----------------------- 2 ----------------------
+//----------------- HELPER METHODS ---------------
+// These methods house the dynamic parameters of the trials below. Each is a function that 
+// when called will determine the values of lang and resp_type to incorporate different 
+// languages and response types. EVERYTIME lang OR resp_type ARE USED, THEY MUST BE INSIDE
+// A FUNCTION.
+
+var instr_choice = function() {
+  if (resp_mode == 'button') {
+    return lang.instructions.button.instr_choice;
   }
-
-  var prompt0 = function() {
-    if (resp_mode == 'button') {
-      return lang.instructions.button.prompt0;
-    }
-    else {
-      return lang.instructions.key.prompt0;
-    }
+  else {
+    return lang.instructions.key.instr_choice;
   }
+}
 
-  var prompt_new = function() {
-    if (resp_mode == 'button') {
-      return lang.instructions.button.prompt_new;
-    } 
-    else {
-      return lang.instructions.key.prompt_new;
-    }
+var prompt0 = function() {
+  if (resp_mode == 'button') {
+    return lang.instructions.button.prompt0;
   }
-
-  var inc_new = function() {
-    if (resp_mode == 'button') {
-      return lang.instructions.button.inc_new;
-    } 
-    else {
-      return lang.instructions.key.inc_new;
-    }
+  else {
+    return lang.instructions.key.prompt0;
   }
+}
 
-  var cor_new = function() {return lang.instructions.cor_new}
-
-  var prompt_rep = function() {
-    if (resp_mode == 'button') {
-      return lang.instructions.button.prompt_rep;
-    } 
-    else {
-      return lang.instructions.key.prompt_rep;
-    }
-  }
-
-  var inc_rep = function() {
-    if (resp_mode == 'button') {
-      return lang.instructions.button.inc_rep;
-    } 
-    else {
-      return lang.instructions.key.inc_rep;
-    }
-  }
-
-  var cor_rep = function() {return lang.instructions.cor_rep}
-
-  var prompt_lure = function() {
-    if (resp_mode == 'button') {
-      return lang.instructions.button.prompt_lure;
-    } 
-    else {
-      return lang.instructions.key.prompt_lure;
-    }
-  }
-
-  var inc_lure = function() {
-    if (resp_mode == 'button') {
-      return lang.instructions.button.inc_lure;
-    } 
-    else {
-      return lang.instructions.key.inc_lure;
-    }
-  }
-
-  var cor_lure = function() {return lang.instructions.cor_lure}
-
-  var side_by_side = function() {
-    if (resp_mode == 'button') {
-      return lang.instructions.side_by_side + lang.instructions.button.continue;
-     }
-     else {
-      return lang.instructions.side_by_side + lang.instructions.key.continue;
-    }
-  }
-  
-  var prompt_test = function() {
-    if (resp_mode == 'button') {
-      return lang.instructions.prompt_test + lang.instructions.button.trial_txt; 
-    }
-    else {
-      return lang.instructions.prompt_test + lang.instructions.key.trial_txt;
-    }
-  }
-
-
-  var trial_choices = function() {
-    if (resp_mode == 'button') {
-    return [
-      `${lang.instructions.button.trial_choices.old}`,
-      `${lang.instructions.button.trial_choices.sim}`,
-      `${lang.instructions.button.trial_choices.new}`,
-    ];
-    }
-    else {
-    return [
-      `${lang.instructions.key.trial_choices.old}`,
-      `${lang.instructions.key.trial_choices.sim}`,
-      `${lang.instructions.key.trial_choices.new}`,
-    ];  
-    }
+var prompt_new = function() {
+  if (resp_mode == 'button') {
+    return lang.instructions.button.prompt_new;
   } 
-
-
-  //////////////////////////                //////////////////////////
-  ////////////////////////// Dynamic Trials //////////////////////////
-  //////////////////////////                //////////////////////////
-  // These trials call the functions housing the parameter information.
-  
-
-  var intro = {
-    type: (resp_mode == 'button' ? jsPsychHtmlButtonResponse : jsPsychHtmlKeyboardResponse),
-    choices: instr_choice,
-    prompt: prompt0,
-    stimulus: function() {return lang.instructions.txt0},
+  else {
+    return lang.instructions.key.prompt_new;
   }
+}
 
-  var new1 = {
-    type: (resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage), 
-    stimulus: images['foil_1032.jpg'],
-    key_answer: function() {return lang.instructions.key.trial_choices.new}, button_answer: 2,
-    choices: trial_choices,
-    prompt: prompt_new,
-    force_correct_button_press: true,
-    incorrect_text: inc_new,
-    correct_text: cor_new,   
+var inc_new = function() {
+  if (resp_mode == 'button') {
+    return lang.instructions.button.inc_new;
+  } 
+  else {
+    return lang.instructions.key.inc_new;
   }
+}
 
-  var new2 = {
-    type: (resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage),
-    stimulus: images['foil_1033.jpg'],
-    key_answer: function() {return lang.instructions.key.trial_choices.new} , button_answer: 2,
-    choices: trial_choices,
-    prompt: prompt_new, 
-    force_correct_button_press: true,
-    incorrect_text: inc_new,
-    correct_text: cor_new,   
-  }
+var cor_new = function() {return lang.instructions.cor_new}
 
-  var new3 = {
-    type:  (resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage),
-    stimulus: images['pcon026a.jpg'],
-    key_answer: function() {return lang.instructions.key.trial_choices.new}, button_answer: 2,
-    choices: trial_choices,
-    prompt: prompt_new,
-    force_correct_button_press: true,
-    incorrect_text: inc_new,
-    correct_text: cor_new,   
+var prompt_rep = function() {
+  if (resp_mode == 'button') {
+    return lang.instructions.button.prompt_rep;
+  } 
+  else {
+    return lang.instructions.key.prompt_rep;
   }
+}
 
-  var repeat1 = {
-    type:  (resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage),
-    stimulus: images['foil_1033.jpg'],
-    key_answer: function() {return lang.instructions.key.trial_choices.old} , button_answer: 0,
-    choices: trial_choices,
-    prompt: prompt_rep,
-    force_correct_button_press: true,
-    incorrect_text: inc_rep,
-    correct_text: cor_rep,    
+var inc_rep = function() {
+  if (resp_mode == 'button') {
+    return lang.instructions.button.inc_rep;
+  } 
+  else {
+    return lang.instructions.key.inc_rep;
   }
+}
 
-  var lure1 ={
-    type:  (resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage),
-    stimulus: images['pcon026b.jpg'],
-    key_answer: function() {return lang.instructions.key.trial_choices.sim} , button_answer: 1,
-    choices: trial_choices,
-    prompt: prompt_lure,
-    force_correct_button_press: true,
-    incorrect_text: inc_lure,
-    correct_text: cor_lure,   
-  }
+var cor_rep = function() {return lang.instructions.cor_rep}
 
-  var side_by_side1 = {
-    type: (resp_mode == 'button' ? jsPsychCategorizeMultipleImageButtons : jsPsychCategorizeMultipleImageKeyboard),
-    key_answer: function() {return lang.instructions.key.instr_choice} , button_answer: 0,
-    feedback_duration: 0,
-    stimulus: images['pcon026a.jpg'],
-    stimulus2: images['pcon026b.jpg'],
-    choices: instr_choice,
-    prompt: side_by_side,
+var prompt_lure = function() {
+  if (resp_mode == 'button') {
+    return lang.instructions.button.prompt_lure;
+  } 
+  else {
+    return lang.instructions.key.prompt_lure;
   }
+}
 
-  var new4 = {
-    type:  (resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage),
-    stimulus: images['foil_1035.jpg'],
-    key_answer: function() {return lang.instructions.key.trial_choices.new} , button_answer: 2,
-    choices: trial_choices,
-    prompt: prompt_test,
-    force_correct_button_press: true,
-    incorrect_text: inc_new,
-    correct_text: cor_new,
+var inc_lure = function() {
+  if (resp_mode == 'button') {
+    return lang.instructions.button.inc_lure;
+  } 
+  else {
+    return lang.instructions.key.inc_lure;
   }
+}
 
-  var new5 = {
-    type:  (resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage),
-    stimulus: images['pcon028a.jpg'],
-    key_answer: function() {return lang.instructions.key.trial_choices.new} , button_answer: 2,
-    choices: trial_choices,
-    prompt: prompt_test,
-    force_correct_button_press: true,
-    incorrect_text: inc_new,
-    correct_text: cor_new,  
-  }
+var cor_lure = function() {return lang.instructions.cor_lure}
 
-  var repeat2 = {
-    type:  (resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage),
-    stimulus: images['foil_1035.jpg'],
-    key_answer: function() {return lang.instructions.key.trial_choices.old} , button_answer: 0,
-    choices: trial_choices,
-    prompt: prompt_test,
-    force_correct_button_press: true,
-    incorrect_text: inc_rep,
-    correct_text: cor_rep,    
+var side_by_side = function() {
+  if (resp_mode == 'button') {
+    return lang.instructions.side_by_side + lang.instructions.button.continue;
+    }
+    else {
+    return lang.instructions.side_by_side + lang.instructions.key.continue;
   }
+}
 
-  var lure2 = {
-    type:  (resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage),
-    stimulus: images['pcon028b.jpg'],
-    key_answer: function() {return lang.instructions.key.trial_choices.sim}, button_answer: 1,
-    choices: trial_choices,
-    prompt: prompt_test,
-    force_correct_button_press: true,
-    incorrect_text: inc_lure,
-    correct_text: cor_lure,  
+var prompt_test = function() {
+  if (resp_mode == 'button') {
+    return lang.instructions.prompt_test + lang.instructions.button.trial_txt; 
   }
+  else {
+    return lang.instructions.prompt_test + lang.instructions.key.trial_txt;
+  }
+}
 
-  var side_by_side2 = {
-    type: (resp_mode == 'button' ? jsPsychCategorizeMultipleImageButtons : jsPsychCategorizeMultipleImageKeyboard),
-    key_answer: function() {return lang.instructions.key.instr_choice} , button_answer: 0,
-    feedback_duration: 0,
-    stimulus: images['pcon028a.jpg'], 
-    stimulus2: images['pcon028b.jpg'],
-    choices: instr_choice,
-    prompt: side_by_side,
-  }
 
-  var outtro = {
-    type: (resp_mode == 'button' ? jsPsychHtmlButtonResponse : jsPsychHtmlKeyboardResponse),
-    choices: instr_choice,
-    prompt: prompt0,
-    stimulus: function() {return lang.instructions.end}, 
+var trial_choices = function() {
+  if (resp_mode == 'button') {
+  return [
+    `${lang.instructions.button.trial_choices.old}`,
+    `${lang.instructions.button.trial_choices.sim}`,
+    `${lang.instructions.button.trial_choices.new}`,
+  ];
   }
+  else {
+  return [
+    `${lang.instructions.key.trial_choices.old}`,
+    `${lang.instructions.key.trial_choices.sim}`,
+    `${lang.instructions.key.trial_choices.new}`,
+  ];  
+  }
+} 
+
+
+//----------------------- 3 ----------------------
+//-------------------- TRIALS --------------------
+// These trials call the functions housing the parameter information.
+
+
+var intro = {
+  type: (resp_mode == 'button' ? jsPsychHtmlButtonResponse : jsPsychHtmlKeyboardResponse),
+  choices: instr_choice,
+  prompt: prompt0,
+  stimulus: function() {return lang.instructions.txt0},
+}
+
+var new1 = {
+  type: (resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage), 
+  stimulus: images['foil_1032.jpg'],
+  key_answer: function() {return lang.instructions.key.trial_choices.new}, button_answer: 2,
+  choices: trial_choices,
+  prompt: prompt_new,
+  force_correct_button_press: true,
+  incorrect_text: inc_new,
+  correct_text: cor_new,   
+}
+
+var new2 = {
+  type: (resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage),
+  stimulus: images['foil_1033.jpg'],
+  key_answer: function() {return lang.instructions.key.trial_choices.new} , button_answer: 2,
+  choices: trial_choices,
+  prompt: prompt_new, 
+  force_correct_button_press: true,
+  incorrect_text: inc_new,
+  correct_text: cor_new,   
+}
+
+var new3 = {
+  type:  (resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage),
+  stimulus: images['pcon026a.jpg'],
+  key_answer: function() {return lang.instructions.key.trial_choices.new}, button_answer: 2,
+  choices: trial_choices,
+  prompt: prompt_new,
+  force_correct_button_press: true,
+  incorrect_text: inc_new,
+  correct_text: cor_new,   
+}
+
+var repeat1 = {
+  type:  (resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage),
+  stimulus: images['foil_1033.jpg'],
+  key_answer: function() {return lang.instructions.key.trial_choices.old} , button_answer: 0,
+  choices: trial_choices,
+  prompt: prompt_rep,
+  force_correct_button_press: true,
+  incorrect_text: inc_rep,
+  correct_text: cor_rep,    
+}
+
+var lure1 ={
+  type:  (resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage),
+  stimulus: images['pcon026b.jpg'],
+  key_answer: function() {return lang.instructions.key.trial_choices.sim} , button_answer: 1,
+  choices: trial_choices,
+  prompt: prompt_lure,
+  force_correct_button_press: true,
+  incorrect_text: inc_lure,
+  correct_text: cor_lure,   
+}
+
+var side_by_side1 = {
+  type: (resp_mode == 'button' ? jsPsychCategorizeMultipleImageButtons : jsPsychCategorizeMultipleImageKeyboard),
+  key_answer: function() {return lang.instructions.key.instr_choice} , button_answer: 0,
+  feedback_duration: 0,
+  stimulus: images['pcon026a.jpg'],
+  stimulus2: images['pcon026b.jpg'],
+  choices: instr_choice,
+  prompt: side_by_side,
+}
+
+var new4 = {
+  type:  (resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage),
+  stimulus: images['foil_1035.jpg'],
+  key_answer: function() {return lang.instructions.key.trial_choices.new} , button_answer: 2,
+  choices: trial_choices,
+  prompt: prompt_test,
+  force_correct_button_press: true,
+  incorrect_text: inc_new,
+  correct_text: cor_new,
+}
+
+var new5 = {
+  type:  (resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage),
+  stimulus: images['pcon028a.jpg'],
+  key_answer: function() {return lang.instructions.key.trial_choices.new} , button_answer: 2,
+  choices: trial_choices,
+  prompt: prompt_test,
+  force_correct_button_press: true,
+  incorrect_text: inc_new,
+  correct_text: cor_new,  
+}
+
+var repeat2 = {
+  type:  (resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage),
+  stimulus: images['foil_1035.jpg'],
+  key_answer: function() {return lang.instructions.key.trial_choices.old} , button_answer: 0,
+  choices: trial_choices,
+  prompt: prompt_test,
+  force_correct_button_press: true,
+  incorrect_text: inc_rep,
+  correct_text: cor_rep,    
+}
+
+var lure2 = {
+  type:  (resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage),
+  stimulus: images['pcon028b.jpg'],
+  key_answer: function() {return lang.instructions.key.trial_choices.sim}, button_answer: 1,
+  choices: trial_choices,
+  prompt: prompt_test,
+  force_correct_button_press: true,
+  incorrect_text: inc_lure,
+  correct_text: cor_lure,  
+}
+
+var side_by_side2 = {
+  type: (resp_mode == 'button' ? jsPsychCategorizeMultipleImageButtons : jsPsychCategorizeMultipleImageKeyboard),
+  key_answer: function() {return lang.instructions.key.instr_choice} , button_answer: 0,
+  feedback_duration: 0,
+  stimulus: images['pcon028a.jpg'], 
+  stimulus2: images['pcon028b.jpg'],
+  choices: instr_choice,
+  prompt: side_by_side,
+}
+
+var outtro = {
+  type: (resp_mode == 'button' ? jsPsychHtmlButtonResponse : jsPsychHtmlKeyboardResponse),
+  choices: instr_choice,
+  prompt: prompt0,
+  stimulus: function() {return lang.instructions.end}, 
+}
+
+//----------------------- 4 ----------------------
+//-------------------- EXPORTS -------------------
 
 // export the trials to be imported to the main timeline   
 export { intro, new1, new2, new3, repeat1, lure1, side_by_side1, new4, new5, repeat2, lure2, side_by_side2, outtro };

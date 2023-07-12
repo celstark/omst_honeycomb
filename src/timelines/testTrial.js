@@ -1,11 +1,25 @@
+//*******************************************************************
+//
+//   File: testTrial.js               Folder: timelines
+//
+//   Author: Honeycomb, Audrey Hempel
+//   --------------------
+// 
+//   Changes:
+//        7/11/23 (AGH): added data to include condition.data (set, selfpaced,
+//                      orderfile) in each repeated trial data
+//
+//   --------------------
+//   This file sets up an iteration of the test trial (/trials/trialCont.js)
+//   with the appropriate stimulus and data parameters from the passed in
+//   condition.
+//   
+//*******************************************************************
+
+//----------------------- 1 ----------------------
+//-------------------- IMPORTS -------------------
+
 import jsPsychImageKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-//import jsPsychImageButtonResponse from '@jspsych/plugin-image-button-response';
-
-// for debugging -- testing array length
-// import { showMessage } from '@brown-ccv/behavioral-task-trials';
-// import { eventCodes } from '../config/main';
-//import { tlv } from '../config/experiment'
-
 import { config } from '../config/main';
 
 // image objects that allow image path of each set (based on stim_set)
@@ -17,7 +31,8 @@ import { stim_set } from '../config/contOmstset';
 import { contTrial } from '../trials/trialCont';
 
 
-
+//----------------------- 2 ----------------------
+//-------------------- TIMELINE ------------------
 
 // sets up a basic trial in the contOmst, gets repeated for each element of the trial_stim array in testBlock
 
@@ -47,11 +62,6 @@ const testTrial = (blockSettings, blockDetails, condition) => {
         },
         data: function() {return condition.data; },
      }),
-    // showMessage(config, {
-    //     message: tlv.length,
-    //     onstart: true,
-    //     taskCode: eventCodes.evidence,
-    //   })
   ];
 
   return {
@@ -59,5 +69,8 @@ const testTrial = (blockSettings, blockDetails, condition) => {
     timeline,
   };
 };
+
+//----------------------- 3 ----------------------
+//--------------------- EXPORT -------------------
 
 export default testTrial;
