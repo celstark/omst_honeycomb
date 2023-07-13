@@ -67,17 +67,29 @@ const importAll = (r) => {
 const images = importAll(requireContext('../assets/images', false, /\.(png|jpe?g|svg)$/));
 
 //dont think this is necessary with the parsing in contOmst
-const set1Images = importAll(requireContext('../assets/images/Set1_rs', false, /\.(png|jpe?g|svg)$/));
+const set1Images = importAll(
+  requireContext('../assets/images/Set1_rs', false, /\.(png|jpe?g|svg)$/)
+);
 
-const set2Images = importAll(requireContext('../assets/images/Set2_rs', false, /\.(png|jpe?g|svg)$/));
+const set2Images = importAll(
+  requireContext('../assets/images/Set2_rs', false, /\.(png|jpe?g|svg)$/)
+);
 
-const set3Images = importAll(requireContext('../assets/images/Set3_rs', false, /\.(png|jpe?g|svg)$/));
+const set3Images = importAll(
+  requireContext('../assets/images/Set3_rs', false, /\.(png|jpe?g|svg)$/)
+);
 
-const set4Images = importAll(requireContext('../assets/images/Set4_rs', false, /\.(png|jpe?g|svg)$/));
+const set4Images = importAll(
+  requireContext('../assets/images/Set4_rs', false, /\.(png|jpe?g|svg)$/)
+);
 
-const set5Images = importAll(requireContext('../assets/images/Set5_rs', false, /\.(png|jpe?g|svg)$/));
+const set5Images = importAll(
+  requireContext('../assets/images/Set5_rs', false, /\.(png|jpe?g|svg)$/)
+);
 
-const set6Images = importAll(requireContext('../assets/images/Set6_rs', false, /\.(png|jpe?g|svg)$/));
+const set6Images = importAll(
+  requireContext('../assets/images/Set6_rs', false, /\.(png|jpe?g|svg)$/)
+);
 
 const getQueryVariable = (variable) => {
   const query = window.location.search.substring(1);

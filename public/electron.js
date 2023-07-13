@@ -229,7 +229,7 @@ const getSavePath = (participantID, studyID) => {
     const desktop = app.getPath('desktop');
     const name = app.getName();
     const date = today.toISOString().slice(0, 10);
-    // ADDED: This section was added for the omst to ensure that data was saved on the first iteration of a studyID and participant ID 
+    // ADDED: This section was added for the omst to ensure that data was saved on the first iteration of a studyID and participant ID
     const folderPath = path.join(desktop, studyID, participantID, date, name);
 
     // Create the folders if they don't exist

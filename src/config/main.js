@@ -4,7 +4,7 @@
 //
 //   Author: Honeycomb, Audrey Hempel
 //   --------------------
-// 
+//
 //   Changes:
 //        6/?/23 (AGH): removed language selection to /trials/selectLanguage.js
 //
@@ -12,7 +12,7 @@
 //   This is the main configuration file where universal and default settings
 //   should be placed. These settins can then be imported anywhere in the app
 //   as they are exported at the botom of the file.
-//   
+//
 //*******************************************************************
 
 //----------------------- 1 ----------------------
@@ -77,9 +77,8 @@ const USE_EEG = process.env.REACT_APP_USE_EEG === 'true' && USE_ELECTRON;
 // whether or not the photodiode is in use
 const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === 'true' && USE_ELECTRON;
 
-
 const defaultBlockSettings = {
-  conditions: ['a', 'b', 'c'], 
+  conditions: ['a', 'b', 'c'],
   repeats_per_condition: 1, // number of times every condition is repeated
   is_practice: false,
   is_tutorial: false,

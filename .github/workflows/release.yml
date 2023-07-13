@@ -14,9 +14,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        setting: ['home', 'clinic' ]
+        setting: ['home', 'clinic']
         os: [ubuntu-latest, macOS-latest, windows-latest]
-
 
     steps:
       # Rewrite "git:" repo urls to use "https:" instead, since GitHub Actions blocks port 9418 (as of Jan 2022).
