@@ -30,21 +30,7 @@ import { exptBlock1 } from '../config/experiment';
 import { select_pref_lang } from '../trials/selectLanguage';
 //import { select_resp_type } from '../trials/selectRespType';
 import { demogform } from '../trials/demographics';
-import {
-  intro,
-  new1,
-  new2,
-  new3,
-  repeat1,
-  lure1,
-  side_by_side1,
-  new4,
-  new5,
-  repeat2,
-  lure2,
-  side_by_side2,
-  outtro,
-} from '../trials/instructions';
+import { intro, new1, new2, new3, repeat1, lure1, side_by_side1, new4, new5, repeat2, lure2, side_by_side2, outtro } from '../trials/instructions';
 import { /*preload,*/ instr1_trial, /*test_trials*/ debrief_block } from '../trials/contOmst';
 import { end_message } from '../trials/end';
 
