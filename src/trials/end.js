@@ -4,9 +4,10 @@
 //
 //   Author: Audrey Hempel
 //   --------------------
-// 
+//
 //   Changes:
 //        7/10/23 (AGH): initial code
+//        7/13/23 (AGH): added task data property
 //
 //   --------------------
 //   This trial displayed the end thank you message at the conclusion
@@ -24,11 +25,12 @@ import { lang } from '../trials/selectLanguage';
 //--------------------- TRIAL --------------------
 
 var end_message = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: function() {
-      return lang.end.ty;
-    },
-}
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: function () {
+    return lang.end.ty;
+  },
+  data: { task: 'end' },
+};
 
 //----------------------- 3 ----------------------
 //-------------------- EXPORT --------------------

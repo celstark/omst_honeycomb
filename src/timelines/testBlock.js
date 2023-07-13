@@ -4,15 +4,16 @@
 //
 //   Author: Honeycomb, Audrey Hempel
 //   --------------------
-// 
+//
 //   Changes:
 //        7/?/23 (AGH):
+//        7/13/23 (AGH): changed arg condition --> tlv
 //
 //   --------------------
 //   This file loops through testTrial (/timelines/testTrial.js) using
-//   the conditions (trial variables) passed into it (exptBlock1) in 
+//   the conditions (trial variables) passed into it (exptBlock1) in
 //   /timelines/main.js.
-//   
+//
 //*******************************************************************
 
 //----------------------- 1 ----------------------
@@ -33,14 +34,12 @@ const testBlock = (blockSettings) => {
 
   const blockDetails = {
     block_earnings: 0.0,
-    optimal_earnings: 0.0, 
+    optimal_earnings: 0.0,
     continue_block: true,
   };
 
   // timeline = loop through trials
-  const timeline = startingOpts.map((condition) =>
-    testTrial(blockSettings, blockDetails, condition)
-  );
+  const timeline = startingOpts.map((tlv) => testTrial(blockSettings, blockDetails, tlv));
 
   const blockStart = {
     type: htmlKeyboardResponse,

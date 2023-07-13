@@ -4,9 +4,10 @@
 //
 //   Author: Audrey Hempel
 //   --------------------
-// 
+//
 //   Changes:
-//        6/?/23 (AGH): 
+//        6/?/23 (AGH):
+//        7/13/23 (AGH): added task data property
 //
 //   --------------------
 //   This trial allows the participant to choose between respondings
@@ -28,20 +29,26 @@ var resp_mode = null;
 
 var select_resp_type = {
   type: surveyMultiChoice,
-  questions: [{
-    prompt: function() {return lang.resp.prompt},
-    options: function() {return [lang.resp.choices.keyboard, lang.resp.choices.buttons]},
-    name: 'resp',
-    required: true,
-  }],    
-  on_finish: function(data) {
+  questions: [
+    {
+      prompt: function () {
+        return lang.resp.prompt;
+      },
+      options: function () {
+        return [lang.resp.choices.keyboard, lang.resp.choices.buttons];
+      },
+      name: 'resp',
+      required: true,
+    },
+  ],
+  data: { task: 'resp_mode' },
+  on_finish: function (data) {
     if (data.response.resp == lang.resp.choices.keyboard) {
-      resp_mode = ('keyboard');
+      resp_mode = 'keyboard';
+    } else if (data.response.resp == lang.resp.choices.buttons) {
+      resp_mode = 'button';
     }
-    else if (data.response.resp == lang.resp.choices.buttons) {
-      resp_mode = ('button');
-    };
-  }
+  },
 };
 
 //----------------------- 3 ----------------------

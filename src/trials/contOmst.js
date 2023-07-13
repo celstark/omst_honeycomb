@@ -5,8 +5,8 @@
 //   Author: Craig Stark
 //   Forked from main cMST_cs_v1 on 5/7/20 and modified for the more traditional continuous MST
 //   Forked again on 8/20/20, pulled out Cordova, and setup for JATOS
-  
-//   Currently, this is set to do a 256-trial continuous design with 32 lures & repeat pairs at 
+
+//   Currently, this is set to do a 256-trial continuous design with 32 lures & repeat pairs at
 //     "short" lags of 4-12 and 32 lure and repeat pairs at "medium" lags of 20-100
 
 //   Revised: November 20, 2019 (CELS) for Cordova
@@ -30,8 +30,8 @@
 //    12/1/20 (CELS): Added twochoice flag (default=1) and, if 0, will do traditional old/similar/new
 //    1/3/22 (CELS): Added ability to force the order file prefix (force_orderprefix)
 
-//    3/14/22 (CELS): Reworked a bit for being our continuous version of the cMST_v2.  
-//                   Set defaults to 3-choice and will used the imbalanced orders. 
+//    3/14/22 (CELS): Reworked a bit for being our continuous version of the cMST_v2.
+//                   Set defaults to 3-choice and will used the imbalanced orders.
 //                   Removed the video instructions
 //                   Renamed to cont_cmst
 //                   Phasename set to cMSTCont
@@ -48,7 +48,7 @@
 
 //   Optional parameters:
 //   In the JATOS versions, these come in via jatos.studySessionData while in Cordova, we pass
-//   them in as URL parameters.  Check the code as the actual variable names differ a touch b/n versions. 
+//   them in as URL parameters.  Check the code as the actual variable names differ a touch b/n versions.
 //   (these are the JATOS ones)
 
 //   Optional parameters:
@@ -61,7 +61,7 @@
 //   [twochoice=X]: 0=OSN, 1=ON response choices (0=default)
 //   [selfpaced=X]: Should we allow infinite time with blank screen to make the response? (default =1)
 
-//   Note, if there is a studySessionData variable called "order" (and one called "taskindex") it will use this to 
+//   Note, if there is a studySessionData variable called "order" (and one called "taskindex") it will use this to
 //   queue up the next task.
 
 //   More parameters:
@@ -78,11 +78,11 @@
 // -->
 
 // <head>
-//  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap:  'unsafe-inline' 'unsafe-eval' 
-//         https://fonts.gstatic.com ; 
-//       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/css; media-src *; 
+//  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap:  'unsafe-inline' 'unsafe-eval'
+//         https://fonts.gstatic.com ;
+//       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/css; media-src *;
 //       img-src 'self' data: content:;">
-      
+
 //   <script type="text/javascript" src="jatos.js"></script>
 //   <script type="text/javascript" src="js/index.js"></script>
 //   <script src="js/jquery-3.1.1.min.js"></script>
@@ -113,15 +113,16 @@
 //
 //   Author: Craig Stark, Audrey Hempel
 //   --------------------
-// 
+//
 //   Changes:
 //        6/?/23 (AGH): moved config variables (stim_set, orderfile...)
-//                     to /config/contOmstset.js  
+//                     to /config/contOmstset.js
 //        6/?/23 (AGH): moved repeat test_trials to /trials/trialCont.js +
 //                     /timelines/testTrial.js + /timelines/testBlock.js
-//        6/?/23 (AGH): moved timeline variables set up of test_trials 
-//                     as the condition of exptBlock1 in /config/experiment.js 
+//        6/?/23 (AGH): moved timeline variables set up of test_trials
+//                     as the condition of exptBlock1 in /config/experiment.js
 //                     (gets called in main timeline as testBlock(exptBlock1))
+//        7/13/23 (AGH): added task data property to trials
 //
 //   --------------------
 //   This file includes the continuous oMST instructions and debrief
@@ -138,8 +139,7 @@ import { initJsPsych } from 'jspsych';
 
 import { lang } from '../trials/selectLanguage';
 import { resp_mode } from '../trials/selectRespType';
-import { twochoice, /*selfpaced, stim_set, trial_stim*/ } from '../config/contOmstset';
-
+import { twochoice /*selfpaced, stim_set, trial_stim*/ } from '../config/contOmstset';
 
 // <script>
 // function waitFor(conditionFunction) {
@@ -150,38 +150,53 @@ import { twochoice, /*selfpaced, stim_set, trial_stim*/ } from '../config/contOm
 //   return new Promise(poll)
 // }
 
-function invNormcdf(p) { // https://stackoverflow.com/questions/8816729/javascript-equivalent-for-inverse-normal-function-eg-excels-normsinv-or-nor
-  var a1 = -39.6968302866538, a2 = 220.946098424521, a3 = -275.928510446969;
-  var a4 = 138.357751867269, a5 = -30.6647980661472, a6 = 2.50662827745924;
-  var b1 = -54.4760987982241, b2 = 161.585836858041, b3 = -155.698979859887;
-  var b4 = 66.8013118877197, b5 = -13.2806815528857, c1 = -7.78489400243029E-03;
-  var c2 = -0.322396458041136, c3 = -2.40075827716184, c4 = -2.54973253934373;
-  var c5 = 4.37466414146497, c6 = 2.93816398269878, d1 = 7.78469570904146E-03;
-  var d2 = 0.32246712907004, d3 = 2.445134137143, d4 = 3.75440866190742;
-  var p_low = 0.02425, p_high = 1 - p_low;
+function invNormcdf(p) {
+  // https://stackoverflow.com/questions/8816729/javascript-equivalent-for-inverse-normal-function-eg-excels-normsinv-or-nor
+  var a1 = -39.6968302866538,
+    a2 = 220.946098424521,
+    a3 = -275.928510446969;
+  var a4 = 138.357751867269,
+    a5 = -30.6647980661472,
+    a6 = 2.50662827745924;
+  var b1 = -54.4760987982241,
+    b2 = 161.585836858041,
+    b3 = -155.698979859887;
+  var b4 = 66.8013118877197,
+    b5 = -13.2806815528857,
+    c1 = -7.78489400243029e-3;
+  var c2 = -0.322396458041136,
+    c3 = -2.40075827716184,
+    c4 = -2.54973253934373;
+  var c5 = 4.37466414146497,
+    c6 = 2.93816398269878,
+    d1 = 7.78469570904146e-3;
+  var d2 = 0.32246712907004,
+    d3 = 2.445134137143,
+    d4 = 3.75440866190742;
+  var p_low = 0.02425,
+    p_high = 1 - p_low;
   var q, r;
   var retVal;
 
-  if ((p < 0) || (p > 1))
-  {
-    alert("NormSInv: Argument out of range.");
+  if (p < 0 || p > 1) {
+    alert('NormSInv: Argument out of range.');
     retVal = 0;
-  }
-  else if (p < p_low)
-  {
+  } else if (p < p_low) {
     q = Math.sqrt(-2 * Math.log(p));
-    retVal = (((((c1 * q + c2) * q + c3) * q + c4) * q + c5) * q + c6) / ((((d1 * q + d2) * q + d3) * q + d4) * q + 1);
-  }
-  else if (p <= p_high)
-  {
+    retVal =
+      (((((c1 * q + c2) * q + c3) * q + c4) * q + c5) * q + c6) /
+      ((((d1 * q + d2) * q + d3) * q + d4) * q + 1);
+  } else if (p <= p_high) {
     q = p - 0.5;
     r = q * q;
-    retVal = (((((a1 * r + a2) * r + a3) * r + a4) * r + a5) * r + a6) * q / (((((b1 * r + b2) * r + b3) * r + b4) * r + b5) * r + 1);
-  }
-  else
-  {
+    retVal =
+      ((((((a1 * r + a2) * r + a3) * r + a4) * r + a5) * r + a6) * q) /
+      (((((b1 * r + b2) * r + b3) * r + b4) * r + b5) * r + 1);
+  } else {
     q = Math.sqrt(-2 * Math.log(1 - p));
-    retVal = -(((((c1 * q + c2) * q + c3) * q + c4) * q + c5) * q + c6) / ((((d1 * q + d2) * q + d3) * q + d4) * q + 1);
+    retVal =
+      -(((((c1 * q + c2) * q + c3) * q + c4) * q + c5) * q + c6) /
+      ((((d1 * q + d2) * q + d3) * q + d4) * q + 1);
   }
 
   return retVal;
@@ -192,7 +207,6 @@ function invNormcdf(p) { // https://stackoverflow.com/questions/8816729/javascri
 //   .toString()
 //   .padStart(width,0)
 // }
-
 
 // jatos.onLoad(async function() {
 //   //baseurl='https://starklab.bio.uci.edu/mst/'; // How we'll get images, videos, etc.  Set to empty string to use local folders
@@ -239,150 +253,170 @@ function invNormcdf(p) { // https://stackoverflow.com/questions/8816729/javascri
 //     console.log('Order prefix forced via JSON component to ' + orderprefix);
 //   }
 
+// // START OF CODE THAT SHOULD BE CONSTANT REGARDLESS OF JATOS / CORDOVA
+// const phasename='oMSTCont';
 
-  
-  // // START OF CODE THAT SHOULD BE CONSTANT REGARDLESS OF JATOS / CORDOVA
-  // const phasename='oMSTCont';
+var jsPsych = initJsPsych();
 
-  var jsPsych = initJsPsych();
-
-  // jsPsych.data.addProperties({
-  //   task: phasename,
-  //   subject: sid,
-  //   set: stim_set,
-  //   selfpaced: selfpaced,
-  //   orderfile: orderfile
-  // });
+// jsPsych.data.addProperties({
+//   task: phasename,
+//   subject: sid,
+//   set: stim_set,
+//   selfpaced: selfpaced,
+//   orderfile: orderfile
+// });
 
 //----------------------- 2 ----------------------
 //---------------- HELPER METHODS ----------------
 // helper methods that setup prompts and response options based on keyboard/button and 2/3 choices
 
-var instr_choice = function() {
-  if (resp_mode == 'button'){
-      return lang.cont.button.instr_choice;
-    }
-  else {
-      return lang.cont.key.instr_choice;
-  }  
-}
+var instr_choice = function () {
+  if (resp_mode == 'button') {
+    return lang.cont.button.instr_choice;
+  } else {
+    return lang.cont.key.instr_choice;
+  }
+};
 
-var instr_prompt = function() {
-  if (resp_mode == 'button'){
-      return lang.cont.button.instr_prompt;
-    }
-  else {
-      return lang.cont.key.instr_prompt;
-  }  
-}
+var instr_prompt = function () {
+  if (resp_mode == 'button') {
+    return lang.cont.button.instr_prompt;
+  } else {
+    return lang.cont.key.instr_prompt;
+  }
+};
 
 var instr_stim = function () {
-  if (resp_mode == 'button'){
+  if (resp_mode == 'button') {
     if (twochoice == 0) {
       return lang.cont.button.threechoice.instr_stim;
-    }
-    else {
+    } else {
       return lang.cont.button.twochoice.instr_stim;
     }
-  }
-  else {
+  } else {
     if (twochoice == 0) {
       return lang.cont.key.threechoice.instr_stim;
-    }
-    else {
+    } else {
       return lang.cont.key.twochoice.instr_stim;
     }
-  }  
-}
+  }
+};
 
 //----------------------- 3 ----------------------
 //--------------------- TRIALS -------------------
 
 //instructions trial
-var instr1_trial = {  
-  type: (resp_mode == 'button' ? jsPsychHtmlButtonResponse : jsPsychHtmlKeyboardResponse),
+var instr1_trial = {
+  type: resp_mode == 'button' ? jsPsychHtmlButtonResponse : jsPsychHtmlKeyboardResponse,
   choices: instr_choice,
   prompt: instr_prompt,
-  margin_horizontal: '40px', margin_vertical: '20px',
-//        button_html: '<button style="font-size: 150%" class="jspsych-btn">%choice%</button>',
+  margin_horizontal: '40px',
+  margin_vertical: '20px',
+  //        button_html: '<button style="font-size: 150%" class="jspsych-btn">%choice%</button>',
   stimulus: instr_stim,
-}
+  data: { task: 'oMSTCont' },
+};
 
 // thank you message
 var debrief_block = {
   type: jsPsychHtmlKeyboardResponse,
   trial_duration: 500,
-  stimulus: function() {
+  stimulus: function () {
     return lang.cont.ty;
   },
+  data: { task: 'oMSTCont' },
   on_finish: function (data) {
-    let validtrials=jsPsych.data.get().filterCustom(function(trial) {
-      return trial.resp !== null; 
-    })
-    let targets=validtrials.filter({condition: 'target'});
-    let lures=validtrials.filter({condition: 'lure'});
-    let foils=validtrials.filter({condition: 'foil'});
+    let validtrials = jsPsych.data.get().filterCustom(function (trial) {
+      return trial.resp !== null;
+    });
+    let targets = validtrials.filter({ condition: 'target' });
+    let lures = validtrials.filter({ condition: 'lure' });
+    let foils = validtrials.filter({ condition: 'foil' });
 
-    if (twochoice==1) {
-      let corr_targs = targets.filter({correct: true});
-      let corr_lures = lures.filter({correct: true});
-      let corr_foils = foils.filter({correct: true});
-      let hits=Math.round(corr_targs.count() / targets.count() * 100);
-      let cr_lure=Math.round(corr_lures.count() / lures.count() * 100);
-      let cr_foil=Math.round(corr_foils.count() / foils.count() * 100);
+    if (twochoice == 1) {
+      let corr_targs = targets.filter({ correct: true });
+      let corr_lures = lures.filter({ correct: true });
+      let corr_foils = foils.filter({ correct: true });
+      let hits = Math.round((corr_targs.count() / targets.count()) * 100);
+      let cr_lure = Math.round((corr_lures.count() / lures.count()) * 100);
+      let cr_foil = Math.round((corr_foils.count() / foils.count()) * 100);
       let p_fa_foil = 0.0;
       let p_fa_lure = 0.0;
       let p_hit = 0.0;
-      if (corr_targs.count() == 0) { p_hit = 0.5 / targets.count(); }
-      else if (corr_targs.count() == targets.count() ) { p_hit = (targets.count() - 0.5) / targets.count(); }
-      else { p_hit=corr_targs.count() / targets.count(); }
+      if (corr_targs.count() == 0) {
+        p_hit = 0.5 / targets.count();
+      } else if (corr_targs.count() == targets.count()) {
+        p_hit = (targets.count() - 0.5) / targets.count();
+      } else {
+        p_hit = corr_targs.count() / targets.count();
+      }
 
-      if (corr_lures.count() == lures.count()) { p_fa_lure = 0.5 / lures.count(); }
-      else if (corr_lures.count() == 0 ) { p_fa_lure = (lures.count() - 0.5) / lures.count(); }
-      else { p_fa_lure=1-(corr_lures.count() / lures.count());}
+      if (corr_lures.count() == lures.count()) {
+        p_fa_lure = 0.5 / lures.count();
+      } else if (corr_lures.count() == 0) {
+        p_fa_lure = (lures.count() - 0.5) / lures.count();
+      } else {
+        p_fa_lure = 1 - corr_lures.count() / lures.count();
+      }
 
-      if (corr_foils.count() == foils.count()) { p_fa_foil = 0.5 / foils.count(); }
-      else if (corr_foils.count() ==0 ) {p_fa_foil = (foils.count() - 0.5) / foils.count(); }
-      else { p_fa_foil=1-(corr_foils.count() / foils.count()); }
+      if (corr_foils.count() == foils.count()) {
+        p_fa_foil = 0.5 / foils.count();
+      } else if (corr_foils.count() == 0) {
+        p_fa_foil = (foils.count() - 0.5) / foils.count();
+      } else {
+        p_fa_foil = 1 - corr_foils.count() / foils.count();
+      }
 
-      console.log(corr_targs.count() + " " + targets.count() + " " + p_hit)
-      console.log(corr_lures.count() + " " + lures.count() + " " + p_fa_lure)
-      console.log(corr_foils.count() + " " + foils.count() + " " + p_fa_foil)
-      console.log(invNormcdf(p_hit))
-      console.log(invNormcdf(p_fa_lure))
-      console.log(invNormcdf(p_fa_foil))
+      console.log(corr_targs.count() + ' ' + targets.count() + ' ' + p_hit);
+      console.log(corr_lures.count() + ' ' + lures.count() + ' ' + p_fa_lure);
+      console.log(corr_foils.count() + ' ' + foils.count() + ' ' + p_fa_foil);
+      console.log(invNormcdf(p_hit));
+      console.log(invNormcdf(p_fa_lure));
+      console.log(invNormcdf(p_fa_foil));
 
-      let dpTF = invNormcdf(p_hit) - invNormcdf(p_fa_foil); 
-      let dpTL = invNormcdf(p_hit) - invNormcdf(p_fa_lure); 
+      let dpTF = invNormcdf(p_hit) - invNormcdf(p_fa_foil);
+      let dpTL = invNormcdf(p_hit) - invNormcdf(p_fa_lure);
 
-      var retstr = 'HR, ' + hits + ', CR-L, ' + cr_lure + ', CR-F rate, ' + cr_foil + ", d'T:F, " + dpTF.toFixed(3) + ", d'T:L, " + dpTL.toFixed(3) 
-    }
-    else { // OSN
-      let targ_old=targets.filter({resp: 'o'});
-      let targ_sim=targets.filter({resp: 's'});
-      let targ_new=targets.filter({resp: 'n'});
-      let lure_old=lures.filter({resp: 'o'});
-      let lure_sim=lures.filter({resp: 's'});
-      let lure_new=lures.filter({resp: 'n'});
-      let foil_old=foils.filter({resp: 'o'});
-      let foil_sim=foils.filter({resp: 's'});
-      let foil_new=foils.filter({resp: 'n'});
+      var retstr =
+        'HR, ' +
+        hits +
+        ', CR-L, ' +
+        cr_lure +
+        ', CR-F rate, ' +
+        cr_foil +
+        ", d'T:F, " +
+        dpTF.toFixed(3) +
+        ", d'T:L, " +
+        dpTL.toFixed(3);
+    } else {
+      // OSN
+      let targ_old = targets.filter({ resp: 'o' });
+      let targ_sim = targets.filter({ resp: 's' });
+      let targ_new = targets.filter({ resp: 'n' });
+      let lure_old = lures.filter({ resp: 'o' });
+      let lure_sim = lures.filter({ resp: 's' });
+      let lure_new = lures.filter({ resp: 'n' });
+      let foil_old = foils.filter({ resp: 'o' });
+      let foil_sim = foils.filter({ resp: 's' });
+      let foil_new = foils.filter({ resp: 'n' });
 
-      let rec=(targ_old.count() / targets.count()) - (foil_old.count() / foils.count());
-      let ldi=(lure_sim.count() / lures.count()) - (foil_sim.count() / foils.count());
-// removed var
-      retstr='Valid, ' + targets.count() + ", " + lures.count() + ', ' + foils.count() + '\n';
-      retstr += 'Old, ' + targ_old.count() + ", " + lure_old.count() + ', ' + foil_old.count() + '\n';
-      retstr += 'Similar, ' + targ_sim.count() + ", " + lure_sim.count() + ', ' + foil_sim.count() + '\n';
-      retstr += 'New, ' + targ_new.count() + ", " + lure_new.count() + ', ' + foil_new.count() + '\n';
+      let rec = targ_old.count() / targets.count() - foil_old.count() / foils.count();
+      let ldi = lure_sim.count() / lures.count() - foil_sim.count() / foils.count();
+      // removed var
+      retstr = 'Valid, ' + targets.count() + ', ' + lures.count() + ', ' + foils.count() + '\n';
+      retstr +=
+        'Old, ' + targ_old.count() + ', ' + lure_old.count() + ', ' + foil_old.count() + '\n';
+      retstr +=
+        'Similar, ' + targ_sim.count() + ', ' + lure_sim.count() + ', ' + foil_sim.count() + '\n';
+      retstr +=
+        'New, ' + targ_new.count() + ', ' + lure_new.count() + ', ' + foil_new.count() + '\n';
       retstr += 'REC, ' + rec.toFixed(3) + ', LDI, ' + ldi.toFixed(3);
-
     }
-    
-    // let date = new Date(); 
-    // let dcode = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + (date.getDate()+1) + 
+
+    // let date = new Date();
+    // let dcode = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + (date.getDate()+1) +
     //   "-" + date.getHours() + "-" + date.getMinutes() + "-" + date.getSeconds();
-    
+
     // if (!jatos.batchSession.defined("/" + sid)) {  // Should have this by now, but to be safe -- make sure to create this as an array
     //   jatos.batchSession.add("/" + sid,[phasename+"_"+dcode+"_"+retstr]);
     // }
@@ -392,16 +426,15 @@ var debrief_block = {
     data.summary = retstr;
     //jatos.batchSession.add("/"+idcode,{ [phasename + "_results"]: data.summary });
     //return '<p>Hit rate: ' + hits + '</p><p>CR-L rate: ' + cr_lure + '</p><p>CR-F rate: ' + cr_foil + '</p>'
-    //return 'HR, ' + hits + ', CR-L, ' + cr_lure + ', CR-F rate, ' + cr_foil + ", d'T:F, " + dpTF.toFixed(3) + ", d'T:L, " + dpTL.toFixed(3) 
-  }
-}
-
+    //return 'HR, ' + hits + ', CR-L, ' + cr_lure + ', CR-F rate, ' + cr_foil + ", d'T:F, " + dpTF.toFixed(3) + ", d'T:L, " + dpTL.toFixed(3)
+  },
+};
 
 //----------------------- 4 ----------------------
 //--------------------- EXPORTS -------------------
 
-export { /*preload,*/ instr1_trial, /*test_trials,*/ debrief_block }
-      
+export { /*preload,*/ instr1_trial, /*test_trials,*/ debrief_block };
+
 // });
 // </script>
 

@@ -4,7 +4,6 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import { config } from '../config/main';
 import { initParticipant } from '../firebase';
 import { buildTimeline, jsPsychOptions } from '../timelines/main';
-import { stim_set, selfpaced, orderfile } from '../config/contOmstset';
 
 function JsPsychExperiment({
   participantId,
@@ -43,9 +42,6 @@ function JsPsychExperiment({
     jsPsych.data.addProperties({
       study_id: studyId,
       participant_id: participantId,
-      set: stim_set,
-      selfpaced: selfpaced,
-      orderfile: orderfile
       //start_date: startDate,
       //task_version: taskVersion,
     });
