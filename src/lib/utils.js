@@ -66,7 +66,7 @@ const importAll = (r) => {
 
 const images = importAll(requireContext('../assets/images', false, /\.(png|jpe?g|svg)$/));
 
-//dont think this is necessary with the parsing in contOmst
+// 6/28/23 (AGH): adapted images object to direct for the different order sets
 const set1Images = importAll(
   requireContext('../assets/images/Set1_rs', false, /\.(png|jpe?g|svg)$/)
 );

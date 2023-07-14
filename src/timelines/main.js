@@ -6,9 +6,14 @@
 //   --------------------
 //
 //   Changes:
-//        7/?/23 (AGH):
-//        7/9/23 (AGH): added conditional timelines based on user
-//                      consent
+//        6/26/23 (AGH): added contOmst preload, instructions, debrief blocks
+//        6/28/23 (AGH): added contOmst repeating trials in testBlock(exptBlock1)
+//        7/6/23 (AGH):  deleted preload
+//        7/7/23 (AGH):  created consented and notConsented conditional timelines
+//                       to progress based on participant consent
+//        7/9/23 (AGH):  added conditional timelines based on user
+//                       consent
+//        7/10/23 (AGH): added end_message
 //
 //   --------------------
 //   This file builds the primaryTimeline from all of the trials.
@@ -20,7 +25,7 @@
 //----------------------- 1 ----------------------
 //-------------------- IMPORTS -------------------
 
-import { /*lang,*/ config } from '../config/main';
+import { config } from '../config/main';
 import { consent_trial, consentGiven, not_consented } from '../trials/consent_trial';
 import preamble from './preamble';
 import testBlock from './testBlock';
@@ -28,10 +33,9 @@ import taskBlock from './taskBlock';
 import { tutorialBlock } from '../config/tutorial';
 import { exptBlock1 } from '../config/experiment';
 import { select_pref_lang } from '../trials/selectLanguage';
-//import { select_resp_type } from '../trials/selectRespType';
 import { demogform } from '../trials/demographics';
 import { intro, new1, new2, new3, repeat1, lure1, side_by_side1, new4, new5, repeat2, lure2, side_by_side2, outtro } from '../trials/instructions';
-import { /*preload,*/ instr1_trial, /*test_trials*/ debrief_block } from '../trials/contOmst';
+import { instr1_trial, debrief_block } from '../trials/contOmst';
 import { end_message } from '../trials/end';
 
 //----------------------- 2 ----------------------

@@ -6,7 +6,10 @@
 //   --------------------
 //
 //   Changes:
-//        7/?/23 (AGH):
+//        6/30/23 (AGH): converted consent_trialfrom consent_form.html
+//                       added selector ids and custom formatting
+//                       in App.css
+//        7/7/23 (AGH):  created not_consented for conditional timeline
 //        7/13/23 (AGH): added task data property to trials
 //
 //   --------------------

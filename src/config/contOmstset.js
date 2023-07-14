@@ -6,7 +6,8 @@
 //   --------------------
 //
 //   Changes:
-//        7/?/23 (AGH):
+//        6/27/23 (AGH): created config for contOmst
+//                       imported jsorders files
 //
 //   --------------------
 //   This file defines all of the continuous trial config variables that set

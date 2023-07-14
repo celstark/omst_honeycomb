@@ -6,7 +6,7 @@
 //   --------------------
 //
 //   Changes:
-//        6/?/23 (AGH): removed language selection to /trials/selectLanguage.js
+//        6/20/23 (AGH): removed language selection to /trials/selectLanguage.js
 //
 //   --------------------
 //   This is the main configuration file where universal and default settings

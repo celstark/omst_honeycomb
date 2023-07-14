@@ -6,7 +6,7 @@
 //   --------------------
 //
 //   Changes:
-//        7/10/23 (AGH): initial code
+//        7/10/23 (AGH): initial code converted from end.html
 //        7/13/23 (AGH): added task data property
 //
 //   --------------------

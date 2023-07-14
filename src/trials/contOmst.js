@@ -115,13 +115,17 @@
 //   --------------------
 //
 //   Changes:
-//        6/?/23 (AGH): moved config variables (stim_set, orderfile...)
-//                     to /config/contOmstset.js
-//        6/?/23 (AGH): moved repeat test_trials to /trials/trialCont.js +
-//                     /timelines/testTrial.js + /timelines/testBlock.js
-//        6/?/23 (AGH): moved timeline variables set up of test_trials
-//                     as the condition of exptBlock1 in /config/experiment.js
-//                     (gets called in main timeline as testBlock(exptBlock1))
+//        6/26/23 (AGH): began converting cont_omst.html into honeycomb template
+//                       (adding imports, exports, removing JATOS code)
+//        6/27/23 (AGH): moved config variables (stim_set, orderfile...)
+//                       to /config/contOmstset.js
+//                       made dynamic for lang and resp_mode
+//        6/28/23 (AGH):  moved repeat test_trials to /trials/trialCont.js +
+//                       /timelines/testTrial.js + /timelines/testBlock.js
+//        6/28/23 (AGH):  moved timeline variables set up of test_trials
+//                       as the condition of exptBlock1 in /config/experiment.js
+//                       (gets called in main timeline as testBlock(exptBlock1))
+//        7/6/23 (AGH):  deleted preload
 //        7/13/23 (AGH): added task data property to trials
 //
 //   --------------------

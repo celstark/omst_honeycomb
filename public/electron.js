@@ -32,7 +32,7 @@ if (activeProductId) {
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
-// ADDED: this function was added to allow the application to save data if the window is
+// 7/10/23 (AGH) ADDED: this function was added to allow the application to save data if the window is
 // closed before the completion of the experiment
 const saveDataAndQuit = () => {
   if (stream) {
@@ -99,7 +99,7 @@ function createWindow() {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    saveDataAndQuit(); // ADDED
+    saveDataAndQuit(); // 7/10/23 (AGH) ADDED
     mainWindow = null;
   });
 }
@@ -229,7 +229,7 @@ const getSavePath = (participantID, studyID) => {
     const desktop = app.getPath('desktop');
     const name = app.getName();
     const date = today.toISOString().slice(0, 10);
-    // ADDED: This section was added for the omst to ensure that data was saved on the first iteration of a studyID and participant ID
+    // 7/10/23 (AGH) ADDED: This section was added for the omst to ensure that data was saved on the first iteration of a studyID and participant ID
     const folderPath = path.join(desktop, studyID, participantID, date, name);
 
     // Create the folders if they don't exist

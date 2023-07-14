@@ -6,6 +6,10 @@
 //   --------------------
 //
 //   Changes:
+//        6/28/23 (AGH): copied from honeycomb taskTrial
+//        6/28/23 (AGH): moved repeat test_trials from ./trials/contOmst 
+//                       set up stimulus from tlv argument
+//                       imported (new) set image objects form ../lib/utils
 //        7/11/23 (AGH): added data to include condition.data (set, selfpaced,
 //                       orderfile) in each repeated trial data
 //        7/13/23 (AGH): moved set, selfpaced, orderfile declaration to here instead of JsPsychExperiment

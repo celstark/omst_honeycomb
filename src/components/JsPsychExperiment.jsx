@@ -42,8 +42,8 @@ function JsPsychExperiment({
     jsPsych.data.addProperties({
       study_id: studyId,
       participant_id: participantId,
-      //start_date: startDate,
-      //task_version: taskVersion,
+      //start_date: startDate, 7/13/23 (AGH): DELETED
+      //task_version: taskVersion, 7/13/23 (AGH): DELETED
     });
     return jsPsych;
   }, [participantId, studyId, taskVersion]);

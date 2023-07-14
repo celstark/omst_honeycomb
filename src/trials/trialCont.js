@@ -6,8 +6,8 @@
 //   --------------------
 //
 //   Changes:
-//        6/?/23 (AGH): adapted from cont_omst.html into honeycomb
-//                      looping format
+//        6/28/23 (AGH): moved repeated test_trials from ./contOmst
+//                       (defaults)
 //        7/11/23 (AGH): added data parameter
 //
 //   --------------------

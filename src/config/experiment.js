@@ -6,8 +6,9 @@
 //   --------------------
 //
 //   Changes:
-//        6/?/23 (AGH): moved the timeline variables for contOMST
-//                     test_trials
+//        6/28/23 (AGH): moved the timeline variables for contOMST
+//                       test_trials from ./trials
+//                       set up tlv as exptBlock1 conditions
 //
 //   --------------------
 //   This file defines the experiment changing conditions in repeated

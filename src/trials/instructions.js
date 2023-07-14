@@ -103,7 +103,17 @@
 //   --------------------
 //
 //   Changes:
-//        6/?/23 (AGH):
+//        6/12/23 (AGH): forked honeycomb, began to transfer trials from
+//                       cmst_instr_contOSN.html into template (adding imports,
+//                       exports, removing JATOS code)
+//        6/14/23 (AGH): loaded images into ../assets and imported { images }
+//                       from ../lib/utils     
+//        6/16/23 (AGH): created and imported custom plugins in ./uniqueplugins 
+//                       adpated from Craig's create-image-buttons plugin
+//        6/20/23 (AGH): created ./selectLanguage and imported { lang }
+//                       created ./selectRespType and imported { resp_mode }
+//        6/22/23 (AGH): converted all the trial parameters dependent on lang
+//                       and resp-mode into dynamic parameters
 //        7/13/23 (AGH): added task as data property
 //
 //   --------------------

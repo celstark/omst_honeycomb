@@ -76,8 +76,12 @@
 //   --------------------
 //
 //   Changes:
-//        6/?/23 (AGH):
-//        7/13/23 (AGH): added task data property back in
+//        6/22/23 (AGH): adapted demogrpahics.html into honeycomb template
+//                       (adding imports, exports, removing JATOS code)
+//        6/23/23 (AGH): made dynamic for { lang }
+//        6/30/23 (AGH): added selector ids and custom formatting
+//                       in App.css
+//        7/13/23 (AGH): added task data property to include task name
 //
 //   --------------------
 //   This trial displays the demographics survey
