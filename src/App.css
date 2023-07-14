@@ -1,7 +1,7 @@
-p,
+/* p,
 li {
   font-size: 1.5rem;
-}
+} */
 html,
 body,
 #root,
@@ -123,10 +123,10 @@ body,
 }
 
 /* fonts and type */
-
+ 
 .jspsych-display-element {
   font-family: 'Open Sans', 'Arial', sans-serif;
-  font-size: 18px;
+  font-size: 25px; /*changed from 18*/
   line-height: 1.6em;
 }
 
@@ -210,7 +210,7 @@ body,
 /* Demographics form formatting */
 
 #demogpramble {
-  font-size: 125%;
+  font-size: 90%;
 }
 
 #demogform {
@@ -218,6 +218,7 @@ body,
   font-size: 16px;
   margin-top: 50px;
   margin-left: 50px;
+  line-height: 1.5rem;
 }
 
 #demogform p {
@@ -234,6 +235,7 @@ body,
   font-size: 16px;
   color: #666;
   margin: 50px;
+  line-height: 1.5rem;
 }
 
 #consenttext li,

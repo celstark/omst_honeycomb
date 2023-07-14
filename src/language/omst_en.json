@@ -62,13 +62,13 @@
   },
 
   "instructions": {
-    "txt0": "You are going to see pictures of everyday items, one at a time. For each one, you will select <b>Old</b> if you have seen this exact picture before, <b>Similar</b> if it is similar, but not exactly the same as one you saw before, or <b>New</b> if it is entirely a new picture. <p>The way to think of <i>Similar</i> is whether it has the same name, but is a different picture in any way.  <p>A few practice trials should make this clear.",
+    "txt0": "You are going to see pictures of everyday items, one at a time. For each one, you will select <b>Old</b> if you have seen this exact picture before, <b>Similar</b> if it is similar, but not exactly the same as one you saw before, or <b>New</b> if it is entirely a new picture.</p> <p>The way to think of <i>Similar</i> is whether it has the same name, but is a different picture in any way.</p> <p>A few practice trials should make this clear.",
     "cor_new": "<p> Good! You have not seen this image yet, so you correctly selected <b>New</b> </p>",
     "cor_rep": "<p> Good! You have seen this exact image, so you correctly selected <b>Old</b> </p>",
     "cor_lure": "<p> Good! You have not seen this <i>exact</i> image, so you correctly selected <b>Similar</b> </p>",
     "prompt_test": "<p> Your turn. Have you seen this? </p>",
     "side_by_side": "<p> As you can see, these items are similar, but not exactly the same. For this kind of image, you should select <b>Similar</b> to indicate that you saw something similar to this but have not seen that exact item before during this session. </p>",
-    "end": "That's the idea. Now, we'll do the actual test <p><i>As you do the actual task, if the picture disappears before you respond, don't worry. Just make your response even if the screen is blank.</i>",
+    "end": "That's the idea. Now, we'll do the actual test.</p> <p><i>As you do the actual task, if the picture disappears before you respond, don't worry. Just make your response even if the screen is blank.</i>",
 
     "key": {
       "instr_choice": " ",
