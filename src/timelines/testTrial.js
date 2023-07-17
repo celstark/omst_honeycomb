@@ -15,6 +15,9 @@
 //        7/13/23 (AGH): moved set, selfpaced, orderfile declaration to here instead of JsPsychExperiment
 //                       added task data property
 //                       changed arg condition --> tlv
+//        7/14/23 (AGH): created keyboard and button version of timeline
+//                       to allow response selection (trial types cannot 
+//                       be dynamic)
 //
 //   --------------------
 //   This file sets up an iteration of the test trial (/trials/trialCont.js)
@@ -27,6 +30,7 @@
 //-------------------- IMPORTS -------------------
 
 import jsPsychImageKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
+import jsPsychImageButtonResponse from '@jspsych/plugin-html-button-response'
 import { config } from '../config/main';
 
 // image objects that allow image path of each set (based on stim_set)
@@ -39,58 +43,105 @@ import {
   set6Images,
 } from '../lib/utils';
 import { stim_set, orderfile, selfpaced } from '../config/contOmstset';
-//import { resp_mode } from '../trials/selectRespType';
+import { resp_mode } from '../trials/selectRespType';
 
 // default settings for a contOmst trial
-import { contTrial } from '../trials/trialCont';
+import { keyContTrial, buttonContTrial } from '../trials/trialCont';
 
 //----------------------- 2 ----------------------
 //-------------------- TIMELINE ------------------
 
 // sets up a basic trial in the contOmst, gets repeated for each element of the trial_stim array in testBlock
 
-const testTrial = (blockSettings, blockDetails, tlv) => {
-  // timeline
-  const timeline = [
-    contTrial(config, {
-      image: function () {
-        if (stim_set == 1) {
-          return set1Images[tlv.stimulus];
-        } else if (stim_set == 2) {
-          return set2Images[tlv.stimulus];
-        } else if (stim_set == 3) {
-          return set3Images[tlv.stimulus];
-        } else if (stim_set == 4) {
-          return set4Images[tlv.stimulus];
-        } else if (stim_set == 5) {
-          return set5Images[tlv.stimulus];
-        } else if (stim_set == 6) {
-          return set6Images[tlv.stimulus];
-        }
-      },
-      data: function () {
-        // tlv data conditions
-        let condition = tlv.data.condition;
-        let correct_response = tlv.data.correct_response;
-        let lbin = tlv.data.lbin;
-        // return with other data properties
-        return {
-          condition,
-          correct_response,
-          lbin,
-          task: 'oMSTCont',
-          set: stim_set,
-          selfpaced: selfpaced,
-          orderfile: orderfile,
-        };
-      },
-    }),
-  ];
+var timeline = [];
 
-  return {
-    type: jsPsychImageKeyboardResponse,
-    timeline,
-  };
+const testTrial = (blockSettings, blockDetails, tlv) => {
+  if (resp_mode == 'keyboard') {  
+    timeline = [
+      keyContTrial(config, {
+        image: function () {
+          if (stim_set == 1) {
+            return set1Images[tlv.stimulus];
+          } else if (stim_set == 2) {
+            return set2Images[tlv.stimulus];
+          } else if (stim_set == 3) {
+            return set3Images[tlv.stimulus];
+          } else if (stim_set == 4) {
+            return set4Images[tlv.stimulus];
+          } else if (stim_set == 5) {
+            return set5Images[tlv.stimulus];
+          } else if (stim_set == 6) {
+            return set6Images[tlv.stimulus];
+          }
+        },
+        data: function () {
+          // tlv data conditions
+          let condition = tlv.data.condition;
+          let correct_response = tlv.data.correct_response;
+          let lbin = tlv.data.lbin;
+          // return with other data properties
+          return {
+            condition,
+            correct_response,
+            lbin,
+            task: 'oMSTCont',
+            set: stim_set,
+            selfpaced: selfpaced,
+            orderfile: orderfile,
+          };
+        },
+      }),
+    ];
+  } else {
+    timeline = [
+      buttonContTrial(config, {
+        image: function () {
+          if (stim_set == 1) {
+            return set1Images[tlv.stimulus];
+          } else if (stim_set == 2) {
+            return set2Images[tlv.stimulus];
+          } else if (stim_set == 3) {
+            return set3Images[tlv.stimulus];
+          } else if (stim_set == 4) {
+            return set4Images[tlv.stimulus];
+          } else if (stim_set == 5) {
+            return set5Images[tlv.stimulus];
+          } else if (stim_set == 6) {
+            return set6Images[tlv.stimulus];
+          }
+        },
+        data: function () {
+          // tlv data conditions
+          let condition = tlv.data.condition;
+          let correct_response = tlv.data.correct_response;
+          let lbin = tlv.data.lbin;
+          // return with other data properties
+          return {
+            condition,
+            correct_response,
+            lbin,
+            task: 'oMSTCont',
+            set: stim_set,
+            selfpaced: selfpaced,
+            orderfile: orderfile,
+          };
+        },
+      }),
+    ];
+  }
+
+  if (resp_mode == 'keyboard') {  
+    return {
+      type: jsPsychImageKeyboardResponse,
+      timeline,
+    }
+  }
+  else {
+    return {
+      type: jsPsychImageButtonResponse,
+      timeline,
+    }
+  }
 };
 
 //----------------------- 3 ----------------------

@@ -115,6 +115,8 @@
 //        6/22/23 (AGH): converted all the trial parameters dependent on lang
 //                       and resp-mode into dynamic parameters
 //        7/13/23 (AGH): added task as data property
+//        7/14/23 (AGH): created button and key trials for each trial to allow
+//                       response selection (trial types cannot be dynamic)
 //
 //   --------------------
 //   These trials are the instruction trials that explain to the
@@ -152,7 +154,7 @@ const phasename = 'cmst_instr_contOSN';
 
 var instr_choice = function () {
   if (resp_mode == 'button') {
-    return lang.instructions.button.instr_choice;
+    return [lang.instructions.button.instr_choice];
   } else {
     return lang.instructions.key.instr_choice;
   }
@@ -261,9 +263,12 @@ var trial_choices = function () {
 //----------------------- 3 ----------------------
 //-------------------- TRIALS --------------------
 // These trials call the functions housing the parameter information.
+// There is one keyboard version and one button version for everytrial that will be 
+// conditionally added to the main timeline depending on the resp_mode selection
 
-var intro = {
-  type: resp_mode == 'button' ? jsPsychHtmlButtonResponse : jsPsychHtmlKeyboardResponse,
+//---------------intro---------------
+var key_intro = {
+  type: jsPsychHtmlKeyboardResponse,
   choices: instr_choice,
   prompt: prompt0,
   stimulus: function () {
@@ -272,8 +277,19 @@ var intro = {
   data: { task: phasename },
 };
 
-var new1 = {
-  type: resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage,
+var button_intro = {
+  type: jsPsychHtmlButtonResponse,
+  choices: instr_choice,
+  prompt: prompt0,
+  stimulus: function () {
+    return lang.instructions.txt0;
+  },
+  data: { task: phasename },
+};
+
+//----------------new1----------------
+var key_new1 = {
+  type: jsPsychCategorizeImage,
   stimulus: images['foil_1032.jpg'],
   key_answer: function () {
     return lang.instructions.key.trial_choices.new;
@@ -287,8 +303,24 @@ var new1 = {
   data: { task: phasename },
 };
 
-var new2 = {
-  type: resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage,
+var button_new1 = {
+  type: jsPsychCategorizeImageButtons,
+  stimulus: images['foil_1032.jpg'],
+  key_answer: function () {
+    return lang.instructions.key.trial_choices.new;
+  },
+  button_answer: 2,
+  choices: trial_choices,
+  prompt: prompt_new,
+  force_correct_button_press: true,
+  incorrect_text: inc_new,
+  correct_text: cor_new,
+  data: { task: phasename },
+};
+
+//----------------new2----------------
+var key_new2 = {
+  type: jsPsychCategorizeImage,
   stimulus: images['foil_1033.jpg'],
   key_answer: function () {
     return lang.instructions.key.trial_choices.new;
@@ -302,8 +334,24 @@ var new2 = {
   data: { task: phasename },
 };
 
-var new3 = {
-  type: resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage,
+var button_new2 = {
+  type: jsPsychCategorizeImageButtons,
+  stimulus: images['foil_1033.jpg'],
+  key_answer: function () {
+    return lang.instructions.key.trial_choices.new;
+  },
+  button_answer: 2,
+  choices: trial_choices,
+  prompt: prompt_new,
+  force_correct_button_press: true,
+  incorrect_text: inc_new,
+  correct_text: cor_new,
+  data: { task: phasename },
+};
+
+//----------------new3----------------
+var key_new3 = {
+  type: jsPsychCategorizeImage,
   stimulus: images['pcon026a.jpg'],
   key_answer: function () {
     return lang.instructions.key.trial_choices.new;
@@ -317,8 +365,24 @@ var new3 = {
   data: { task: phasename },
 };
 
-var repeat1 = {
-  type: resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage,
+var button_new3 = {
+  type: jsPsychCategorizeImageButtons,
+  stimulus: images['pcon026a.jpg'],
+  key_answer: function () {
+    return lang.instructions.key.trial_choices.new;
+  },
+  button_answer: 2,
+  choices: trial_choices,
+  prompt: prompt_new,
+  force_correct_button_press: true,
+  incorrect_text: inc_new,
+  correct_text: cor_new,
+  data: { task: phasename },
+};
+
+//---------------repeat1---------------
+var key_repeat1 = {
+  type: jsPsychCategorizeImage,
   stimulus: images['foil_1033.jpg'],
   key_answer: function () {
     return lang.instructions.key.trial_choices.old;
@@ -332,8 +396,24 @@ var repeat1 = {
   data: { task: phasename },
 };
 
-var lure1 = {
-  type: resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage,
+var button_repeat1 = {
+  type: jsPsychCategorizeImageButtons,
+  stimulus: images['foil_1033.jpg'],
+  key_answer: function () {
+    return lang.instructions.key.trial_choices.old;
+  },
+  button_answer: 0,
+  choices: trial_choices,
+  prompt: prompt_rep,
+  force_correct_button_press: true,
+  incorrect_text: inc_rep,
+  correct_text: cor_rep,
+  data: { task: phasename },
+};
+
+//----------------lure1----------------
+var key_lure1 = {
+  type: jsPsychCategorizeImage,
   stimulus: images['pcon026b.jpg'],
   key_answer: function () {
     return lang.instructions.key.trial_choices.sim;
@@ -347,11 +427,24 @@ var lure1 = {
   data: { task: phasename },
 };
 
-var side_by_side1 = {
-  type:
-    resp_mode == 'button'
-      ? jsPsychCategorizeMultipleImageButtons
-      : jsPsychCategorizeMultipleImageKeyboard,
+var button_lure1 = {
+  type: jsPsychCategorizeImageButtons,
+  stimulus: images['pcon026b.jpg'],
+  key_answer: function () {
+    return lang.instructions.key.trial_choices.sim;
+  },
+  button_answer: 1,
+  choices: trial_choices,
+  prompt: prompt_lure,
+  force_correct_button_press: true,
+  incorrect_text: inc_lure,
+  correct_text: cor_lure,
+  data: { task: phasename },
+};
+
+//-------------side_by_side1-------------
+var key_side_by_side1 = {
+  type: jsPsychCategorizeMultipleImageKeyboard,
   key_answer: function () {
     return lang.instructions.key.instr_choice;
   },
@@ -364,8 +457,23 @@ var side_by_side1 = {
   data: { task: phasename },
 };
 
-var new4 = {
-  type: resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage,
+var button_side_by_side1 = {
+  type: jsPsychCategorizeMultipleImageButtons,
+  key_answer: function () {
+    return lang.instructions.key.instr_choice;
+  },
+  button_answer: 0,
+  feedback_duration: 0,
+  stimulus: images['pcon026a.jpg'],
+  stimulus2: images['pcon026b.jpg'],
+  choices: instr_choice,
+  prompt: side_by_side,
+  data: { task: phasename },
+};
+
+//----------------new4----------------
+var key_new4 = {
+  type: jsPsychCategorizeImage,
   stimulus: images['foil_1035.jpg'],
   key_answer: function () {
     return lang.instructions.key.trial_choices.new;
@@ -379,8 +487,24 @@ var new4 = {
   data: { task: phasename },
 };
 
-var new5 = {
-  type: resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage,
+var button_new4 = {
+  type: jsPsychCategorizeImageButtons,
+  stimulus: images['foil_1035.jpg'],
+  key_answer: function () {
+    return lang.instructions.key.trial_choices.new;
+  },
+  button_answer: 2,
+  choices: trial_choices,
+  prompt: prompt_test,
+  force_correct_button_press: true,
+  incorrect_text: inc_new,
+  correct_text: cor_new,
+  data: { task: phasename },
+};
+
+//----------------new5----------------
+var key_new5 = {
+  type: jsPsychCategorizeImage,
   stimulus: images['pcon028a.jpg'],
   key_answer: function () {
     return lang.instructions.key.trial_choices.new;
@@ -394,8 +518,24 @@ var new5 = {
   data: { task: phasename },
 };
 
-var repeat2 = {
-  type: resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage,
+var button_new5 = {
+  type: jsPsychCategorizeImageButtons,
+  stimulus: images['pcon028a.jpg'],
+  key_answer: function () {
+    return lang.instructions.key.trial_choices.new;
+  },
+  button_answer: 2,
+  choices: trial_choices,
+  prompt: prompt_test,
+  force_correct_button_press: true,
+  incorrect_text: inc_new,
+  correct_text: cor_new,
+  data: { task: phasename },
+};
+
+//---------------repeat2---------------
+var key_repeat2 = {
+  type: jsPsychCategorizeImage,
   stimulus: images['foil_1035.jpg'],
   key_answer: function () {
     return lang.instructions.key.trial_choices.old;
@@ -409,8 +549,24 @@ var repeat2 = {
   data: { task: phasename },
 };
 
-var lure2 = {
-  type: resp_mode == 'button' ? jsPsychCategorizeImageButtons : jsPsychCategorizeImage,
+var button_repeat2 = {
+  type: jsPsychCategorizeImageButtons,
+  stimulus: images['foil_1035.jpg'],
+  key_answer: function () {
+    return lang.instructions.key.trial_choices.old;
+  },
+  button_answer: 0,
+  choices: trial_choices,
+  prompt: prompt_test,
+  force_correct_button_press: true,
+  incorrect_text: inc_rep,
+  correct_text: cor_rep,
+  data: { task: phasename },
+};
+
+//----------------lure2----------------
+var key_lure2 = {
+  type: jsPsychCategorizeImage,
   stimulus: images['pcon028b.jpg'],
   key_answer: function () {
     return lang.instructions.key.trial_choices.sim;
@@ -424,11 +580,24 @@ var lure2 = {
   data: { task: phasename },
 };
 
-var side_by_side2 = {
-  type:
-    resp_mode == 'button'
-      ? jsPsychCategorizeMultipleImageButtons
-      : jsPsychCategorizeMultipleImageKeyboard,
+var button_lure2 = {
+  type: jsPsychCategorizeImageButtons,
+  stimulus: images['pcon028b.jpg'],
+  key_answer: function () {
+    return lang.instructions.key.trial_choices.sim;
+  },
+  button_answer: 1,
+  choices: trial_choices,
+  prompt: prompt_test,
+  force_correct_button_press: true,
+  incorrect_text: inc_lure,
+  correct_text: cor_lure,
+  data: { task: phasename },
+};
+
+//-------------side_by_side2-------------
+var key_side_by_side2 = {
+  type: jsPsychCategorizeMultipleImageKeyboard,
   key_answer: function () {
     return lang.instructions.key.instr_choice;
   },
@@ -441,8 +610,33 @@ var side_by_side2 = {
   data: { task: phasename },
 };
 
-var outtro = {
-  type: resp_mode == 'button' ? jsPsychHtmlButtonResponse : jsPsychHtmlKeyboardResponse,
+var button_side_by_side2 = {
+  type: jsPsychCategorizeMultipleImageButtons,
+  key_answer: function () {
+    return lang.instructions.key.instr_choice;
+  },
+  button_answer: 0,
+  feedback_duration: 0,
+  stimulus: images['pcon028a.jpg'],
+  stimulus2: images['pcon028b.jpg'],
+  choices: instr_choice,
+  prompt: side_by_side,
+  data: { task: phasename },
+};
+
+//------------------outro------------------
+var key_outtro = {
+  type: jsPsychHtmlKeyboardResponse,
+  choices: instr_choice,
+  prompt: prompt0,
+  stimulus: function () {
+    return lang.instructions.end;
+  },
+  data: { task: phasename },
+};
+
+var button_outtro = {
+  type: jsPsychHtmlButtonResponse,
   choices: instr_choice,
   prompt: prompt0,
   stimulus: function () {
@@ -456,17 +650,17 @@ var outtro = {
 
 // export the trials to be imported to the main timeline
 export {
-  intro,
-  new1,
-  new2,
-  new3,
-  repeat1,
-  lure1,
-  side_by_side1,
-  new4,
-  new5,
-  repeat2,
-  lure2,
-  side_by_side2,
-  outtro,
+  key_intro, button_intro,
+  key_new1, button_new1,
+  key_new2, button_new2,
+  key_new3, button_new3,
+  key_repeat1, button_repeat1,
+  key_lure1, button_lure1,
+  key_side_by_side1, button_side_by_side1,
+  key_new4, button_new4,
+  key_new5, button_new5,
+  key_repeat2, button_repeat2,
+  key_lure2, button_lure2,
+  key_side_by_side2, button_side_by_side2,
+  key_outtro, button_outtro,
 };

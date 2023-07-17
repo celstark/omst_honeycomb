@@ -11,6 +11,7 @@
 //                       in App.css
 //        7/7/23 (AGH):  created not_consented for conditional timeline
 //        7/13/23 (AGH): added task data property to trials
+//        7/14/23 (AGH): added margin-vertical parameter to space buttons
 //
 //   --------------------
 //   This file creates a consent trial that displays a formatted
@@ -72,6 +73,7 @@ var consent_trial = {
   type: jsPsychHtmlButtonResponse,
   stimulus: irb_stim,
   choices: buttons,
+  margin_vertical: '20px',
   data: { task: 'consent' },
   on_finish: function (data) {
     if (data.response == 0) {

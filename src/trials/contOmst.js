@@ -127,6 +127,7 @@
 //                       (gets called in main timeline as testBlock(exptBlock1))
 //        7/6/23 (AGH):  deleted preload
 //        7/13/23 (AGH): added task data property to trials
+//        7/14/23 (AGH): split instructions into keyboard and button version
 //
 //   --------------------
 //   This file includes the continuous oMST instructions and debrief
@@ -309,9 +310,9 @@ var instr_stim = function () {
 //----------------------- 3 ----------------------
 //--------------------- TRIALS -------------------
 
-//instructions trial
-var instr1_trial = {
-  type: resp_mode == 'button' ? jsPsychHtmlButtonResponse : jsPsychHtmlKeyboardResponse,
+//-------------instructions------------
+var key_instr1_trial = {
+  type: jsPsychHtmlKeyboardResponse,
   choices: instr_choice,
   prompt: instr_prompt,
   margin_horizontal: '40px',
@@ -321,7 +322,18 @@ var instr1_trial = {
   data: { task: 'oMSTCont' },
 };
 
-// thank you message
+var button_instr1_trial = {
+  type: jsPsychHtmlButtonResponse,
+  choices: [instr_choice],
+  prompt: instr_prompt,
+  margin_horizontal: '40px',
+  margin_vertical: '20px',
+  //        button_html: '<button style="font-size: 150%" class="jspsych-btn">%choice%</button>',
+  stimulus: instr_stim,
+  data: { task: 'oMSTCont' },
+};
+
+//---------------thank you--------------
 var debrief_block = {
   type: jsPsychHtmlKeyboardResponse,
   trial_duration: 500,
@@ -437,7 +449,7 @@ var debrief_block = {
 //----------------------- 4 ----------------------
 //--------------------- EXPORTS -------------------
 
-export { /*preload,*/ instr1_trial, /*test_trials,*/ debrief_block };
+export { key_instr1_trial, button_instr1_trial, debrief_block };
 
 // });
 // </script>

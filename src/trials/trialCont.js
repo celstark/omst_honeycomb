@@ -9,6 +9,12 @@
 //        6/28/23 (AGH): moved repeated test_trials from ./contOmst
 //                       (defaults)
 //        7/11/23 (AGH): added data parameter
+//        7/14/23 (AGH): split conTrial into keyboard and button version 
+//                       to allow response selection (trial types cannot 
+//                       be dynamic)
+//        7/14/23 (AGH): deleted margin parameters for keyboard trial, adjusted 
+//                       horizontal margin to 8px (same as instructions) and
+//                       deleted cursor block for button trial 
 //
 //   --------------------
 //
@@ -23,6 +29,7 @@
 //-------------------- IMPORTS -------------------
 
 import jsPsychImageKeyboardResponse from '@jspsych/plugin-image-keyboard-response';
+import jsPsychImageButtonResponse from '@jspsych/plugin-image-button-response';
 
 import $ from 'jquery';
 
@@ -81,15 +88,79 @@ var trial_choices = function () {
 };
 
 //----------------------- 3 ----------------------
-//--------------------- TRIAL --------------------
+//-------------------- TRIALS --------------------
+// one keyboard version and one button version
 
-export function contTrial(config, options) {
+export function keyContTrial(config, options) {
   const defaults = {
     responseType: jsPsychImageKeyboardResponse,
     stimulusDuration: 2000,
     trialDuration: selfpaced == 1 ? null : 2500,
     postTrialGap: 500,
-    marginHorizontal: '40px',
+    stimulusHeight: 400,
+    stimulusWidth: 400,
+    trialChoices: trial_choices,
+    prompt: trial_prompt,
+    responseEndsTrial: true,
+    image: '',
+    data: '',
+  };
+  const {
+    stimulusDuration,
+    trialDuration,
+    postTrialGap,
+    stimulusHeight,
+    stimulusWidth,
+    trialChoices,
+    prompt,
+    responseEndsTrial,
+    image,
+    data,
+  } = { ...defaults, ...options };
+
+  return {
+    type: jsPsychImageKeyboardResponse,
+    prompt: prompt,
+    stimulus: image,
+    choices: trialChoices,
+    stimulus_duration: stimulusDuration,
+    trial_duration: trialDuration,
+    post_trial_gap: postTrialGap,
+    response_ends_trial: responseEndsTrial,
+    on_load: () => {
+      $('#jspsych-image-keyboard-response-stimulus').addClass('image');
+      $('#jspsych-image-keyboard-response-stimulus').height(stimulusHeight);
+      $('#jspsych-image-keyboard-response-stimulus').width(stimulusWidth);
+      $('html').css('cursor', 'none');
+    },
+    on_finish: function (data) {
+      // yes = button 0 = 'y' = keycode 89
+      // no = button 1 = 'n' = keycode 78
+      // let resp = 'n';
+      // if (resp_mode == 'button' && data.button_pressed == 0) { resp = 'y' }
+      // if (resp_mode == 'keyboard' && data.key_press == 89 ) { resp = 'y' }
+      let resp = null;
+      if (data.response == 'v') {
+        resp = 'o';
+      } else if (data.response == 'b') {
+        resp = 's';
+      } else if (data.response == 'n') {
+        resp = 'n';
+      }
+      data.correct = resp == data.correct_response;
+      data.resp = resp;
+    },
+    data: data,
+  };
+};
+
+export function  buttonContTrial(config, options) {
+  const defaults = {
+    responseType: jsPsychImageButtonResponse,
+    stimulusDuration: 2000,
+    trialDuration: selfpaced == 1 ? null : 2500,
+    postTrialGap: 500,
+    marginHorizontal: '8px',
     marginVertical: '20px',
     stimulusHeight: 400,
     stimulusWidth: 400,
@@ -115,7 +186,7 @@ export function contTrial(config, options) {
   } = { ...defaults, ...options };
 
   return {
-    type: jsPsychImageKeyboardResponse,
+    type: jsPsychImageButtonResponse,
     prompt: prompt,
     stimulus: image,
     choices: trialChoices,
@@ -126,10 +197,9 @@ export function contTrial(config, options) {
     margin_horizontal: marginHorizontal,
     margin_vertical: marginVertical,
     on_load: () => {
-      $('#jspsych-image-keyboard-response-stimulus').addClass('image');
-      $('#jspsych-image-keyboard-response-stimulus').height(stimulusHeight);
-      $('#jspsych-image-keyboard-response-stimulus').width(stimulusWidth);
-      $('html').css('cursor', 'none');
+      $('#jspsych-image-button-response-stimulus').addClass('image');
+      $('#jspsych-image-button-response-stimulus').height(stimulusHeight);
+      $('#jspsych-image-button-response-stimulus').width(stimulusWidth);
     },
     on_finish: function (data) {
       // yes = button 0 = 'y' = keycode 89
@@ -138,27 +208,16 @@ export function contTrial(config, options) {
       // if (resp_mode == 'button' && data.button_pressed == 0) { resp = 'y' }
       // if (resp_mode == 'keyboard' && data.key_press == 89 ) { resp = 'y' }
       let resp = null;
-      if (resp_mode == 'button') {
-        if (data.response == 0) {
-          resp = 'o';
-        } else if (data.response == 2) {
-          resp = 'n';
-        } else if (data.response == 1) {
-          resp = twochoice == 1 ? 'n' : 's';
-        }
-      } else {
-        if (data.response == 'v') {
-          resp = 'o';
-        } else if (data.response == 'b') {
-          resp = 's';
-        } else if (data.response == 'n') {
-          resp = 'n';
-        }
+      if (data.response == 0) {
+        resp = 'o';
+      } else if (data.response == 2) {
+        resp = 'n';
+      } else if (data.response == 1) {
+        resp = twochoice == 1 ? 'n' : 's';
       }
-
       data.correct = resp == data.correct_response;
       data.resp = resp;
     },
     data: data,
   };
-}
+};

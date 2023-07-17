@@ -33,9 +33,10 @@ import taskBlock from './taskBlock';
 import { tutorialBlock } from '../config/tutorial';
 import { exptBlock1 } from '../config/experiment';
 import { select_pref_lang } from '../trials/selectLanguage';
+import { select_resp_type, resp_mode } from '../trials/selectRespType';
 import { demogform } from '../trials/demographics';
-import { intro, new1, new2, new3, repeat1, lure1, side_by_side1, new4, new5, repeat2, lure2, side_by_side2, outtro } from '../trials/instructions';
-import { instr1_trial, debrief_block } from '../trials/contOmst';
+import { key_intro, button_intro, key_new1, button_new1, key_new2, button_new2, key_new3, button_new3, key_repeat1, button_repeat1, key_lure1, button_lure1, key_side_by_side1, button_side_by_side1, key_new4, button_new4, key_new5, button_new5, key_repeat2, button_repeat2, key_lure2, button_lure2, key_side_by_side2, button_side_by_side2, key_outtro, button_outtro, } from '../trials/instructions';
+import { key_instr1_trial, button_instr1_trial, debrief_block } from '../trials/contOmst';
 import { end_message } from '../trials/end';
 
 //----------------------- 2 ----------------------
@@ -70,29 +71,7 @@ const buildPrimaryTimeline = () => {
   var consented = {
     timeline: [
       demogform, // demographics
-      // select_resp_type, // select keyboard or button response type
-
-      // instructions
-      intro,
-      new1,
-      new2,
-      new3,
-      repeat1,
-      lure1,
-      side_by_side1,
-      new4,
-      new5,
-      repeat2,
-      lure2,
-      side_by_side2,
-      outtro,
-
-      // continuous omst
-      instr1_trial, // instructions
-      testBlock(exptBlock1), // looping trials
-      debrief_block, // thank you
-
-      end_message, // final thank you message
+      select_resp_type, // select keyboard or button response type
     ],
     conditional_function: function () {
       // if consent was given in consent trial, run above timeline
@@ -103,6 +82,75 @@ const buildPrimaryTimeline = () => {
       }
     },
   };
+
+  var keyboard = {
+    timeline : [
+      // instructions
+      key_intro,
+      key_new1,
+      key_new2,
+      key_new3,
+      key_repeat1,
+      key_lure1,
+      key_side_by_side1,
+      key_new4,
+      key_new5,
+      key_repeat2,
+      key_lure2,
+      key_side_by_side2,
+      key_outtro,
+
+      // continuous omst
+      key_instr1_trial, // instructions
+      testBlock(exptBlock1), // looping trials
+      debrief_block, // thank you
+
+      end_message, // final thank you message
+    ],
+    conditional_function: function () {
+      // if consent was given in consent trial and keyboard response type run above timeline
+      if (consentGiven && resp_mode == 'keyboard') {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  }
+
+  var buttons = {
+    timeline : [
+      // instructions 
+      button_intro,
+      button_new1,
+      button_new2,
+      button_new3,
+      button_repeat1,
+      button_lure1,
+      button_side_by_side1,
+      button_new4,
+      button_new5,
+      button_repeat2,
+      button_lure2,
+      button_side_by_side2,
+      button_outtro,
+      
+      // continuous omst
+      button_instr1_trial, // instructions
+      testBlock(exptBlock1), // looping trials
+      debrief_block, // thank you
+
+      end_message, // final thank you message
+    ],
+    conditional_function: function () {
+      // if consent was given in consent trial and button response type run above timeline
+      if (consentGiven && resp_mode == 'button') {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  }
+
 
   // conditional timeline that runs ending message if participant does not consent
   var notConsented = {
@@ -117,7 +165,7 @@ const buildPrimaryTimeline = () => {
   };
 
   // add conditional timelines to primary
-  primaryTimeline.push(consented, notConsented);
+  primaryTimeline.push(consented, keyboard, buttons, notConsented);
   return primaryTimeline;
 };
 
