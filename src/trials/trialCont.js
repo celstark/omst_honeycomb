@@ -35,11 +35,12 @@ import $ from 'jquery';
 
 import { resp_mode } from '../trials/selectRespType';
 import { lang } from '../trials/selectLanguage';
-import { twochoice, selfpaced /*orderfile, stim_set*/ } from '../config/contOmstset';
+import { twochoice, selfpaced /*orderfile, stim_set*/ } from '../config/cont';
 
 //----------------------- 2 ----------------------
 //----------------- HELPER METHODS ---------------
-// helper methods that allow selection of language and twochoice
+// Helper methods that allow flexibilty for selection of language, resp_mode 
+// and twochoice
 
 var trial_prompt = function () {
   if (resp_mode == 'button') {
@@ -89,9 +90,11 @@ var trial_choices = function () {
 
 //----------------------- 3 ----------------------
 //-------------------- TRIALS --------------------
-// one keyboard version and one button version
+// Keyboard version and button version
 
+// Keyboard version
 export function keyContTrial(config, options) {
+  // set default trial parameters for keyboard response
   const defaults = {
     responseType: jsPsychImageKeyboardResponse,
     stimulusDuration: 2000,
@@ -102,8 +105,10 @@ export function keyContTrial(config, options) {
     trialChoices: trial_choices,
     prompt: trial_prompt,
     responseEndsTrial: true,
-    image: '',
-    data: '',
+
+  
+    image: '', // image and data will be different for each 
+    data: '',  // iteration of the trial so their default is blank
   };
   const {
     stimulusDuration,
@@ -117,7 +122,8 @@ export function keyContTrial(config, options) {
     image,
     data,
   } = { ...defaults, ...options };
-
+  
+  // return defaults
   return {
     type: jsPsychImageKeyboardResponse,
     prompt: prompt,
@@ -133,7 +139,7 @@ export function keyContTrial(config, options) {
       $('#jspsych-image-keyboard-response-stimulus').width(stimulusWidth);
       $('html').css('cursor', 'none');
     },
-    on_finish: function (data) {
+    on_finish: function (data) { // set up data collection properties
       // yes = button 0 = 'y' = keycode 89
       // no = button 1 = 'n' = keycode 78
       // let resp = 'n';
@@ -154,8 +160,10 @@ export function keyContTrial(config, options) {
   };
 };
 
+// Button version
 export function  buttonContTrial(config, options) {
   const defaults = {
+    // set default trial parameters for button response
     responseType: jsPsychImageButtonResponse,
     stimulusDuration: 2000,
     trialDuration: selfpaced == 1 ? null : 2500,
@@ -167,8 +175,8 @@ export function  buttonContTrial(config, options) {
     trialChoices: trial_choices,
     prompt: trial_prompt,
     responseEndsTrial: true,
-    image: '',
-    data: '',
+    image: '', // image and data will be different for each 
+    data: '',  // iteration of the trial so their default is blank
   };
   const {
     stimulusDuration,
@@ -185,6 +193,7 @@ export function  buttonContTrial(config, options) {
     data,
   } = { ...defaults, ...options };
 
+  // return defaults
   return {
     type: jsPsychImageButtonResponse,
     prompt: prompt,
@@ -201,7 +210,7 @@ export function  buttonContTrial(config, options) {
       $('#jspsych-image-button-response-stimulus').height(stimulusHeight);
       $('#jspsych-image-button-response-stimulus').width(stimulusWidth);
     },
-    on_finish: function (data) {
+    on_finish: function (data) { // set up data collection properties
       // yes = button 0 = 'y' = keycode 89
       // no = button 1 = 'n' = keycode 78
       // let resp = 'n';

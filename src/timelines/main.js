@@ -26,18 +26,20 @@
 //-------------------- IMPORTS -------------------
 
 import { config } from '../config/main';
-import { consent_trial, consentGiven, not_consented } from '../trials/consent_trial';
-import preamble from './preamble';
-import testBlock from './testBlock';
-import taskBlock from './taskBlock';
-import { tutorialBlock } from '../config/tutorial';
-import { exptBlock1 } from '../config/experiment';
+
 import { select_pref_lang } from '../trials/selectLanguage';
-import { select_resp_type, resp_mode } from '../trials/selectRespType';
+import { consent_trial, consentGiven, not_consented } from '../trials/consent_trial';
 import { demogform } from '../trials/demographics';
+import { select_resp_type, resp_mode } from '../trials/selectRespType';
 import { key_intro, button_intro, key_new1, button_new1, key_new2, button_new2, key_new3, button_new3, key_repeat1, button_repeat1, key_lure1, button_lure1, key_side_by_side1, button_side_by_side1, key_new4, button_new4, key_new5, button_new5, key_repeat2, button_repeat2, key_lure2, button_lure2, key_side_by_side2, button_side_by_side2, key_outtro, button_outtro, } from '../trials/instructions';
 import { key_instr1_trial, button_instr1_trial, debrief_block } from '../trials/contOmst';
+import { exptBlock1 } from '../config/experiment';
+import testBlock from './testBlock';
 import { end_message } from '../trials/end';
+
+import preamble from './preamble';
+import taskBlock from './taskBlock';
+import { tutorialBlock } from '../config/tutorial';
 
 //----------------------- 2 ----------------------
 //-------------------- OPTIONS -------------------
@@ -62,7 +64,6 @@ const buildTimeline = () => (config.USE_MTURK ? mturkTimeline : buildPrimaryTime
 
 const buildPrimaryTimeline = () => {
   const primaryTimeline = [
-    //preamble,
     select_pref_lang,
     consent_trial,
   ];
@@ -75,7 +76,7 @@ const buildPrimaryTimeline = () => {
     ],
     conditional_function: function () {
       // if consent was given in consent trial, run above timeline
-      if (consentGiven) {
+      if (consentGiven) { 
         return true;
       } else {
         return false;
@@ -83,6 +84,7 @@ const buildPrimaryTimeline = () => {
     },
   };
 
+  // timeline for all the keyboard response trials
   var keyboard = {
     timeline : [
       // instructions
@@ -117,6 +119,7 @@ const buildPrimaryTimeline = () => {
     },
   }
 
+  // timeline for all the button response trials
   var buttons = {
     timeline : [
       // instructions 
@@ -185,5 +188,5 @@ const mturkTimeline = [
 //----------------------- 4 ----------------------
 //-------------------- EXPORTS -------------------
 
-// Honeycomb, please include these options, and please get the timeline from this function.
+// include these options, get the timeline from this function.
 export { jsPsychOptions, buildTimeline };

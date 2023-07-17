@@ -25,8 +25,10 @@ import { lang } from '../trials/selectLanguage';
 //----------------------- 2 ----------------------
 //--------------------- TRIAL --------------------
 
+// var to store the participant response
 var resp_mode = null;
 
+// select response mode trial
 var select_resp_type = {
   type: surveyMultiChoice,
   questions: [
@@ -41,7 +43,8 @@ var select_resp_type = {
       required: true,
     },
   ],
-  data: { task: 'resp_mode' },
+  data: { task: 'resp_mode' }, // add task name to data collection
+  // update resp_mode based on response
   on_finish: function (data) {
     if (data.response.resp == lang.resp.choices.keyboard) {
       resp_mode = 'keyboard';

@@ -30,7 +30,7 @@ import { generateStartingOpts } from '../lib/taskUtils';
 // testBlock
 
 const testBlock = (blockSettings) => {
-  // initialize block
+  // initialize block with starting options that set up looped trials
   const startingOpts = generateStartingOpts(blockSettings);
 
   const blockDetails = {

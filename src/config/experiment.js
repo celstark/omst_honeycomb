@@ -21,7 +21,7 @@
 
 import { defaultBlockSettings } from './main';
 import { deepCopy } from '../lib/utils';
-import { twochoice, trial_stim } from '../config/contOmstset';
+import { twochoice, trial_stim } from './cont';
 
 //----------------------- 2 ----------------------
 //-------------- TIMELINE VARIABLES --------------

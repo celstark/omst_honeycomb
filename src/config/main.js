@@ -19,7 +19,6 @@
 //-------------------- IMPORTS -------------------
 
 import { initJsPsych } from 'jspsych';
-//import _ from 'lodash';
 import { eventCodes } from './trigger';
 import { init } from '@brown-ccv/behavioral-task-trials';
 import { getProlificId } from '../lib/utils';

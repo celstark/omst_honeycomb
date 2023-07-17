@@ -97,6 +97,7 @@ import jsPsychSurveyHtmlForm from '@jspsych/plugin-survey-html-form';
 //----------------------- 2 ----------------------
 //--------------------- TRIAL --------------------
 
+// demographics survey trial
 var demogform = {
   type: jsPsychSurveyHtmlForm,
   preamble: function () {
@@ -153,6 +154,7 @@ var demogform = {
       </div>'
     );
   },
+  // add task name to data collection
   data: { task: 'demographics' },
 };
 
@@ -160,11 +162,3 @@ var demogform = {
 //--------------------- EXPORT -------------------
 
 export { demogform };
-
-//   var timeline = [demogform];
-//   jsPsych.run(timeline);
-
-// });
-// </script>
-
-// </html>

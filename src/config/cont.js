@@ -8,6 +8,7 @@
 //   Changes:
 //        6/27/23 (AGH): created config for contOmst
 //                       imported jsorders files
+//                       removed .js from end of orderfile 
 //
 //   --------------------
 //   This file defines all of the continuous trial config variables that set
@@ -35,21 +36,26 @@ import { ts6_2_1 } from './jsOrders/cMST_Imbal2_orders_6_2_1';
 //----------------------- 2 ----------------------
 //------------------- VARIABLES ------------------
 
+// [set=#]: Stimulus set -- 1-6 (1=default) -- used in loading the order file
 var stim_set = '1';
 
+//  [trialorder=#]: Which base order file? (1-4, 1=default)  -- controls ordering of conditions in a run
 var trialorder = '1';
 
+// [run=#]: Which particular run? (1-1, 1=default) -- controls which actual stimuli in that set are plugged into the order
 var run = '1';
 
-var twochoice = '0';
+// [twochoice=#]: 0=OSN, 1=ON response choices (0=default)
+var twochoice = '0'; // 0 
 
+// [selfpaced=#]: Should we allow infinite time with blank screen to make the response? (default =1)
 var selfpaced = '1';
 
+// set orderfile: jsOrders/cMST_Imbal2_orders_[set]_[order]_[run].js
 var orderprefix = './jsOrders/cMST_Imbal2_orders_';
+var orderfile = orderprefix + stim_set + '_' + trialorder + '_' + run;
 
-//set orderfile
-var orderfile = orderprefix + stim_set + '_' + trialorder + '_' + run; // took off '.js'
-
+// initialize var to store jsOrderfile array
 var trial_stim;
 
 // load trial_stim depending on selected orderfile

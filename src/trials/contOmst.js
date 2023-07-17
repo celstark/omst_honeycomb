@@ -144,7 +144,7 @@ import { initJsPsych } from 'jspsych';
 
 import { lang } from '../trials/selectLanguage';
 import { resp_mode } from '../trials/selectRespType';
-import { twochoice /*selfpaced, stim_set, trial_stim*/ } from '../config/contOmstset';
+import { twochoice /*selfpaced, stim_set, trial_stim*/ } from '../config/cont';
 
 // <script>
 // function waitFor(conditionFunction) {
@@ -319,6 +319,7 @@ var key_instr1_trial = {
   margin_vertical: '20px',
   //        button_html: '<button style="font-size: 150%" class="jspsych-btn">%choice%</button>',
   stimulus: instr_stim,
+  // add task name to data collection
   data: { task: 'oMSTCont' },
 };
 
@@ -330,16 +331,19 @@ var button_instr1_trial = {
   margin_vertical: '20px',
   //        button_html: '<button style="font-size: 150%" class="jspsych-btn">%choice%</button>',
   stimulus: instr_stim,
+  // add task name to data collection
   data: { task: 'oMSTCont' },
 };
 
 //---------------thank you--------------
+// (button type not necessary)
 var debrief_block = {
   type: jsPsychHtmlKeyboardResponse,
   trial_duration: 500,
   stimulus: function () {
     return lang.cont.ty;
   },
+  // add task name to data collection
   data: { task: 'oMSTCont' },
   on_finish: function (data) {
     let validtrials = jsPsych.data.get().filterCustom(function (trial) {
@@ -451,7 +455,3 @@ var debrief_block = {
 
 export { key_instr1_trial, button_instr1_trial, debrief_block };
 
-// });
-// </script>
-
-// </html>

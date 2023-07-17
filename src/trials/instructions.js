@@ -114,7 +114,7 @@
 //                       created ./selectRespType and imported { resp_mode }
 //        6/22/23 (AGH): converted all the trial parameters dependent on lang
 //                       and resp-mode into dynamic parameters
-//        7/13/23 (AGH): added task as data property
+//        7/13/23 (AGH): added task as data property to each trial
 //        7/14/23 (AGH): created button and key trials for each trial to allow
 //                       response selection (trial types cannot be dynamic)
 //
@@ -150,7 +150,8 @@ import { resp_mode } from './selectRespType.js';
 // languages and response types. EVERYTIME lang OR resp_type ARE USED, THEY MUST BE INSIDE
 // A FUNCTION.
 
-const phasename = 'cmst_instr_contOSN';
+// var to store the task name (data property)
+const phasename = 'cmst_instr_contOSN'; 
 
 var instr_choice = function () {
   if (resp_mode == 'button') {
@@ -647,8 +648,8 @@ var button_outtro = {
 
 //----------------------- 4 ----------------------
 //-------------------- EXPORTS -------------------
-
 // export the trials to be imported to the main timeline
+
 export {
   key_intro, button_intro,
   key_new1, button_new1,

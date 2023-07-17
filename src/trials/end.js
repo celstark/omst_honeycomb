@@ -24,12 +24,13 @@ import { lang } from '../trials/selectLanguage';
 //----------------------- 2 ----------------------
 //--------------------- TRIAL --------------------
 
+// ending trial
 var end_message = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: function () {
     return lang.end.ty;
   },
-  data: { task: 'end' },
+  data: { task: 'end' }, // add task name to data collection
 };
 
 //----------------------- 3 ----------------------

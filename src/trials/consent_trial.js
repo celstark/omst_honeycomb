@@ -31,8 +31,8 @@ import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response'
 
 //----------------------- 2 ----------------------
 //----------------- HELPER METHODS ---------------
+// functions for formatting stimulus and button choices
 
-// functions for formatted stimulus and button choices
 var irb_stim = function () {
   return (
     '<div id="consenttext"> <h1 style="text-align: center">' +
@@ -74,21 +74,21 @@ var consent_trial = {
   stimulus: irb_stim,
   choices: buttons,
   margin_vertical: '20px',
-  data: { task: 'consent' },
+  data: { task: 'consent' }, // add task name to data collection
   on_finish: function (data) {
     if (data.response == 0) {
       consentGiven = true; //var used to run conditional timeline
     } else {
       consentGiven = false;
     }
-  },
+  }
 };
 
 // trial called in conditional timeline if participant does not consent
 var not_consented = {
   type: jsPsychHtmlKeyboardResponse,
   trial_duration: 1000,
-  data: { task: 'endNotConsented' },
+  data: { task: 'endNotConsented' }, // add task name to data collection
   stimulus: function () {
     return lang.end.nc;
   },

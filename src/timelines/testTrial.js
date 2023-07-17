@@ -42,7 +42,7 @@ import {
   set5Images,
   set6Images,
 } from '../lib/utils';
-import { stim_set, orderfile, selfpaced } from '../config/contOmstset';
+import { stim_set, orderfile, selfpaced } from '../config/cont';
 import { resp_mode } from '../trials/selectRespType';
 
 // default settings for a contOmst trial
@@ -53,9 +53,11 @@ import { keyContTrial, buttonContTrial } from '../trials/trialCont';
 
 // sets up a basic trial in the contOmst, gets repeated for each element of the trial_stim array in testBlock
 
+// initialize timeline
 var timeline = [];
 
 const testTrial = (blockSettings, blockDetails, tlv) => {
+  // if keyboard response, load stimulus and data specifications for keyboard trials into timeline
   if (resp_mode == 'keyboard') {  
     timeline = [
       keyContTrial(config, {
@@ -92,7 +94,9 @@ const testTrial = (blockSettings, blockDetails, tlv) => {
         },
       }),
     ];
-  } else {
+  } 
+  // if button response response, load stimulus and data specifications for keyboard trials into timeline
+  else {
     timeline = [
       buttonContTrial(config, {
         image: function () {
@@ -130,12 +134,14 @@ const testTrial = (blockSettings, blockDetails, tlv) => {
     ];
   }
 
+  // if keyboard response, return keyboard type and timeline
   if (resp_mode == 'keyboard') {  
     return {
       type: jsPsychImageKeyboardResponse,
       timeline,
     }
   }
+  // if button response, return button type and timeline
   else {
     return {
       type: jsPsychImageButtonResponse,

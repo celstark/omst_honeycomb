@@ -6,8 +6,10 @@
 //   --------------------
 //
 //   Changes:
-//        6/20/23 (AGH): wrote initial trial for language selection
+//        6/20/23 (AGH): initial trial for language selection
+//        6/22/23 (AGH): added korean
 //        7/13/23 (AGH): added task data property
+//        7/17/23 (AGH): added chinese
 //
 //   --------------------
 //   This trial allows the participant to choose between language
@@ -23,7 +25,7 @@ import surveyMultiChoice from '@jspsych/plugin-survey-multi-choice';
 //----------------------- 2 ----------------------
 //--------------------- TRIAL --------------------
 
-// language file direct holder
+// var to store the language file path
 var lang = null;
 
 // select language trial
@@ -32,17 +34,20 @@ var select_pref_lang = {
   questions: [
     {
       prompt: '<p> Please select a language. </p>',
-      options: ['English', 'Español', '한국인'],
+      options: ['English', 'Español', '한국인', '中文'],
       name: 'lang',
       required: true,
     },
   ],
-  data: { task: 'language' },
+  data: { task: 'language' }, // add task name to data collection
+  // update lang with appropriate language file path based on response
   on_finish: function (data) {
     if (data.response.lang == 'Español') {
       lang = require('../language/omst_spa.json');
     } else if (data.response.lang == '한국인') {
       lang = require('../language/omst_kor.json');
+    } else if (data.response.lang == '中文') {
+      lang = require('../language/omst_zho.json');
     } else {
       lang = require('../language/omst_en.json');
     }
