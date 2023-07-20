@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 
 import JsPsychExperiment from './components/JsPsychExperiment';
-import Login from './components/Login';
+import { Login } from './components/Login';
 
 import { config, taskVersion, turkUniqueId } from './config/main';
 import { addToFirebase, validateParticipant } from './firebase';

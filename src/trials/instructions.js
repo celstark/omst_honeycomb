@@ -141,7 +141,7 @@ import { jsPsychCategorizeMultipleImageButtons } from './uniquePlugins/plugin-ca
 // importing languages, images object, and response-mode
 import { lang } from './selectLanguage.js';
 import { images } from '../lib/utils.js';
-import { resp_mode } from './selectRespType.js';
+import { resp_mode } from '../components/Login';
 
 //----------------------- 2 ----------------------
 //----------------- HELPER METHODS ---------------

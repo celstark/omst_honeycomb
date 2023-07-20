@@ -33,9 +33,9 @@ import jsPsychImageButtonResponse from '@jspsych/plugin-image-button-response';
 
 import $ from 'jquery';
 
-import { resp_mode } from '../trials/selectRespType';
+//import { resp_mode } from '../trials/selectRespType';
 import { lang } from '../trials/selectLanguage';
-import { twochoice, selfpaced /*orderfile, stim_set*/ } from '../config/cont';
+import { twochoice, selfpaced, resp_mode /*orderfile, stim_set*/ } from '../components/Login';
 
 //----------------------- 2 ----------------------
 //----------------- HELPER METHODS ---------------
