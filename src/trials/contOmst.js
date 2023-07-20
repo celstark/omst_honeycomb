@@ -143,8 +143,8 @@ import jsPsychHtmlButtonResponse from '@jspsych/plugin-html-button-response';
 import { initJsPsych } from 'jspsych';
 
 import { lang } from '../trials/selectLanguage';
-import { resp_mode } from '../trials/selectRespType';
-import { twochoice /*selfpaced, stim_set, trial_stim*/ } from '../config/cont';
+//import { resp_mode } from '../trials/selectRespType';
+import { twochoice, resp_mode } from '../components/Login';
 
 // <script>
 // function waitFor(conditionFunction) {
@@ -184,7 +184,7 @@ function invNormcdf(p) {
   var retVal;
 
   if (p < 0 || p > 1) {
-    alert('NormSInv: Argument out of range.');
+    alert('NormSInv: Argument out of range. Probability must be between 0 and 1.');
     retVal = 0;
   } else if (p < p_low) {
     q = Math.sqrt(-2 * Math.log(p));
