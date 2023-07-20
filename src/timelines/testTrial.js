@@ -12,12 +12,16 @@
 //                       imported (new) set image objects form ../lib/utils
 //        7/11/23 (AGH): added data to include condition.data (set, selfpaced,
 //                       orderfile) in each repeated trial data
-//        7/13/23 (AGH): moved set, selfpaced, orderfile declaration to here instead of JsPsychExperiment
+//        7/13/23 (AGH): added set, selfpaced, orderfile data property declaration  
+//                       to here instead of /components/JsPsychExperiment.jsx 
 //                       added task data property
 //                       changed arg condition --> tlv
 //        7/14/23 (AGH): created keyboard and button version of timeline
 //                       to allow response selection (trial types cannot 
 //                       be dynamic)
+//        7/18/23 (AGH): changed the image parameter (the entire image path 
+//                       including the directing image objects are now defined 
+//                       within tlv.stimulus from /config/experiment)
 //
 //   --------------------
 //   This file sets up an iteration of the test trial (/trials/trialCont.js)
@@ -33,17 +37,7 @@ import jsPsychImageKeyboardResponse from '@jspsych/plugin-html-keyboard-response
 import jsPsychImageButtonResponse from '@jspsych/plugin-html-button-response'
 import { config } from '../config/main';
 
-// image objects that allow image path of each set (based on stim_set)
-import {
-  set1Images,
-  set2Images,
-  set3Images,
-  set4Images,
-  set5Images,
-  set6Images,
-} from '../lib/utils';
-import { stim_set, orderfile, selfpaced } from '../config/cont';
-import { resp_mode } from '../trials/selectRespType';
+import { stim_set, selfpaced, orderfile, resp_mode } from '../components/Login';
 
 // default settings for a contOmst trial
 import { keyContTrial, buttonContTrial } from '../trials/trialCont';
@@ -61,21 +55,7 @@ const testTrial = (blockSettings, blockDetails, tlv) => {
   if (resp_mode == 'keyboard') {  
     timeline = [
       keyContTrial(config, {
-        image: function () {
-          if (stim_set == 1) {
-            return set1Images[tlv.stimulus];
-          } else if (stim_set == 2) {
-            return set2Images[tlv.stimulus];
-          } else if (stim_set == 3) {
-            return set3Images[tlv.stimulus];
-          } else if (stim_set == 4) {
-            return set4Images[tlv.stimulus];
-          } else if (stim_set == 5) {
-            return set5Images[tlv.stimulus];
-          } else if (stim_set == 6) {
-            return set6Images[tlv.stimulus];
-          }
-        },
+        image: function () { return tlv.stimulus; },
         data: function () {
           // tlv data conditions
           let condition = tlv.data.condition;
@@ -99,21 +79,7 @@ const testTrial = (blockSettings, blockDetails, tlv) => {
   else {
     timeline = [
       buttonContTrial(config, {
-        image: function () {
-          if (stim_set == 1) {
-            return set1Images[tlv.stimulus];
-          } else if (stim_set == 2) {
-            return set2Images[tlv.stimulus];
-          } else if (stim_set == 3) {
-            return set3Images[tlv.stimulus];
-          } else if (stim_set == 4) {
-            return set4Images[tlv.stimulus];
-          } else if (stim_set == 5) {
-            return set5Images[tlv.stimulus];
-          } else if (stim_set == 6) {
-            return set6Images[tlv.stimulus];
-          }
-        },
+        image: function () { return tlv.stimulus; },
         data: function () {
           // tlv data conditions
           let condition = tlv.data.condition;
@@ -142,7 +108,7 @@ const testTrial = (blockSettings, blockDetails, tlv) => {
     }
   }
   // if button response, return button type and timeline
-  else {
+  else if (resp_mode == 'button') {
     return {
       type: jsPsychImageButtonResponse,
       timeline,
