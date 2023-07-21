@@ -18,6 +18,7 @@
 //                       the user selection of the state variables on Login
 //                       (now calls the function loadExptBlock1 from 
 //                       /config/experiment)
+//        7/21/23 (AGH): reformatted login page in App.css
 //
 //   --------------------
 //   This file creates a Login screen that logs in the participant
@@ -122,10 +123,10 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
 //--------------------LOGIN FORM -----------------
 
   return (
-    <div className='centered-h-v'>
+    <div className='centered-h-v'> 
       <div className='width-50'>
         <Form className='centered-h-v' onSubmit={handleSubmit}>
-          <Form.Group className='width-100' size='lg' controlId='participantId'>
+          <Form.Group className='login' size='lg' controlId='participantId'>
             <Form.Label>Participant ID</Form.Label>
             <Form.Control
               autoFocus
@@ -134,7 +135,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
               onChange={(e) => setParticipant(e.target.value)}
             />
           </Form.Group>
-          <Form.Group className='width-100' size='lg' controlId='studyId'>
+          <Form.Group className='login' size='lg' controlId='studyId'>
             <Form.Label>Study ID</Form.Label>
             <Form.Control
               type='studyId'
@@ -142,55 +143,71 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
               onChange={(e) => setStudy(e.target.value)}
             />
           </Form.Group>
-          <Form.Group className='width-100' controlId='stim_set'>
-            <Form.Label>Select the stimulus set:</Form.Label>
-            <Form.Control as='select' value={chooseStimset} onChange={(e) => setStimset(e.target.value)}>
-              <option value='1'>1</option>
-              <option value='2'>2</option>
-              <option value='3'>3</option>
-              <option value='4'>4</option>
-              <option value='5'>5</option>
-              <option value='6'>6</option>
-            </Form.Control>
-          </Form.Group>
-          <Form.Group className='width-100' controlId='trialorder'>
-            <Form.Label>Select the trial order:</Form.Label>
-            <Form.Control as='select' value={chooseTrialorder} onChange={(e) => setTrialorder(e.target.value)}>
-              <option value='1'>1</option>
-              <option value='2'>2</option>
-              <option value='3'>3</option>
-              <option value='4'>4</option>
-            </Form.Control>
-          </Form.Group>
-          <Form.Group className='width-100' controlId='run'>
-            <Form.Label>Select the run:</Form.Label>
-            <Form.Control as='select' value={chooseRun} onChange={(e) => setRun(e.target.value)}>
-              <option value='1'>1</option>
-            </Form.Control>
-          </Form.Group>
-          <Form.Group className='width-100' controlId='respmode'>
-            <Form.Label>Select the response mode:</Form.Label>
-            <Form.Control as='select' value={chooseRespmode} onChange={(e) => setRespmode(e.target.value)}>
-              <option value='button'>Buttons</option>
-              <option value='keyboard'>Keyboard</option>
-            </Form.Control>
-          </Form.Group>
-          <Form.Group controlId='twochoice'>
-            <Form.Check
-              type='checkbox'
-              label='twochoice'
-              checked={chooseTwochoice}
-              onChange={(e) => setTwochoice(e.target.checked)}
-            />
-          </Form.Group>
-          <Form.Group controlId='selfpaced'>
-            <Form.Check
-              type='checkbox'
-              label='selfpaced'
-              checked={chooseSelfpaced}
-              onChange={(e) => setSelfpaced(e.target.checked)}
-            />
-          </Form.Group>
+
+          <div className="options-container">
+            <div className='login-options'>
+              <Form.Group controlId='stim_set'>
+                <Form.Label>Stimulus set:</Form.Label>
+                <Form.Control as='select' value={chooseStimset} onChange={(e) => setStimset(e.target.value)}>
+                  <option value='1'>1</option>
+                  <option value='2'>2</option>
+                  <option value='3'>3</option>
+                  <option value='4'>4</option>
+                  <option value='5'>5</option>
+                  <option value='6'>6</option>
+                </Form.Control>
+              </Form.Group>
+              <Form.Group controlId='trialorder'>
+                <Form.Label>Trial order:</Form.Label>
+                <Form.Control as='select' value={chooseTrialorder} onChange={(e) => setTrialorder(e.target.value)}>
+                  <option value='1'>1</option>
+                  <option value='2'>2</option>
+                  <option value='3'>3</option>
+                  <option value='4'>4</option>
+                </Form.Control>
+              </Form.Group>
+              <Form.Group controlId='run'>
+                <Form.Label>Run:</Form.Label>
+                <Form.Control as='select' value={chooseRun} onChange={(e) => setRun(e.target.value)}>
+                  <option value='1'>1</option>
+                </Form.Control>
+              </Form.Group>
+            </div>
+
+            <div className='response-options'>
+              <Form.Group controlId='respmode'>
+                <Form.Label>Response mode:</Form.Label>
+                <Form.Control as='select' value={chooseRespmode} onChange={(e) => setRespmode(e.target.value)}>
+                  <option value='button'>Buttons</option>
+                  <option value='keyboard'>Keyboard</option>
+                </Form.Control>
+              </Form.Group>
+            </div>
+          </div>
+
+          <div className='checkboxes-container'>
+            <div className='checkbox-option'>
+              <Form.Group controlId='twochoice'>
+                <Form.Check
+                  type='checkbox'
+                  label='Two choice'
+                  checked={chooseTwochoice}
+                  onChange={(e) => setTwochoice(e.target.checked)}
+                />
+              </Form.Group>
+            </div>
+            <div className='checkbox-option'>
+              <Form.Group controlId='selfpaced'>
+                <Form.Check
+                  type='checkbox'
+                  label='Selfpaced'
+                  checked={chooseSelfpaced}
+                  onChange={(e) => setSelfpaced(e.target.checked)}
+                />
+              </Form.Group>
+            </div>
+          </div>
+
           <Button
             style={{ width: '100%' }}
             block
