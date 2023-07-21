@@ -1,3 +1,70 @@
+/* Login page formatting */
+
+.login-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login {
+  width: 100%;
+  margin: 10px;
+}
+
+.options-container {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  align-items: baseline;
+  margin-top: 10px;
+}
+
+.login-options {
+  display: flex;
+  gap: 50px;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.login-options select {
+  align-items: center;
+  width: 75px;
+}
+
+.login-options select option {
+  text-align: center;
+}
+
+.response-options {
+  display: flex;
+  gap: 50px;
+  margin-top: 10px;
+}
+
+.response-options select option {
+  text-align: center;
+}
+
+.checkboxes-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  margin: 20px;
+}
+
 /* p,
 li {
   font-size: 1.5rem;
@@ -141,7 +208,7 @@ body,
 .jspsych-btn {
   display: inline-block;
   padding: 6px 12px;
-  font-size: 25px;
+  font-size: 30px;
   font-weight: 400;
   font-family: 'Open Sans', 'Arial', sans-serif;
   cursor: pointer;
