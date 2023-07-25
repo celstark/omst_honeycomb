@@ -10,6 +10,8 @@
 //        6/22/23 (AGH): added korean
 //        7/13/23 (AGH): added task data property
 //        7/17/23 (AGH): added chinese
+//        7/24/23 (AGH): added startDate to record the time the
+//                       experiment begins
 //
 //   --------------------
 //   This trial allows the participant to choose between language
@@ -21,12 +23,14 @@
 //-------------------- IMPORTS -------------------
 
 import surveyMultiChoice from '@jspsych/plugin-survey-multi-choice';
+import { getFormattedDate } from '../lib/utils';
 
 //----------------------- 2 ----------------------
 //--------------------- TRIAL --------------------
 
 // var to store the language file path
 var lang = null;
+var startDate = new Date();
 
 // select language trial
 var select_pref_lang = {
@@ -39,7 +43,7 @@ var select_pref_lang = {
       required: true,
     },
   ],
-  data: { task: 'language' }, // add task name to data collection
+  data: { task: 'language', date: getFormattedDate(startDate) }, // add task name to data collection
   // update lang with appropriate language file path based on response
   on_finish: function (data) {
     if (data.response.lang == 'Español') {
