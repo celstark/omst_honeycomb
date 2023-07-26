@@ -1,4 +1,24 @@
-// TODO 151: Can't use ES7 import statements here?
+//*******************************************************************
+//
+//   File: electron.js               Folder: public
+//
+//   Author: Honeycomb, Audrey Hempel
+//   --------------------
+//
+//   Changes:
+//        7/10/23 (AGH): made changes to getSavePath to make sure
+//                       the data saves on the first iteration of
+//                       a participantID and studyID
+//                       added saveDataandQuit to save data if window
+//                       is closed before experiment end
+//        7/24/23 (AGH): added fsExtra and made changes 
+//                       saveDataandQuit to correct for stream errors
+//
+//   --------------------
+//   This file handles the Electron framework integration for the 
+//   application, managing data storage, event handling, etc.
+//
+//*******************************************************************
 
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, dialog } = require('electron');
@@ -7,6 +27,7 @@ const ipc = require('electron').ipcMain;
 const _ = require('lodash');
 const fs = require('fs-extra');
 const log = require('electron-log');
+const fsExtra = require('fs-extra'); // 7/24/23 (AGH) ADDED
 
 // Event Trigger
 const { eventCodes, vendorId, productId, comName } = require('./config/trigger');
@@ -42,18 +63,23 @@ const saveDataAndQuit = () => {
         const filename = `pid_${participantID}_${today.getTime()}.json`; // Generate a unique filename using the current timestamp
         const fullPath = getFullPath(filename); // Set the full path for the data file
 
-        fs.rename(preSavePath, fullPath, (err) => {
+        // Ensure that the savePath directory exists before moving the file
+        fsExtra.ensureDirSync(savePath); //7/24/23 (AGH) ADDED
+
+        fsExtra.move(preSavePath, fullPath, (err) => { //7/24/23 (AGH) CHANGED
           if (err) {
-            console.error('Error renaming data file:', err);
+            console.error('Error moving data file:', err);
           } else {
             console.log('Data file saved:', fullPath);
           }
+          app.quit(); // Quit the app after the data is saved
         });
+      } else {
+        app.quit(); // Quit the app if preSavePath or savePath is missing
       }
-      app.quit();
     });
   } else {
-    app.quit();
+    app.quit(); // Quit the app if the stream is not available
   }
 };
 // END OF ADDED SECTION
@@ -82,6 +108,11 @@ function createWindow() {
         webSecurity: true,
         contextIsolation: false,
       },
+    });
+
+    mainWindow.on('closed', function () { //7/24/23 (AGH) ADDED
+      saveDataAndQuit();
+      mainWindow = null;
     });
   }
 
@@ -284,10 +315,13 @@ ipc.on('data', (event, args) => {
     }
 
     // write the data
-    stream.write(JSON.stringify({ ...args, git }));
+    data = JSON.stringify({ ...args, git });
+    data = data.replace('{"summary"', ',{"summary"');
+    stream.write(data); 
 
     // Copy provocation images to participant's data folder
     if (args.trial_type === 'image-keyboard-response') images.push(args.stimulus.slice(7));
+
   }
 });
 
@@ -313,7 +347,7 @@ ipc.on('save_video', (event, videoFileName, buffer) => {
 // EXPERIMENT END
 ipc.on('end', () => {
   // quit app
-  app.quit();
+  //app.quit();
 });
 
 // Error state sent from front end to back end (e.g. wrong number of images)

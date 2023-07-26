@@ -124,8 +124,9 @@ function App() {
 
   // Save the experiment data on the desktop
   const defaultFinishFunction = (data) => {
-    data.localSave('csv', 'neuro-task.csv');
+    data.localSave('csv', 'omst.csv');
   };
+
   // Execute the 'end' callback function (see public/electron.js)
   const desktopFinishFunction = () => {
     ipcRenderer.send('end', 'true');

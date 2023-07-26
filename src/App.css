@@ -1,74 +1,25 @@
-/* Login page formatting */
+/***********************************************************************
+//
+//   File: App.css                        Folder: src
+//
+//   Author: Honeycomb, Craig Stark, Audrey Hempel
+//   --------------------
+//
+//   Changes:
+//        6/15/23 (AGH): added Craig's general jspysch formatting 
+//        6/30/23 (AGH): added consent form and demogform selectors
+//        7/21/23 (AGH): added Login page selectors and formatting
+//                       made jspsych buttons larger
+//
+//   --------------------
+//   This file contains the general formatting for the app and some 
+//   selectors that format specific trials or pages.
+//
+/************************************************************************
 
-.login-container {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
+/*----------------------- 1 ----------------------*/
+/*-------------- GENERAL FORMATTING --------------*/
 
-.login-form {
-  display: flex;
-  flex-direction: column;
-}
-
-.login {
-  width: 100%;
-  margin: 10px;
-}
-
-.options-container {
-  display: flex;
-  flex-direction: row;
-  gap: 50px;
-  align-items: baseline;
-  margin-top: 10px;
-}
-
-.login-options {
-  display: flex;
-  gap: 50px;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.login-options select {
-  align-items: center;
-  width: 75px;
-}
-
-.login-options select option {
-  text-align: center;
-}
-
-.response-options {
-  display: flex;
-  gap: 50px;
-  margin-top: 10px;
-}
-
-.response-options select option {
-  text-align: center;
-}
-
-.checkboxes-container {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-  margin-bottom: 10px;
-}
-
-.checkbox-option {
-  display: flex;
-  align-items: center;
-  margin: 20px;
-}
-
-/* p,
-li {
-  font-size: 1.5rem;
-} */
 html,
 body,
 #root,
@@ -137,15 +88,8 @@ body,
   border-radius: 50%;
 }
 
-/* .jspsych-btn {
-  padding: 0.5rem 1rem;
-  font-weight: bold;
-  border-radius: 5px;
-  box-shadow: 5px 5px 5px #efefef;
-  background-color: #d3d3d3;
-  margin: 1rem;
-  width: 10rem !important;
-} */
+/*----------------------- 2 ----------------------*/
+/*-------------- JSPSYCH FORMATTING---------------*/
 
 /*
  * CSS for jsPsych experiments.
@@ -276,27 +220,76 @@ body,
   text-align: left;
 }
 
-/* Demographics form formatting */
+/*----------------------- 3 ----------------------*/
+/*------------------ LOGIN PAGE ------------------*/
 
-#demogpramble {
-  font-size: 90%;
+.login-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
-#demogform {
-  text-align: left;
-  font-size: 16px;
-  margin-top: 50px;
-  margin-left: 50px;
-  line-height: 1.5rem;
+.login-form {
+  display: flex;
+  flex-direction: column;
 }
 
-#demogform p {
-  text-align: left;
-  font-size: 16px;
-  line-height: 1.6em;
+.login {
+  width: 100%;
+  margin: 10px;
 }
 
-/* Consent form formatting */
+.options-container {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  align-items: baseline;
+  margin-top: 10px;
+}
+
+.login-options {
+  display: flex;
+  gap: 50px;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.login-options select {
+  align-items: center;
+  width: 75px;
+}
+
+.login-options select option {
+  text-align: center;
+}
+
+.response-options {
+  display: flex;
+  gap: 50px;
+  margin-top: 10px;
+}
+
+.response-options select option {
+  text-align: center;
+}
+
+.checkboxes-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  margin: 20px;
+}
+
+/*----------------------- 4 ----------------------*/
+/*----------------- CONSENT FORM -----------------*/
 
 #consenttext {
   font-family: 'Open Sans', 'Arial', sans-serif;
@@ -327,3 +320,27 @@ ul {
   border-radius: 4px;
   padding: 0.5em 2em;
 }
+
+
+/*----------------------- 5 ----------------------*/
+/*----------------- DEMOGRAPHICS -----------------*/
+
+#demogpramble {
+  font-size: 90%;
+}
+
+#demogform {
+  text-align: left;
+  font-size: 16px;
+  margin-top: 50px;
+  margin-left: 50px;
+  line-height: 1.5rem;
+}
+
+#demogform p {
+  text-align: left;
+  font-size: 16px;
+  line-height: 1.6em;
+}
+
+

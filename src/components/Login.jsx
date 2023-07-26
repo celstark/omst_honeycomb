@@ -36,9 +36,12 @@ import Form from 'react-bootstrap/Form';
 
 import { deepCopy } from '../lib/utils';
 
-import { /* checkStimset, checkTrialorder, checkRun, checkTwochoice, checkSelfpaced, */ writeOrderfile, loadOrderfile /*, checkRespmode*/} from '../config/cont';
+import { writeOrderfile, loadOrderfile } from '../config/cont';
 import { loadExptBlock1 } from '../config/experiment';
 import { defaultBlockSettings } from '../config/main';
+
+import { refresh_instr_trials} from '../trials/instructions';
+import { refresh_cont_trials} from '../trials/contOmst';
 
 //----------------------- 2 ----------------------
 //------------------- VARIABLES ------------------
@@ -117,6 +120,11 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     // in /config/experiment.js
     exptBlock1 = loadExptBlock1(trial_stim, stim_set);
 
+    // refresh trails based on Login options
+    console.log('refreshing instr trials');
+    refresh_instr_trials();
+    refresh_cont_trials();
+
 }
 
 //----------------------- 4 ----------------------
@@ -162,8 +170,6 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
                 <Form.Control as='select' value={chooseTrialorder} onChange={(e) => setTrialorder(e.target.value)}>
                   <option value='1'>1</option>
                   <option value='2'>2</option>
-                  <option value='3'>3</option>
-                  <option value='4'>4</option>
                 </Form.Control>
               </Form.Group>
               <Form.Group controlId='run'>

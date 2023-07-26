@@ -1,4 +1,96 @@
+//*******************************************************************
+//
+//   File: utils.js               Folder: lib
+//
+//   Author: Honeycomb, Audrey Hempel
+//   --------------------
+//
+//   Changes:
+//        6/28/23 (AGH): created new image objects to direct the
+//                       path for different sets
+//        7/24/23 (AGH): added getFormattedDate method (for adding
+//                       date to beginning and end of data file)
+//
+//   --------------------
+//   This file holds various utility functions.
+//
+//*******************************************************************
+
+//----------------------- 1 ----------------------
+//-------------------- IMPORTS -------------------
+
 import requireContext from 'require-context.macro';
+
+
+//----------------------- 2 ----------------------
+//----------------- IMAGE OBJECTS ----------------
+
+// Discover and import images in src/assets/images.
+// This produces an object that maps friendly image file names to obscure webpack path names.
+// For example:
+//   {
+//     image1.png: '/static/media/image1.5dca7a2a50fb8b633fd5.png',
+//     image2.png: '/static/media/image2.5dca7a2a50fb8b633fd5.png'
+//   }
+const importAll = (r) => {
+  const importImageByName = (allImages, imageName) => {
+    const friendlyName = imageName.replace('./', '');
+    return { ...allImages, [friendlyName]: r(imageName) };
+  };
+  return r.keys().reduce(importImageByName, {});
+};
+
+const images = importAll(requireContext('../assets/images', false, /\.(png|jpe?g|svg)$/));
+
+// 6/28/23 (AGH): adapted images object to direct for the different order sets
+const set1Images = importAll(
+  requireContext('../assets/images/Set1_rs', false, /\.(png|jpe?g|svg)$/)
+);
+
+const set2Images = importAll(
+  requireContext('../assets/images/Set2_rs', false, /\.(png|jpe?g|svg)$/)
+);
+
+const set3Images = importAll(
+  requireContext('../assets/images/Set3_rs', false, /\.(png|jpe?g|svg)$/)
+);
+
+const set4Images = importAll(
+  requireContext('../assets/images/Set4_rs', false, /\.(png|jpe?g|svg)$/)
+);
+
+const set5Images = importAll(
+  requireContext('../assets/images/Set5_rs', false, /\.(png|jpe?g|svg)$/)
+);
+
+const set6Images = importAll(
+  requireContext('../assets/images/Set6_rs', false, /\.(png|jpe?g|svg)$/)
+);
+
+//----------------------- 3 ----------------------
+//------------------- FUNCTIONS ------------------
+
+
+function getFormattedDate(date) {
+  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  const dayOfWeek = daysOfWeek[date.getUTCDay()];
+  const month = months[date.getUTCMonth()];
+  const day = date.getUTCDate();
+  const year = date.getUTCFullYear();
+  const hours = date.getUTCHours();
+  const minutes = date.getUTCMinutes();
+  const seconds = date.getUTCSeconds();
+  const timezoneOffset = date.getTimezoneOffset();
+  const timezoneOffsetHours = Math.abs(Math.floor(timezoneOffset / 60));
+  const timezoneOffsetMinutes = Math.abs(timezoneOffset % 60);
+  const timezoneSign = timezoneOffset > 0 ? '-' : '+';
+  const timezoneName = 'Eastern Daylight Time'; // Replace this with the actual timezone name if needed.
+
+  const formattedDate = `${dayOfWeek} ${month} ${day} ${year} ${hours}:${minutes}:${seconds} GMT${timezoneSign}${timezoneOffsetHours.toString().padStart(2, '0')}${timezoneOffsetMinutes.toString().padStart(2, '0')} (${timezoneName})`;
+  return formattedDate;
+}
 
 const sleep = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -49,48 +141,6 @@ const startKeypressListener = (jsPsych) => {
   return keyboardListener;
 };
 
-// Discover and import images in src/assets/images.
-// This produces an object that maps friendly image file names to obscure webpack path names.
-// For example:
-//   {
-//     image1.png: '/static/media/image1.5dca7a2a50fb8b633fd5.png',
-//     image2.png: '/static/media/image2.5dca7a2a50fb8b633fd5.png'
-//   }
-const importAll = (r) => {
-  const importImageByName = (allImages, imageName) => {
-    const friendlyName = imageName.replace('./', '');
-    return { ...allImages, [friendlyName]: r(imageName) };
-  };
-  return r.keys().reduce(importImageByName, {});
-};
-
-const images = importAll(requireContext('../assets/images', false, /\.(png|jpe?g|svg)$/));
-
-// 6/28/23 (AGH): adapted images object to direct for the different order sets
-const set1Images = importAll(
-  requireContext('../assets/images/Set1_rs', false, /\.(png|jpe?g|svg)$/)
-);
-
-const set2Images = importAll(
-  requireContext('../assets/images/Set2_rs', false, /\.(png|jpe?g|svg)$/)
-);
-
-const set3Images = importAll(
-  requireContext('../assets/images/Set3_rs', false, /\.(png|jpe?g|svg)$/)
-);
-
-const set4Images = importAll(
-  requireContext('../assets/images/Set4_rs', false, /\.(png|jpe?g|svg)$/)
-);
-
-const set5Images = importAll(
-  requireContext('../assets/images/Set5_rs', false, /\.(png|jpe?g|svg)$/)
-);
-
-const set6Images = importAll(
-  requireContext('../assets/images/Set6_rs', false, /\.(png|jpe?g|svg)$/)
-);
-
 const getQueryVariable = (variable) => {
   const query = window.location.search.substring(1);
   const vars = query.split('&');
@@ -120,6 +170,10 @@ const beep = (audioCodes) => {
   o.stop(context.currentTime + 0.4);
 };
 
+
+//----------------------- 4 ----------------------
+//-------------------- EXPORTS -------------------
+
 export {
   sleep,
   jitter,
@@ -138,4 +192,5 @@ export {
   startKeypressListener,
   getProlificId,
   beep,
+  getFormattedDate,
 };

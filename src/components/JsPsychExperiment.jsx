@@ -1,9 +1,41 @@
+//*******************************************************************
+//
+//   File: JsPsychExperiment.js               Folder: components
+//
+//   Author: Honeycomb, Audrey Hempel
+//   --------------------
+//
+//   Changes:
+//        7/13/23 (AGH): deleted start_date and task_version from 
+//                       added properties
+//        7/21/23 (AGH): added dataCalcFunction from contOmst to 
+//                       on_finish
+//        7/24/23 (AGH): modified on_finish to update the data with
+//                       the added summary so it saves to the json
+//                       file
+//                       added endDate to record the time the
+//                       experiment ends
+//
+//   --------------------
+//   This file holds the experiment, adds properties and builds the 
+//   timelines
+//
+//*******************************************************************
+
+//----------------------- 1 ----------------------
+//-------------------- IMPORTS -------------------
+
 import { initJsPsych } from 'jspsych';
 import React, { useEffect, useMemo, useRef } from 'react';
 
 import { config } from '../config/main';
 import { initParticipant } from '../firebase';
 import { buildTimeline, jsPsychOptions } from '../timelines/main';
+import { dataCalcFunction } from '../trials/contOmst';
+import { getFormattedDate } from '../lib/utils';
+
+//----------------------- 2 ----------------------
+//-------------------- JSPSYCH -------------------
 
 function JsPsychExperiment({
   participantId,
@@ -24,7 +56,13 @@ function JsPsychExperiment({
     ...jsPsychOptions,
     display_element: experimentDivId,
     on_data_update: (data) => dataUpdateFunction(data),
-    on_finish: (data) => dataFinishFunction(data),
+    on_finish: (data) => {
+      const summary = dataCalcFunction(data);
+      const endDate = getFormattedDate(new Date());
+      dataUpdateFunction({summary, endDate});
+      const dataWithSummary = { ...data, summary, endDate };
+      dataFinishFunction(dataWithSummary);
+    }, 
   };
 
   // Create the instance of jsPsych that we'll reuse within the scope of this JsPsychExperiment component.
@@ -42,8 +80,6 @@ function JsPsychExperiment({
     jsPsych.data.addProperties({
       study_id: studyId,
       participant_id: participantId,
-      //start_date: startDate, 7/13/23 (AGH): DELETED
-      //task_version: taskVersion, 7/13/23 (AGH): DELETED
     });
     return jsPsych;
   }, [participantId, studyId, taskVersion]);
@@ -85,5 +121,8 @@ function JsPsychExperiment({
     </div>
   );
 }
+
+//----------------------- 3 ----------------------
+//-------------------- EXPORTS -------------------
 
 export default JsPsychExperiment;
