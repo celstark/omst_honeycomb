@@ -128,6 +128,8 @@
 //        7/6/23 (AGH):  deleted preload
 //        7/13/23 (AGH): added task data property to trials
 //        7/14/23 (AGH): split instructions into keyboard and button version
+//        7/21/23 (AGH): made debrief data calculations a seperate function o 
+//                       exported to /components/JsPsychExperiment
 //
 //   --------------------
 //   This file includes the continuous oMST instructions and debrief
@@ -140,7 +142,7 @@
 
 import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import jsPsychHtmlButtonResponse from '@jspsych/plugin-html-button-response';
-import { initJsPsych } from 'jspsych';
+// import { initJsPsych } from 'jspsych';
 
 import { lang } from '../trials/selectLanguage';
 //import { resp_mode } from '../trials/selectRespType';
@@ -261,7 +263,7 @@ function invNormcdf(p) {
 // // START OF CODE THAT SHOULD BE CONSTANT REGARDLESS OF JATOS / CORDOVA
 // const phasename='oMSTCont';
 
-var jsPsych = initJsPsych();
+// var jsPsych = initJsPsych();
 
 // jsPsych.data.addProperties({
 //   task: phasename,
@@ -344,14 +346,23 @@ var debrief_block = {
     return lang.cont.ty;
   },
   // add task name to data collection
-  data: { task: 'oMSTCont' },
-  on_finish: function (data) {
-    let validtrials = jsPsych.data.get().filterCustom(function (trial) {
+  data: { task: 'oMSTCont'},
+};
+
+var retstr;
+
+var dataCalcFunction = (data) => {
+   let validtrials = data.filterCustom(function (trial) {
       return trial.resp !== null;
     });
     let targets = validtrials.filter({ condition: 'target' });
     let lures = validtrials.filter({ condition: 'lure' });
     let foils = validtrials.filter({ condition: 'foil' });
+
+    console.log('validtrials: ' + validtrials.count());
+    console.log('targets: ' + targets.count());
+    console.log('lures: ' + lures.count());
+    console.log('foils: ' + foils.count());
 
     if (twochoice == 1) {
       let corr_targs = targets.filter({ correct: true });
@@ -397,7 +408,7 @@ var debrief_block = {
       let dpTF = invNormcdf(p_hit) - invNormcdf(p_fa_foil);
       let dpTL = invNormcdf(p_hit) - invNormcdf(p_fa_lure);
 
-      var retstr =
+      retstr =
         'HR, ' +
         hits +
         ', CR-L, ' +
@@ -408,6 +419,11 @@ var debrief_block = {
         dpTF.toFixed(3) +
         ", d'T:L, " +
         dpTL.toFixed(3);
+
+      console.log('retstr:' + retstr);
+
+      return (retstr);
+
     } else {
       // OSN
       let targ_old = targets.filter({ resp: 'o' });
@@ -431,6 +447,11 @@ var debrief_block = {
       retstr +=
         'New, ' + targ_new.count() + ', ' + lure_new.count() + ', ' + foil_new.count() + '\n';
       retstr += 'REC, ' + rec.toFixed(3) + ', LDI, ' + ldi.toFixed(3);
+
+      console.log('ldi: ' + ldi);
+      console.log('retstr: ' + retstr);
+
+      return (retstr);
     }
 
     // let date = new Date();
@@ -443,15 +464,119 @@ var debrief_block = {
     // else { // Append to array
     //   jatos.batchSession.add("/" + sid + "/-",phasename+"_"+dcode+"_"+retstr);
     // }
-    data.summary = retstr;
+    // data.summary = retstr;
     //jatos.batchSession.add("/"+idcode,{ [phasename + "_results"]: data.summary });
     //return '<p>Hit rate: ' + hits + '</p><p>CR-L rate: ' + cr_lure + '</p><p>CR-F rate: ' + cr_foil + '</p>'
     //return 'HR, ' + hits + ', CR-L, ' + cr_lure + ', CR-F rate, ' + cr_foil + ", d'T:F, " + dpTF.toFixed(3) + ", d'T:L, " + dpTL.toFixed(3)
-  },
+    
 };
+
+  //   let validtrials = jsPsych.data.get().filterCustom(function (trial) {
+  //     return trial.resp !== null;
+  //   });
+  //   let targets = validtrials.filter({ condition: 'target' });
+  //   let lures = validtrials.filter({ condition: 'lure' });
+  //   let foils = validtrials.filter({ condition: 'foil' });
+
+  //   if (twochoice == 1) {
+  //     let corr_targs = targets.filter({ correct: true });
+  //     let corr_lures = lures.filter({ correct: true });
+  //     let corr_foils = foils.filter({ correct: true });
+  //     let hits = Math.round((corr_targs.count() / targets.count()) * 100);
+  //     let cr_lure = Math.round((corr_lures.count() / lures.count()) * 100);
+  //     let cr_foil = Math.round((corr_foils.count() / foils.count()) * 100);
+  //     let p_fa_foil = 0.0;
+  //     let p_fa_lure = 0.0;
+  //     let p_hit = 0.0;
+  //     if (corr_targs.count() == 0) {
+  //       p_hit = 0.5 / targets.count();
+  //     } else if (corr_targs.count() == targets.count()) {
+  //       p_hit = (targets.count() - 0.5) / targets.count();
+  //     } else {
+  //       p_hit = corr_targs.count() / targets.count();
+  //     }
+
+  //     if (corr_lures.count() == lures.count()) {
+  //       p_fa_lure = 0.5 / lures.count();
+  //     } else if (corr_lures.count() == 0) {
+  //       p_fa_lure = (lures.count() - 0.5) / lures.count();
+  //     } else {
+  //       p_fa_lure = 1 - corr_lures.count() / lures.count();
+  //     }
+
+  //     if (corr_foils.count() == foils.count()) {
+  //       p_fa_foil = 0.5 / foils.count();
+  //     } else if (corr_foils.count() == 0) {
+  //       p_fa_foil = (foils.count() - 0.5) / foils.count();
+  //     } else {
+  //       p_fa_foil = 1 - corr_foils.count() / foils.count();
+  //     }
+
+  //     console.log(corr_targs.count() + ' ' + targets.count() + ' ' + p_hit);
+  //     console.log(corr_lures.count() + ' ' + lures.count() + ' ' + p_fa_lure);
+  //     console.log(corr_foils.count() + ' ' + foils.count() + ' ' + p_fa_foil);
+  //     console.log(invNormcdf(p_hit));
+  //     console.log(invNormcdf(p_fa_lure));
+  //     console.log(invNormcdf(p_fa_foil));
+
+  //     let dpTF = invNormcdf(p_hit) - invNormcdf(p_fa_foil);
+  //     let dpTL = invNormcdf(p_hit) - invNormcdf(p_fa_lure);
+
+  //     var retstr =
+  //       'HR, ' +
+  //       hits +
+  //       ', CR-L, ' +
+  //       cr_lure +
+  //       ', CR-F rate, ' +
+  //       cr_foil +
+  //       ", d'T:F, " +
+  //       dpTF.toFixed(3) +
+  //       ", d'T:L, " +
+  //       dpTL.toFixed(3);
+  //   } else {
+  //     // OSN
+  //     let targ_old = targets.filter({ resp: 'o' });
+  //     let targ_sim = targets.filter({ resp: 's' });
+  //     let targ_new = targets.filter({ resp: 'n' });
+  //     let lure_old = lures.filter({ resp: 'o' });
+  //     let lure_sim = lures.filter({ resp: 's' });
+  //     let lure_new = lures.filter({ resp: 'n' });
+  //     let foil_old = foils.filter({ resp: 'o' });
+  //     let foil_sim = foils.filter({ resp: 's' });
+  //     let foil_new = foils.filter({ resp: 'n' });
+
+  //     let rec = targ_old.count() / targets.count() - foil_old.count() / foils.count();
+  //     let ldi = lure_sim.count() / lures.count() - foil_sim.count() / foils.count();
+  //     // removed var
+  //     retstr = 'Valid, ' + targets.count() + ', ' + lures.count() + ', ' + foils.count() + '\n';
+  //     retstr +=
+  //       'Old, ' + targ_old.count() + ', ' + lure_old.count() + ', ' + foil_old.count() + '\n';
+  //     retstr +=
+  //       'Similar, ' + targ_sim.count() + ', ' + lure_sim.count() + ', ' + foil_sim.count() + '\n';
+  //     retstr +=
+  //       'New, ' + targ_new.count() + ', ' + lure_new.count() + ', ' + foil_new.count() + '\n';
+  //     retstr += 'REC, ' + rec.toFixed(3) + ', LDI, ' + ldi.toFixed(3);
+  //   }
+
+  //   // let date = new Date();
+  //   // let dcode = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + (date.getDate()+1) +
+  //   //   "-" + date.getHours() + "-" + date.getMinutes() + "-" + date.getSeconds();
+
+  //   // if (!jatos.batchSession.defined("/" + sid)) {  // Should have this by now, but to be safe -- make sure to create this as an array
+  //   //   jatos.batchSession.add("/" + sid,[phasename+"_"+dcode+"_"+retstr]);
+  //   // }
+  //   // else { // Append to array
+  //   //   jatos.batchSession.add("/" + sid + "/-",phasename+"_"+dcode+"_"+retstr);
+  //   // }
+  //   data.summary = retstr;
+  //   //jatos.batchSession.add("/"+idcode,{ [phasename + "_results"]: data.summary });
+  //   //return '<p>Hit rate: ' + hits + '</p><p>CR-L rate: ' + cr_lure + '</p><p>CR-F rate: ' + cr_foil + '</p>'
+  //   //return 'HR, ' + hits + ', CR-L, ' + cr_lure + ', CR-F rate, ' + cr_foil + ", d'T:F, " + dpTF.toFixed(3) + ", d'T:L, " + dpTL.toFixed(3)
+  // },
+//};
 
 //----------------------- 4 ----------------------
 //--------------------- EXPORTS -------------------
 
-export { key_instr1_trial, button_instr1_trial, debrief_block };
+export { key_instr1_trial, button_instr1_trial, debrief_block, dataCalcFunction, retstr };
 
