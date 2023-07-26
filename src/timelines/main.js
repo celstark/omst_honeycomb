@@ -14,8 +14,8 @@
 //        7/9/23 (AGH):  added conditional timelines based on user
 //                       consent
 //        7/10/23 (AGH): added end_message
-//        7/18/23 (AGH): removed select_resp_type trial, changed import of resp_mode,
-//                       and exptBlock1 to /components/Login
+//        7/18/23 (AGH): removed select_resp_type trial, changed import path of 
+//                       resp_mode and exptBlock1 to /components/Login
 //
 //   --------------------
 //   This file builds the primaryTimeline from all of the trials.
@@ -70,21 +70,6 @@ const buildPrimaryTimeline = () => {
     consent_trial,
   ];
 
-  // conditional timeline that runs the experiment if consent is given
-  var consented = {
-    timeline: [
-      demogform, // demographics
-    ],
-    conditional_function: function () {
-      // if consent was given in consent trial, run above timeline
-      if (consentGiven) { 
-        return true;
-      } else {
-        return false;
-      }
-    },
-  };
-
   // timeline for all the keyboard response trials
   var keyboard = {
     timeline : [
@@ -107,8 +92,6 @@ const buildPrimaryTimeline = () => {
       key_instr1_trial, // instructions
       testBlock(exptBlock1), // looping trials
       debrief_block, // thank you
-
-      end_message, // final thank you message
     ],
     conditional_function: function () {
       // if consent was given in consent trial and keyboard response type run above timeline
@@ -118,42 +101,40 @@ const buildPrimaryTimeline = () => {
         return false;
       }
     },
-  }
+  };
 
-  // timeline for all the button response trials
-  var buttons = {
-    timeline : [
-      // instructions 
-      button_intro,
-      button_new1,
-      button_new2,
-      button_new3,
-      button_repeat1,
-      button_lure1,
-      button_side_by_side1,
-      button_new4,
-      button_new5,
-      button_repeat2,
-      button_lure2,
-      button_side_by_side2,
-      button_outtro,
-      
-      // continuous omst
-      button_instr1_trial, // instructions
-      testBlock(exptBlock1), // looping trials
-      debrief_block, // thank you
-
-      end_message, // final thank you message
-    ],
-    conditional_function: function () {
-      // if consent was given in consent trial and button response type run above timeline
-      if (consentGiven && resp_mode == 'button') {
-        return true;
-      } else {
-        return false;
-      }
-    },
-  }
+    // timeline for all the button response trials
+    var buttons = {
+      timeline : [
+        // instructions 
+        button_intro,
+        button_new1,
+        button_new2,
+        button_new3,
+        button_repeat1,
+        button_lure1,
+        button_side_by_side1,
+        button_new4,
+        button_new5,
+        button_repeat2,
+        button_lure2,
+        button_side_by_side2,
+        button_outtro,
+        
+        // continuous omst
+        button_instr1_trial, // instructions
+        testBlock(exptBlock1), // looping trials
+        debrief_block, // thank you
+      ],
+      conditional_function: function () {
+        // if consent was given in consent trial and button response type run above timeline
+        if (consentGiven && resp_mode == 'button') {
+          return true;
+        } else {
+          return false;
+        }
+      },
+    };
 
 
   // conditional timeline that runs ending message if participant does not consent
@@ -168,8 +149,27 @@ const buildPrimaryTimeline = () => {
     },
   };
 
+  // conditional timeline that runs the experiment if consent is given
+  var consented = {
+    timeline: [
+      demogform, // demographics
+      keyboard, // conditional keyboard timeline
+      buttons, // conditional button timeline
+
+      end_message, // final thank you message
+    ],
+    conditional_function: function () {
+      // if consent was given in consent trial, run above timeline
+      if (consentGiven) { 
+        return true;
+      } else {
+        return false;
+      }
+    },
+  };
+
   // add conditional timelines to primary
-  primaryTimeline.push(consented, keyboard, buttons, notConsented);
+  primaryTimeline.push(consented, notConsented);
   return primaryTimeline;
 };
 
