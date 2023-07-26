@@ -279,7 +279,7 @@ function invNormcdf(p) {
 
 var instr_choice = function () {
   if (resp_mode == 'button') {
-    return lang.cont.button.instr_choice;
+    return [lang.cont.button.instr_choice];
   } else {
     return lang.cont.key.instr_choice;
   }
@@ -312,29 +312,22 @@ var instr_stim = function () {
 //----------------------- 3 ----------------------
 //--------------------- TRIALS -------------------
 
-//-------------instructions------------
-var key_instr1_trial = {
-  type: jsPsychHtmlKeyboardResponse,
-  choices: instr_choice,
-  prompt: instr_prompt,
-  margin_horizontal: '40px',
-  margin_vertical: '20px',
-  //        button_html: '<button style="font-size: 150%" class="jspsych-btn">%choice%</button>',
-  stimulus: instr_stim,
-  // add task name to data collection
-  data: { task: 'oMSTCont' },
-};
+//-------------instructions-------------
 
-var button_instr1_trial = {
-  type: jsPsychHtmlButtonResponse,
-  choices: [instr_choice],
-  prompt: instr_prompt,
-  margin_horizontal: '40px',
-  margin_vertical: '20px',
-  //        button_html: '<button style="font-size: 150%" class="jspsych-btn">%choice%</button>',
-  stimulus: instr_stim,
-  // add task name to data collection
-  data: { task: 'oMSTCont' },
+var instr1_trial = {};
+
+function refresh_cont_trials() {
+  instr1_trial = {
+    type: (resp_mode == 'button' ? jsPsychHtmlButtonResponse: jsPsychHtmlKeyboardResponse),
+    choices: instr_choice,
+    prompt: instr_prompt,
+    margin_horizontal: '40px',
+    margin_vertical: '20px',
+    //        button_html: '<button style="font-size: 150%" class="jspsych-btn">%choice%</button>',
+    stimulus: instr_stim,
+    // add task name to data collection
+    data: { task: 'oMSTCont' },
+  }
 };
 
 //---------------thank you--------------
@@ -578,5 +571,5 @@ var dataCalcFunction = (data) => {
 //----------------------- 4 ----------------------
 //--------------------- EXPORTS -------------------
 
-export { key_instr1_trial, button_instr1_trial, debrief_block, dataCalcFunction, retstr };
+export { refresh_cont_trials, instr1_trial, debrief_block, dataCalcFunction, retstr };
 
