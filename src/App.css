@@ -10,6 +10,11 @@
 //        6/30/23 (AGH): added consent form and demogform selectors
 //        7/21/23 (AGH): added Login page selectors and formatting
 //                       made jspsych buttons larger
+//        7/27/23 (AGH): changes to login setup to space out new
+//                       language, consent, demog, pcon and instr
+//                       options
+//        7/28/28 (AGH): added toggle to login setup to format
+//                       the participant/experimenter view button
 //
 //   --------------------
 //   This file contains the general formatting for the app and some 
@@ -224,7 +229,7 @@ body,
 /*------------------ LOGIN PAGE ------------------*/
 
 .login-container {
-  max-width: 400px;
+  max-width: 600px;
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
@@ -234,6 +239,7 @@ body,
 .login-form {
   display: flex;
   flex-direction: column;
+  width: 800px;
 }
 
 .login {
@@ -243,26 +249,36 @@ body,
 
 .options-container {
   display: flex;
+  flex-direction: column;
+}
+
+.num-options-container {
+  display: flex;
   flex-direction: row;
   gap: 50px;
   align-items: baseline;
   margin-top: 10px;
 }
 
-.login-options {
+.num-options {
   display: flex;
-  gap: 50px;
-  align-items: center;
+  gap: 57px;
+  align-items: baseline;
   margin-top: 20px;
 }
 
-.login-options select {
+.num-options select {
   align-items: center;
-  width: 75px;
+  width: 95px;
 }
 
-.login-options select option {
+.num-options select option {
   text-align: center;
+}
+
+.response-options-container {
+  display: flex;
+  gap: 50px;
 }
 
 .response-options {
@@ -271,21 +287,35 @@ body,
   margin-top: 10px;
 }
 
+.response-options select {
+  width: 150px;
+}
+
 .response-options select option {
   text-align: center;
 }
 
 .checkboxes-container {
   display: flex;
-  gap: 10px;
+  gap: 6px;
   margin-top: 20px;
   margin-bottom: 10px;
+  align-items: start;
 }
 
 .checkbox-option {
   display: flex;
   align-items: center;
   margin: 20px;
+}
+
+.toggle-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: transparent;
+  border-color: #ccc;
+  align-items: left;
 }
 
 /*----------------------- 4 ----------------------*/

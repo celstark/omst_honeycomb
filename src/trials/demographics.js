@@ -91,7 +91,7 @@
 //----------------------- 1 ----------------------
 //-------------------- IMPORTS -------------------
 
-import { lang } from './selectLanguage';
+import { lang } from '../components/Login';
 import jsPsychSurveyHtmlForm from '@jspsych/plugin-survey-html-form';
 
 //----------------------- 2 ----------------------
