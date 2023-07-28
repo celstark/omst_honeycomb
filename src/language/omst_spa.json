@@ -19,6 +19,7 @@
       "email": "cestark@uci.edu <br>"
     },
     "text": "<li>Le estamos pidiendo que participe en un estudio realizado por investigadores de la Universidad de California en Irvine. Participación en este estudio es opcional. </li> <li> Si elige participar en el estudio, completará un experimento de memoria con imágenes de objetos comunes. Además, podrá participar en una encuesta que nos ayudará a aprender más sobre cómo los hábitos alimenticios, la actividad física, el estado de ánimo, los patrones de sueño, y el estrés pueden influir el desempeño de la memoria. La sesión tardará unos 30 minutos en completarse. </li> <li> Puede omitir las preguntas que no quiere contestar o parar la encuesta en cualquier momento. Mantendremos la confidencialidad de sus respuestas y no compartiremos su información personal con nadie fuera del equipo del estudio. </li> <li> Este investigación es solo para participantes mayores de 18 años de edad; si usted es menor de 18 años, por favor no participe en esta encuesta</li> <li>Algunas preguntas pueden causar vergüenza o ansiedad. Si no desea contestar una pregunta, puede omitirla y pasar a las siguientes preguntas. Si no desea participar, puede parar.</li> <li>Como en la mayoría de las investigaciones, existe la posibilidad de que la confidencialidad se vea comprometida. Tomamos precauciones para minimizar este riesgo, incluido la codificación de sus datos con un numero en vez de su nombre y el almacenamiento en una base de datos protegida con una contraseña.  </li> <li>Recibirá crédito adicional para un curso elegible mediante el UCI Ciencias Sociales grupo de sujetos humanos. Recibirá media unidad de crédito del curso por cada media hora de participación en este estudio. La cantidad total de crédito que puede ganar por este estudio es una unidad de crédito. El instructor del curso que ofrece crédito adicional para participación en una investigación debe ofrecer alternativas para ganar crédito adicional del curso. La asignación alternativa debe requerir el tiempo y el esfuerzo igual o menor a la cantidad del crédito adicional que puede ganar por participación en una investigación. </li> <li>Si tiene comentarios, inquietudes o preguntas con respecto a la realización de esta investigación por favor consulte los investigadores enumerados en la parte superior de esta autorización.</li> <li> Si tiene preguntas o inquietudes sobre sus derechos como participante en una investigación, puede comunicarse con el Consejo de Revisión Institucional (IRB) de UCI por teléfono, (949) 824-0665, por correo electrónico en IRB@research.uci.edu o a 141 Innovation, Suite 250, Irvine, CA 92697. </li> <br><b>¿Qué es un IRB?</b>  Un Consejo de Revisión Institucional (IRB) es un comité de científicos y no científicos. El papel del IRB es proteger los derechos y bienestar de sujetos humanos en la investigación. Además, el IRB asegura que la investigación cumple con las reglamentaciones, leyes, y políticas institucionales aplicables. </li> ",
+    "prompt": "<li>Si quiere participar en este estudio, haz clic en el botón que dice <b>Acepto<b> para empezar la encuesta </li>",
     "buttons": {
       "agree": "Acepto",
       "cancel": "Cancelar"
@@ -60,11 +61,11 @@
 
   "instructions": {
     "text0": "Verá imágenes de objetos comunes uno a uno. Para cada imagen, seleccionará <b>Viejo</b> si usted ha visto esta imagen exacta antes, <b>Similar</b> si es similar, pero no es exactamente idéntica a la imagen que vió antes, o <b>Nuevo</b> si es una imagen totalmente nueva. <p> La manera de pensar en <i>Similar</i> es si el objeto tiene el mismo nombre, pero es una imagen diferente de algún modo. <p> Unas pruebas de práctica le ayudaran a entender mejor esta tarea",
-    "cor_new": "<p> ¡Muy Bien!! Todavía no ha visto esta imagen, así que ha seleccionado correctamente <b>Nuevo</b> </p>",
-    "cor_rep": "<p> ¡Muy Bien!! Usted ya ha visto esta imagen exacta, así que ha seleccionado correctamente <b>Viejo</b> </p>",
-    "cor_lure": "<p> ¡Muy Bien!! No ha visto esta imagen <i>exacta</i>, así que ha seleccionado correctamente <b>Similar</b> </p>",
-    "prompt_test": "<p> Es su turno. ¿Ya ha visto esto? </p>",
-    "side_by_side": "<p> Como puede ver, estos objetos son similares, pero no son exactamente iguales. Para este tipo de imagen, debería seleccionar <b>Similar</b> para indicar que ha visto algo similar a esta imagén, pero no ha visto esta imagén exacta antes durante esta sesión. </p>",
+    "cor_new": "¡Muy Bien!! Todavía no ha visto esta imagen, así que ha seleccionado correctamente <b>Nuevo</b>",
+    "cor_rep": "¡Muy Bien!! Usted ya ha visto esta imagen exacta, así que ha seleccionado correctamente <b>Viejo</b>",
+    "cor_lure": "¡Muy Bien!! No ha visto esta imagen <i>exacta</i>, así que ha seleccionado correctamente <b>Similar</b>",
+    "prompt_test": "Es su turno. ¿Ya ha visto esto?",
+    "side_by_side": "Como puede ver, estos objetos son similares, pero no son exactamente iguales. Para este tipo de imagen, debería seleccionar <b>Similar</b> para indicar que ha visto algo similar a esta imagén, pero no ha visto esta imagén exacta antes durante esta sesión.",
     "end": "Esta es la idea. Ahora, vamos a hacer la prueba real <p><i> Durante la prueba real, si la imagen desaparece antes de responder, no se preocupe. Seleccione su respuesta aún si la pantalla está en blanco.</i>",
 
     "key": {
@@ -75,14 +76,14 @@
         "sim": "b",
         "new": "n"
       },
-      "prompt0": "<p> Presione <i>la barra espaciadora</i> para comenzar </p>",
-      "prompt_new": "<p> Todavía no ha visto esta imagen, así que debería seleccionar <b>Nuevo</b> (<b>n</b>) aquí. </p>",
-      "inc_new": "<p> Todavía no ha visto esta imagen, así que presione <i>Nuevo</i> (<b>n</b>) </p>",
-      "prompt_rep": "<p> Usted ya ha visto este objeto antes, presione <i>Viejo</i> (<b>v</b>) </p>",
-      "inc_rep": "<p> Usted ya ha visto esta imagen exacta, así que presione <i>Viejo/i> (<b>v</b>) </p>",
-      "prompt_lure": "<p> Este objeto es similar a uno que ya ha visto antes, pero no es exactamente igual, así que debería seleccionar <i>Similar</i> (<b>b</b>) aquí. </p>",
-      "inc_lure": "<p> Usted ya ha visto un objeto que era <i>similar a este, pero no era exactamente igual</i>, así que presione <i>Similar</i> (<b>b</b>) </p>",
-      "continue": "<p>(Presione <i>la barra espaciadora</i> para continuar)</p>"
+      "prompt0": "Presione <i>la barra espaciadora</i> para comenzar",
+      "prompt_new": "Todavía no ha visto esta imagen, así que debería seleccionar <b>Nuevo</b> (<b>n</b>) aquí.",
+      "inc_new": "Todavía no ha visto esta imagen, así que presione <i>Nuevo</i> (<b>n</b>)",
+      "prompt_rep": "Usted ya ha visto este objeto antes, presione <i>Viejo</i> (<b>v</b>)",
+      "inc_rep": "Usted ya ha visto esta imagen exacta, así que presione <i>Viejo/i> (<b>v</b>)",
+      "prompt_lure": "Este objeto es similar a uno que ya ha visto antes, pero no es exactamente igual, así que debería seleccionar <i>Similar</i> (<b>b</b>) aquí.",
+      "inc_lure": "Usted ya ha visto un objeto que era <i>similar a este, pero no era exactamente igual</i>, así que presione <i>Similar</i> (<b>b</b>)",
+      "continue": "(Presione <i>la barra espaciadora</i> para continuar)"
     },
 
     "button": {
@@ -93,24 +94,24 @@
         "sim": "Similar",
         "new": "Nuevo"
       },
-      "prompt0": "<p> Presione <i>OK</i> para comenzar </p>",
-      "prompt_new": "<p> Todavía no ha visto esta imagen, así que debería seleccionar <i>Nuevo</i> aquí. </p>",
-      "inc_new": "<p> Todavía no ha visto esta imagen, así que presione <b>Nuevo</b> </p>",
-      "prompt_rep": "<p> Usted ya ha visto este objeto antes, presione <b>Viejo</b> </p>",
-      "inc_rep": "<p> Usted ya ha visto esta imagen exacta, así que presione <b>Viejo</b> </p>",
-      "prompt_lure": "<p> Este objeto es similar a uno que ya ha visto antes, pero no es exactamente igual, así que debería seleccionar <b>Similar</b> aquí. </p>",
-      "inc_lure": "<p> Usted ya ha visto un objeto que era <i>similar a este, pero no era exactamente igual</i>. Así que, la respuesta correcta es <b>Similar</b> </p>",
-      "continue": "<p>(Presione <i>OK</i> para continuar)</p>"
+      "prompt0": "Presione <i>OK</i> para comenzar",
+      "prompt_new": "Todavía no ha visto esta imagen, así que debería seleccionar <i>Nuevo</i> aquí.",
+      "inc_new": "Todavía no ha visto esta imagen, así que presione <b>Nuevo</b>",
+      "prompt_rep": "Usted ya ha visto este objeto antes, presione <b>Viejo</b>",
+      "inc_rep": "Usted ya ha visto esta imagen exacta, así que presione <b>Viejo</b>",
+      "prompt_lure": "Este objeto es similar a uno que ya ha visto antes, pero no es exactamente igual, así que debería seleccionar <b>Similar</b> aquí.",
+      "inc_lure": "Usted ya ha visto un objeto que era <i>similar a este, pero no era exactamente igual</i>. Así que, la respuesta correcta es <b>Similar</b>",
+      "continue": "(Presione <i>OK</i> para continuar)"
     }
   },
 
   "cont": {
     "key": {
       "instr_choice": " ",
-      "instr_prompt": "<p> Presione <i>la barra espaciadora</i> para comenzar la próxima tarea </p>",
+      "instr_prompt": "Presione <i>la barra espaciadora</i> para comenzar la próxima tarea",
       "threechoice": {
-        "instr_stim": "<p> Tarea Continua de Viejo (<b>v</b>), Similar (<b>b</b>), o Nuevo (<b>n</b>)</p>",
-        "trial_prompt": "<p> ¿Ya ha visto esto antes? ¿Es Viejo (<b>v</b>), Similar (<b>b</b>), o Nuevo (<b>n</b>)? </p>",
+        "instr_stim": "Tarea Continua de Viejo (<b>v</b>), Similar (<b>b</b>), o Nuevo (<b>n</b>)",
+        "trial_prompt": "¿Ya ha visto esto antes? ¿Es Viejo (<b>v</b>), Similar (<b>b</b>), o Nuevo (<b>n</b>)?",
         "trial_choices": {
           "old": "v",
           "sim": "b",
@@ -118,8 +119,8 @@
         }
       },
       "twochoice": {
-        "instr_stim": "<p> Tarea Continua de Viejo (<b>v</b>) o Nuevo (<b>n</b>) </p>",
-        "trial_prompt": "<p> ¿Ya ha visto esto antes? ¿Es Viejo (<b>v</b>) o Nuevo (<b>n</b>)? </p>",
+        "instr_stim": "Tarea Continua de Viejo (<b>v</b>) o Nuevo (<b>n</b>)",
+        "trial_prompt": "<¿Ya ha visto esto antes? ¿Es Viejo (<b>v</b>) o Nuevo (<b>n</b>)?",
         "trial_choices": {
           "old": "v",
           "new": "n"
@@ -128,10 +129,10 @@
     },
     "button": {
       "instr_choice": "OK",
-      "instr_prompt": "<p>Presione <i>OK</i> para comenzar la próxima tarea </p>",
+      "instr_prompt": "Presione <i>OK</i> para comenzar la próxima tarea",
       "threechoice": {
-        "instr_stim": "<p> Tarea Continua de <i>Viejo</i>, <i>Similar</i>, o <i>Nuevo</i> </p>",
-        "trial_prompt": "<p> ¿Ya ha visto esto antes? ¿Es <i>Viejo</i>, <i>Similar</i>, o <i>Nuevo</i>? </p>",
+        "instr_stim": "Tarea Continua de <i>Viejo</i>, <i>Similar</i>, o <i>Nuevo</i>",
+        "trial_prompt": "¿Ya ha visto esto antes? ¿Es <i>Viejo</i>, <i>Similar</i>, o <i>Nuevo</i>?",
         "trial_choices": {
           "old": "Viejo",
           "sim": "Similar",
@@ -139,8 +140,8 @@
         }
       },
       "twochoice": {
-        "instr_stim": "<p> Tarea Continua de <i>Viejo</i> o <i>Nuevo</i> </p>",
-        "trial_prompt": "<p> ¿Ya ha visto esto antes? ¿Es <i>Viejo</i> o <i>Nuevo/i>? </p>",
+        "instr_stim": "Tarea Continua de <i>Viejo</i> o <i>Nuevo</i>",
+        "trial_prompt": "¿Ya ha visto esto antes? ¿Es <i>Viejo</i> o <i>Nuevo/i>?",
         "trial_choices": {
           "old": "Viejo",
           "new": "Nuevo"

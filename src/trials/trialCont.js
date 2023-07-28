@@ -14,7 +14,9 @@
 //                       be dynamic)
 //        7/14/23 (AGH): deleted margin parameters for keyboard trial, adjusted 
 //                       horizontal margin to 8px (same as instructions) and
-//                       deleted cursor block for button trial 
+//                       deleted cursor block for button trial
+//        7/27/23 (AGH): added paragraph markers to param functions (previously 
+//                       within text file) 
 //
 //   --------------------
 //
@@ -34,8 +36,7 @@ import jsPsychImageButtonResponse from '@jspsych/plugin-image-button-response';
 import $ from 'jquery';
 
 //import { resp_mode } from '../trials/selectRespType';
-import { lang } from '../trials/selectLanguage';
-import { twochoice, selfpaced, resp_mode /*orderfile, stim_set*/ } from '../components/Login';
+import { twochoice, selfpaced, lang, resp_mode } from '../components/Login';
 
 //----------------------- 2 ----------------------
 //----------------- HELPER METHODS ---------------
@@ -45,15 +46,15 @@ import { twochoice, selfpaced, resp_mode /*orderfile, stim_set*/ } from '../comp
 var trial_prompt = function () {
   if (resp_mode == 'button') {
     if (twochoice == 0) {
-      return lang.cont.button.threechoice.trial_prompt;
+      return "<p>" + lang.cont.button.threechoice.trial_prompt + "</p>";
     } else {
-      return lang.cont.button.twochoice.trial_prompt;
+      return "<p>" + lang.cont.button.twochoice.trial_prompt + "</p>";
     }
   } else {
     if (twochoice == 0) {
-      return lang.cont.key.threechoice.trial_prompt;
+      return "<p>" + lang.cont.key.threechoice.trial_prompt + "</p>";
     } else {
-      return lang.cont.key.twochoice.trial_prompt;
+      return "<p>" + lang.cont.key.twochoice.trial_prompt + "</p>";
     }
   }
 };

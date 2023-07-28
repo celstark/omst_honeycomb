@@ -130,6 +130,10 @@
 //        7/14/23 (AGH): split instructions into keyboard and button version
 //        7/21/23 (AGH): made debrief data calculations a seperate function o 
 //                       exported to /components/JsPsychExperiment
+//        7/26/23 (AGH): consolodated key and button constructions with 
+//                       refresh_cont_trials called at Login
+//        7/27/23 (AGH): added paragraph markers to param functions (previously 
+//                       within text file)
 //
 //   --------------------
 //   This file includes the continuous oMST instructions and debrief
@@ -144,9 +148,8 @@ import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response'
 import jsPsychHtmlButtonResponse from '@jspsych/plugin-html-button-response';
 // import { initJsPsych } from 'jspsych';
 
-import { lang } from '../trials/selectLanguage';
 //import { resp_mode } from '../trials/selectRespType';
-import { twochoice, resp_mode } from '../components/Login';
+import { twochoice, lang, resp_mode } from '../components/Login';
 
 // <script>
 // function waitFor(conditionFunction) {
@@ -287,24 +290,24 @@ var instr_choice = function () {
 
 var instr_prompt = function () {
   if (resp_mode == 'button') {
-    return lang.cont.button.instr_prompt;
+    return "<p>" + lang.cont.button.instr_prompt + "</p>";
   } else {
-    return lang.cont.key.instr_prompt;
+    return "<p>" + lang.cont.key.instr_prompt + "</p>";
   }
 };
 
 var instr_stim = function () {
   if (resp_mode == 'button') {
     if (twochoice == 0) {
-      return lang.cont.button.threechoice.instr_stim;
+      return "<p>" + lang.cont.button.threechoice.instr_stim + "</p>";
     } else {
-      return lang.cont.button.twochoice.instr_stim;
+      return "<p>" + lang.cont.button.twochoice.instr_stim + "</p>";
     }
   } else {
     if (twochoice == 0) {
-      return lang.cont.key.threechoice.instr_stim;
+      return "<p>" + lang.cont.key.threechoice.instr_stim + "</p>";
     } else {
-      return lang.cont.key.twochoice.instr_stim;
+      return "<p>" + lang.cont.key.twochoice.instr_stim + "</p>";
     }
   }
 };

@@ -117,6 +117,10 @@
 //        7/13/23 (AGH): added task as data property to each trial
 //        7/14/23 (AGH): created button and key trials for each trial to allow
 //                       response selection (trial types cannot be dynamic)
+//        7/26/23 (AGH): consoladated button and key versions of trials with the 
+//                       refresh_instr_trials function that gets called at Login
+//        7/27/23 (AGH): added paragraph markers to param functions (previously 
+//                       within text file)
 //
 //   --------------------
 //   These trials are the instruction trials that explain to the
@@ -139,9 +143,8 @@ import { jsPsychCategorizeMultipleImageKeyboard } from './uniquePlugins/plugin-c
 import { jsPsychCategorizeMultipleImageButtons } from './uniquePlugins/plugin-categorize-multiple-image-buttons.js';
 
 // importing languages, images object, and response-mode
-import { lang } from './selectLanguage.js';
 import { images } from '../lib/utils.js';
-import { resp_mode } from '../components/Login';
+import { lang, resp_mode } from '../components/Login';
 
 //----------------------- 2 ----------------------
 //----------------- HELPER METHODS ---------------
@@ -163,85 +166,85 @@ var instr_choice = function () {
 
 var prompt0 = function () {
   if (resp_mode == 'button') {
-    return lang.instructions.button.prompt0;
+    return "<p>" + lang.instructions.button.prompt0 + "</p>";
   } else {
-    return lang.instructions.key.prompt0;
+    return "<p>" + lang.instructions.key.prompt0 + "</p>";
   }
 };
 
 var prompt_new = function () {
   if (resp_mode == 'button') {
-    return lang.instructions.button.prompt_new;
+    return "<p>" + lang.instructions.button.prompt_new + "</p>";
   } else {
-    return lang.instructions.key.prompt_new;
+    return "<p>" + lang.instructions.key.prompt_new + "</p>";
   }
 };
 
 var inc_new = function () {
   if (resp_mode == 'button') {
-    return lang.instructions.button.inc_new;
+    return "<p>" + lang.instructions.button.inc_new + "</p>";
   } else {
-    return lang.instructions.key.inc_new;
+    return "<p>" + lang.instructions.key.inc_new + "</p>";
   }
 };
 
 var cor_new = function () {
-  return lang.instructions.cor_new;
+  return "<p>" + lang.instructions.cor_new + "</p>";
 };
 
 var prompt_rep = function () {
   if (resp_mode == 'button') {
-    return lang.instructions.button.prompt_rep;
+    return "<p>" + lang.instructions.button.prompt_rep + "</p>";
   } else {
-    return lang.instructions.key.prompt_rep;
+    return "<p>" + lang.instructions.key.prompt_rep + "</p>";
   }
 };
 
 var inc_rep = function () {
   if (resp_mode == 'button') {
-    return lang.instructions.button.inc_rep;
+    return "<p>" + lang.instructions.button.inc_rep + "</p>";
   } else {
-    return lang.instructions.key.inc_rep;
+    return "<p>" + lang.instructions.key.inc_rep + "</p>";
   }
 };
 
 var cor_rep = function () {
-  return lang.instructions.cor_rep;
+  return "<p>" + lang.instructions.cor_rep + "</p>";
 };
 
 var prompt_lure = function () {
   if (resp_mode == 'button') {
-    return lang.instructions.button.prompt_lure;
+    return "<p>" + lang.instructions.button.prompt_lure + "</p>";
   } else {
-    return lang.instructions.key.prompt_lure;
+    return "<p>" + lang.instructions.key.prompt_lure + "</p>";
   }
 };
 
 var inc_lure = function () {
   if (resp_mode == 'button') {
-    return lang.instructions.button.inc_lure;
+    return "<p>" + lang.instructions.button.inc_lure + "</p>";
   } else {
-    return lang.instructions.key.inc_lure;
+    return "<p>" + lang.instructions.key.inc_lure + "</p>";
   }
 };
 
 var cor_lure = function () {
-  return lang.instructions.cor_lure;
+  return "<p>" + lang.instructions.cor_lure + "</p>";
 };
 
 var side_by_side = function () {
   if (resp_mode == 'button') {
-    return lang.instructions.side_by_side + lang.instructions.button.continue;
+    return "<p>" + lang.instructions.side_by_side + "</p><p>" + lang.instructions.button.continue + "</p>";
   } else {
-    return lang.instructions.side_by_side + lang.instructions.key.continue;
+    return "<p>" + lang.instructions.side_by_side + "</p><p>" + lang.instructions.key.continue + "</p>";
   }
 };
 
 var prompt_test = function () {
   if (resp_mode == 'button') {
-    return lang.instructions.prompt_test + lang.instructions.button.trial_txt;
+    return "<p>" + lang.instructions.prompt_test + "</p><p>" + lang.instructions.button.trial_text + "</p>";
   } else {
-    return lang.instructions.prompt_test + lang.instructions.key.trial_txt;
+    return "<p>" + lang.instructions.prompt_test + "</p><p>" + lang.instructions.key.trial_text + "</p>";
   }
 };
 
@@ -292,7 +295,7 @@ function refresh_instr_trials() {
     choices: instr_choice,
     prompt: prompt0,
     stimulus: function () {
-    return lang.instructions.txt0;
+    return lang.instructions.text0;
     },
     data: { task: phasename },
   };
