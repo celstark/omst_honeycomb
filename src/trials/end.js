@@ -19,7 +19,7 @@
 //-------------------- IMPORTS -------------------
 
 import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-import { lang } from '../trials/selectLanguage';
+import { lang } from '../components/Login';
 
 //----------------------- 2 ----------------------
 //--------------------- TRIAL --------------------

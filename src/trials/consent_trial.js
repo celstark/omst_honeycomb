@@ -25,7 +25,7 @@
 //----------------------- 1 ----------------------
 //-------------------- IMPORTS -------------------
 
-import { lang } from './selectLanguage';
+import { lang } from '../components/Login';
 import jsPsychHtmlButtonResponse from '@jspsych/plugin-html-button-response';
 import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 
