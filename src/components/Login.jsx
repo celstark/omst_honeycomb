@@ -27,6 +27,9 @@
 //                       includePcon and includeInstr
 //        7/28/23 (AGH): added showExperimentView to create hide and show element
 //                       for participant view and experiment view login screens
+//        7/31/23 (AGH): added var login_data and conditional vars to record the 
+//                       login options at the first included trial (in 
+//                       checkConfigOptions)
 //
 //   --------------------
 //   This file creates a Login screen that logs in the participant
@@ -51,9 +54,12 @@ import { defaultBlockSettings } from '../config/main';
 import { refresh_instr_trials} from '../trials/instructions';
 import { refresh_cont_trials} from '../trials/contOmst';
 
+import { getFormattedDate } from '../lib/utils';
+
 //----------------------- 2 ----------------------
 //------------------- VARIABLES ------------------
 
+var start_date;
 var stim_set = '1';
 var trialorder = '1';
 var run = '1';
@@ -62,6 +68,7 @@ var selfpaced;
 var orderfile = './jsOrders/cMST_Imbal2_orders_1_1_1';
 var resp_mode = 'button';
 var lang;
+var language;
 var include_consent;
 var include_demog;
 var include_pcon;
@@ -69,6 +76,12 @@ var include_instr;
 
 var trial_stim;
 var exptBlock1 = deepCopy(defaultBlockSettings);
+
+var consent_login_data;
+var demog_login_data;
+var pcon_login_data;
+var instr_login_data;
+var cont_login_data;
 
 //----------------------- 3 ----------------------
 //------------------- FUNCTIONS ------------------
@@ -138,6 +151,8 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
   // Function to check the states of all the options and assign chosen values to each variable
   function checkConfigOptions() {
 
+    start_date = getFormattedDate(new Date());
+
     // [set=#]: Stimulus set -- 1-6 (1=default) -- used in loading the order file
     stim_set = chooseStimset;
       console.log('stimset = ' + chooseStimset);
@@ -164,7 +179,9 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     } else {
       lang = require('../language/omst_en.json');
     }
-      console.log('lang = ' + chooseLang);
+
+    language = chooseLang;
+      console.log('language = ' + chooseLang);
 
     // [twochoice=#]: 0=OSN, 1=ON response choices (0=default)
     if (chooseTwochoice === true) {
@@ -220,6 +237,32 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     localStorage.setItem(`${studyId}_demog`, includeDemog);
     localStorage.setItem(`${studyId}_pcon`, includePcon);
     localStorage.setItem(`${studyId}_instr`, includeInstr);
+
+
+    // load login options to be recorded in data file
+    var login_data = { start_date: start_date, "stimset": stim_set, "trialorder": trialorder, "run": run, "respmode": resp_mode, "language": language, "include_consent": include_consent, "include_demog": include_demog, "include_pcon": include_pcon, "include_instr": include_instr, "twochoice": twochoice, "selfpaced": selfpaced };
+
+    // record login_data at first included trial
+    if (!include_consent) {
+      console.log("login data at demog");
+      demog_login_data = login_data;
+      if (!include_demog) {
+        console.log("overwrite: login data at pcon");
+        pcon_login_data = login_data;
+        if (!include_pcon) {
+          console.log("overwrite: login data at instr");
+          instr_login_data = login_data;
+          if (!include_instr) {
+            console.log("overwrite: login data at cont");
+            cont_login_data = login_data;
+          }
+        }
+      }
+    } else {
+      console.log("login data at consent");
+      consent_login_data = login_data;
+    }
+
   }
 
   // Toggle between experimenter view and participant view
@@ -447,4 +490,4 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
 //----------------------- 5 ----------------------
 //---------------------EXPORTS -------------------
 
-export { Login, stim_set, trialorder, run, resp_mode, lang, include_consent, include_demog, include_pcon, include_instr, twochoice, selfpaced, orderfile, trial_stim, exptBlock1 };
+export { Login, stim_set, trialorder, run, resp_mode, lang, language, include_consent, include_demog, include_pcon, include_instr, twochoice, selfpaced, orderfile, trial_stim, exptBlock1, consent_login_data, demog_login_data, pcon_login_data, instr_login_data, cont_login_data };

@@ -34,6 +34,7 @@ import { buildTimeline, jsPsychOptions } from '../timelines/main';
 import { dataCalcFunction } from '../trials/contOmst';
 import { getFormattedDate } from '../lib/utils';
 
+
 //----------------------- 2 ----------------------
 //-------------------- JSPSYCH -------------------
 
@@ -58,9 +59,9 @@ function JsPsychExperiment({
     on_data_update: (data) => dataUpdateFunction(data),
     on_finish: (data) => {
       const summary = dataCalcFunction(data);
-      const endDate = getFormattedDate(new Date());
-      dataUpdateFunction({summary, endDate});
-      const dataWithSummary = { ...data, summary, endDate };
+      const end_date = getFormattedDate(new Date());
+      dataUpdateFunction({summary, end_date});
+      const dataWithSummary = { ...data, summary, end_date };
       dataFinishFunction(dataWithSummary);
     }, 
   };

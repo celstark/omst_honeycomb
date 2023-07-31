@@ -21,6 +21,11 @@
 //        7/27/23 (AGH): removed language selection trial
 //                       added conditional incl_consent, incl_demog, incl_pcon
 //                       timelines 
+//        7/31/23 (AGH): fixed notConsented timeline conditional to include 
+//                       && include_consent
+//                       added login_data properties specific to each conditional
+//                       timeline so the login options are added to the recorded
+//                       data of the first included trial
 //
 //   --------------------
 //   This file builds the primaryTimeline from all of the trials.
@@ -38,7 +43,7 @@ import { consent_trial, consentGiven, not_consented } from '../trials/consent_tr
 import { demogform } from '../trials/demographics';
 import { intro, new1, new2, new3, repeat1, lure1, side_by_side1, new4, new5, repeat2, lure2, side_by_side2, outtro, } from '../trials/instructions';
 import { instr1_trial, debrief_block } from '../trials/contOmst';
-import { include_consent, include_demog, include_instr, include_pcon, exptBlock1 } from '../components/Login';
+import { include_consent, include_demog, include_pcon, include_instr, exptBlock1, consent_login_data, demog_login_data, pcon_login_data, instr_login_data, cont_login_data } from '../components/Login.jsx';
 import testBlock from './testBlock';
 import { end_message } from '../trials/end';
 
@@ -69,8 +74,7 @@ const jsPsychOptions = {
 const buildTimeline = () => (config.USE_MTURK ? mturkTimeline : buildPrimaryTimeline());
 
 const buildPrimaryTimeline = () => {
-  const primaryTimeline = [
-  ];
+  const primaryTimeline = [];
 
   var incl_consent = {
     timeline: [
@@ -83,6 +87,7 @@ const buildPrimaryTimeline = () => {
         return false;
       }
     },
+    data: { login_data: consent_login_data },
   };
 
   var incl_demog = {
@@ -90,12 +95,13 @@ const buildPrimaryTimeline = () => {
       demogform,
     ],
     conditional_function: function () {
-      if (include_demog) { 
+      if (include_demog) {
         return true;
       } else {
         return false;
       }
     },
+    data: { login_data: demog_login_data },
   };
 
   var incl_pcon = {
@@ -109,6 +115,7 @@ const buildPrimaryTimeline = () => {
         return false;
       }
     },
+    data: { login_data: pcon_login_data },
   };
 
   var incl_instr = {
@@ -135,6 +142,7 @@ const buildPrimaryTimeline = () => {
         return false;
       }
     },
+    data: { login_data: instr_login_data },
   };
 
 
@@ -161,13 +169,14 @@ const buildPrimaryTimeline = () => {
         return false;
       }
     },
+    data: { login_data: cont_login_data },
   };
 
   // conditional timeline that runs ending message if participant does not consent
   var notConsented = {
     timeline: [not_consented],
     conditional_function: function () {
-      if (!consentGiven) {
+      if (!consentGiven && include_consent) {
         return true;
       } else {
         return false;
