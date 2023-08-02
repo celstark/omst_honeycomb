@@ -22,8 +22,8 @@
 //
 //   This sets the basic defaults for continuous oMST trial (every
 //   parameter except stimulus and data specifications that vary
-//   trial to trial) the contTrial is exported as a function and
-//   looped in ../timelines/testTrial.js
+//   trial to trial) keyContTrial and buttonContTrial are exported as 
+//   functions and looped in ../timelines/testTrial.js
 //
 //*******************************************************************
 

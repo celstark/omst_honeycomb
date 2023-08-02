@@ -61,6 +61,39 @@
     }
   },
 
+  "pcon": {
+    "instr1_stim": "In this task, you will see two objects appear on the screen, one after the other, with a bit of \"static\" for a few seconds between them. Your job is to determine if the two images are <i>exactly the same</i> or not.",
+    "instr2_stim": "Here are those images again. You should have said <b>Same</b> for that one as they were the same images.",
+    "instr3_stim":  "Here are those images again. You should have said <b>Different</b> for that one as they were not exactly the same.",
+    "ready": "Get ready...",
+    "wait": "Wait...",
+    "ty": "Thank You",
+
+    "key": {
+      "instr_choice": " ",
+      "instr1_prompt": "Press <i>spacebar</i> to see a sample",
+      "instr2_prompt": "Press <i>spacebar</i> to continue",
+      "instr3_prompt": "Ready to begin the test? Press <i>spacebar</i> to start",
+      "trial_txt": "<b>S</b>ame or <b>D</b>ifferent?",
+      "choices": {
+        "same": "S",
+        "dif": "D"
+      }
+    },
+    
+    "button": {
+      "instr_choice": "OK",
+      "instr1_prompt": "Press <i>OK</i> to see a sample",
+      "instr2_prompt": "Press <i>OK</i> to continue",
+      "instr3_prompt": "Ready to begin the test? Press <i>OK</i> to start",
+      "trial_txt": "<i>Same</i> or <i>Different</i>?",
+      "choices": {
+        "same": "Same",
+        "dif": "Different"
+      }
+    }
+  },
+
   "instructions": {
     "text0": "You are going to see pictures of everyday items, one at a time. For each one, you will select <b>Old</b> if you have seen this exact picture before, <b>Similar</b> if it is similar, but not exactly the same as one you saw before, or <b>New</b> if it is entirely a new picture.</p> <p>The way to think of <i>Similar</i> is whether it has the same name, but is a different picture in any way.</p> <p>A few practice trials should make this clear.",
     "cor_new": "Good! You have not seen this image yet, so you correctly selected <b>New</b>",

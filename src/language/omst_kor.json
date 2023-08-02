@@ -59,6 +59,39 @@
     }
   },
 
+  "pcon": {
+    "instr1_stim": "In this task, you will see two objects appear on the screen, one after the other, with a bit of \"static\" for a few seconds between them. Your job is to determine if the two images are <i>exactly the same</i> or not.",
+    "instr2_stim": "Here are those images again. You should have said <b>Same</b> for that one as they were the same images.",
+    "instr3_stim":  "Here are those images again. You should have said <b>Different</b> for that one as they were not exactly the same.",
+    "ready": "Get ready...",
+    "wait": "Wait...",
+    "ty": "Thank You",
+
+    "key": {
+      "instr_choice": " ",
+      "instr1_prompt": "Press <i>spacebar</i> to see a sample",
+      "instr2_prompt": "Press <i>spacebar</i> to continue",
+      "instr3_prompt": "Ready to begin the test? Press <i>spacebar</i> to start",
+      "trial_txt": "<b>S</b>ame or <b>D</b>ifferent?",
+      "choices": {
+        "same": "S",
+        "dif": "D"
+      }
+    },
+    
+    "button": {
+      "instr_choice": "OK",
+      "instr1_prompt": "Press <i>OK</i> to see a sample",
+      "instr2_prompt": "Press <i>OK</i> to continue",
+      "instr3_prompt": "Ready to begin the test? Press <i>OK</i> to start",
+      "trial_txt": "<i>Same</i> or <i>Different</i>?",
+      "choices": {
+        "same": "Same",
+        "dif": "Different"
+      }
+    }
+  },
+
   "instructions": {
     "text0": "당신은 한 번에 하나씩 일상용품의 사진을 볼것입니다. 각각 사진을 본후 선택해주세요. 만약 당신이 이전의 사진과 똑같은 사진을 보았다면, <b>이전 사진</b>을 선택하세요. 만약 사진이 이전에 본것과 비슷하지만 똑같이 일치하지 않으면 <b>비슷한 사진</b>을 선택하세요. 만약 완전히 새로운 사진을 보면 <b>새로운 사진</b>을 선택하세요 . <p> <i>비슷한 사진</i>은 같은 이름으로 구별되지만, 한가지 이상 다른점이 있습니다. <p>몇번의 연습이 이해를 도울것입니다.",
     "cor_new": "잘했습니다! 당신은 이사진을 본적이 없어서 맞게 <b>새로운 사진</b>을 선택했습니다.",
