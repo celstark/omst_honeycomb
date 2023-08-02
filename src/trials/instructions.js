@@ -121,6 +121,9 @@
 //                       refresh_instr_trials function that gets called at Login
 //        7/27/23 (AGH): added paragraph markers to param functions (previously 
 //                       within text file)
+//        8/1/23  (AGH): modified side-by-side stimuli and prompts for better
+//                       formatting; CategorizeMultipleImage(Keyboard/Buttons) 
+//                       no longer necessary
 //
 //   --------------------
 //   These trials are the instruction trials that explain to the
@@ -139,8 +142,6 @@ import jsPsychCategorizeImage from '@jspsych/plugin-categorize-image';
 
 // importing unique plugins
 import { jsPsychCategorizeImageButtons } from './uniquePlugins/plugin-categorize-image-buttons.js';
-import { jsPsychCategorizeMultipleImageKeyboard } from './uniquePlugins/plugin-categorize-multiple-image-keyboard.js';
-import { jsPsychCategorizeMultipleImageButtons } from './uniquePlugins/plugin-categorize-multiple-image-buttons.js';
 
 // importing languages, images object, and response-mode
 import { images } from '../lib/utils.js';
@@ -232,11 +233,19 @@ var cor_lure = function () {
   return "<p>" + lang.instructions.cor_lure + "</p>";
 };
 
-var side_by_side = function () {
+var side_by_side1_stim = function () {
+  return "<p>" + lang.instructions.side_by_side + "</p><table style=\"width:100%\"><tr><td><img src=\"" + images['pcon026a.jpg'] + "\"><td><img src=\"" + images['pcon026b.jpg'] + "\"></table>";
+};
+
+var side_by_side2_stim = function () {
+  return "<p>" + lang.instructions.side_by_side + "</p><table style=\"width:100%\"><tr><td><img src=\"" + images['pcon028a.jpg'] + "\"><td><img src=\"" + images['pcon028b.jpg'] + "\"></table>";
+};
+
+var side_by_side_prompt = function () {
   if (resp_mode == 'button') {
-    return "<p>" + lang.instructions.side_by_side + "</p><p>" + lang.instructions.button.continue + "</p>";
+    return "<p>" + lang.instructions.button.continue + "</p>";
   } else {
-    return "<p>" + lang.instructions.side_by_side + "</p><p>" + lang.instructions.key.continue + "</p>";
+    return "<p>" + lang.instructions.key.continue + "</p>";
   }
 };
 
@@ -288,7 +297,7 @@ var outtro = {};
 
 function refresh_instr_trials() {
 
-  console.log('...refreshing instr trials')
+  console.log('...refreshing instr trials');
 
   intro = {
     type: (resp_mode == 'button' ? jsPsychHtmlButtonResponse: jsPsychHtmlKeyboardResponse),
@@ -376,16 +385,10 @@ function refresh_instr_trials() {
   };
 
   side_by_side1 = {
-    type: (resp_mode == 'button' ? jsPsychCategorizeMultipleImageButtons: jsPsychCategorizeMultipleImageKeyboard),
-    key_answer: function () {
-      return lang.instructions.key.instr_choice;
-    },
-    button_answer: 0,
-    feedback_duration: 0,
-    stimulus: images['pcon026a.jpg'],
-    stimulus2: images['pcon026b.jpg'],
+    type: (resp_mode == 'button' ? jsPsychHtmlButtonResponse : jsPsychHtmlKeyboardResponse),
+    stimulus: side_by_side1_stim,
     choices: instr_choice,
-    prompt: side_by_side,
+    prompt: side_by_side_prompt,
     data: { task: phasename },
   };
 
@@ -450,16 +453,10 @@ function refresh_instr_trials() {
   };
 
   side_by_side2 = {
-    type: (resp_mode == 'button' ? jsPsychCategorizeMultipleImageButtons: jsPsychCategorizeMultipleImageKeyboard),
-    key_answer: function () {
-      return lang.instructions.key.instr_choice;
-    },
-    button_answer: 0,
-    feedback_duration: 0,
-    stimulus: images['pcon028a.jpg'],
-    stimulus2: images['pcon028b.jpg'],
+    type: (resp_mode == 'button' ? jsPsychHtmlButtonResponse : jsPsychHtmlKeyboardResponse),
+    stimulus: side_by_side2_stim,
     choices: instr_choice,
-    prompt: side_by_side,
+    prompt: side_by_side_prompt,
     data: { task: phasename },
   };
 
