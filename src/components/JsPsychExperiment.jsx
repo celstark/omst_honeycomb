@@ -9,12 +9,15 @@
 //        7/13/23 (AGH): deleted start_date and task_version from 
 //                       added properties
 //        7/21/23 (AGH): added dataCalcFunction from contOmst to 
-//                       on_finish
+//                       on_finish in combinedOptions
 //        7/24/23 (AGH): modified on_finish to update the data with
 //                       the added summary so it saves to the json
 //                       file
 //                       added endDate to record the time the
 //                       experiment ends
+//        8/1/23 (AGH):  added pconDataCalcFunction to on_finish in
+//                       in combinedOptions to add pcon data summary
+//                       to the data file
 //
 //   --------------------
 //   This file holds the experiment, adds properties and builds the 
@@ -32,6 +35,7 @@ import { config } from '../config/main';
 import { initParticipant } from '../firebase';
 import { buildTimeline, jsPsychOptions } from '../timelines/main';
 import { dataCalcFunction } from '../trials/contOmst';
+import { pconDataCalcFunction } from '../trials/pcon_demos';
 import { getFormattedDate } from '../lib/utils';
 
 
@@ -58,7 +62,9 @@ function JsPsychExperiment({
     display_element: experimentDivId,
     on_data_update: (data) => dataUpdateFunction(data),
     on_finish: (data) => {
-      const summary = dataCalcFunction(data);
+      const pconsummary = (pconDataCalcFunction(data));
+      const contsummary =  (dataCalcFunction(data));
+      const summary = {pconsummary, contsummary };
       const end_date = getFormattedDate(new Date());
       dataUpdateFunction({summary, end_date});
       const dataWithSummary = { ...data, summary, end_date };

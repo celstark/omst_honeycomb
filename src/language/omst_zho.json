@@ -61,6 +61,39 @@
     }
   },
 
+  "pcon": {
+    "instr1_stim": "In this task, you will see two objects appear on the screen, one after the other, with a bit of \"static\" for a few seconds between them. Your job is to determine if the two images are <i>exactly the same</i> or not.",
+    "instr2_stim": "Here are those images again. You should have said <b>Same</b> for that one as they were the same images.",
+    "instr3_stim":  "Here are those images again. You should have said <b>Different</b> for that one as they were not exactly the same.",
+    "ready": "Get ready...",
+    "wait": "Wait...",
+    "ty": "Thank You",
+
+    "key": {
+      "instr_choice": " ",
+      "instr1_prompt": "Press <i>spacebar</i> to see a sample",
+      "instr2_prompt": "Press <i>spacebar</i> to continue",
+      "instr3_prompt": "Ready to begin the test? Press <i>spacebar</i> to start",
+      "trial_txt": "<b>S</b>ame or <b>D</b>ifferent?",
+      "choices": {
+        "same": "S",
+        "dif": "D"
+      }
+    },
+    
+    "button": {
+      "instr_choice": "OK",
+      "instr1_prompt": "Press <i>OK</i> to see a sample",
+      "instr2_prompt": "Press <i>OK</i> to continue",
+      "instr3_prompt": "Ready to begin the test? Press <i>OK</i> to start",
+      "trial_txt": "<i>Same</i> or <i>Different</i>?",
+      "choices": {
+        "same": "Same",
+        "dif": "Different"
+      }
+    }
+  },
+
   "instructions": {
     "text0": "您接下来会一一看到日常物品的图片。为每一个图片,您会选择<b>旧</b>如果您看到过一模一样的图片，<b>相近</b>如果您看到过类似但不完全一样的图片，或者<b>新</b>如果这是一个崭新的图片。<p>决定一个图片是<b>相近</b>的思考方式是如果这个物品的名字跟您以前看到的一样但图片本身跟以前看到的有所不同。<p>一些练习试验会帮助解释这一点。.",
     "cor_new": "好! 您还没有看过这个图片所以您正确的选择了<b>新</b>",

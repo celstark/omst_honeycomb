@@ -59,6 +59,39 @@
     }
   },
 
+  "pcon": {
+    "instr1_stim": "In this task, you will see two objects appear on the screen, one after the other, with a bit of \"static\" for a few seconds between them. Your job is to determine if the two images are <i>exactly the same</i> or not.",
+    "instr2_stim": "Here are those images again. You should have said <b>Same</b> for that one as they were the same images.",
+    "instr3_stim":  "Here are those images again. You should have said <b>Different</b> for that one as they were not exactly the same.",
+    "ready": "Get ready...",
+    "wait": "Wait...",
+    "ty": "Thank You",
+
+    "key": {
+      "instr_choice": " ",
+      "instr1_prompt": "Press <i>spacebar</i> to see a sample",
+      "instr2_prompt": "Press <i>spacebar</i> to continue",
+      "instr3_prompt": "Ready to begin the test? Press <i>spacebar</i> to start",
+      "trial_txt": "<b>S</b>ame or <b>D</b>ifferent?",
+      "choices": {
+        "same": "S",
+        "dif": "D"
+      }
+    },
+    
+    "button": {
+      "instr_choice": "OK",
+      "instr1_prompt": "Press <i>OK</i> to see a sample",
+      "instr2_prompt": "Press <i>OK</i> to continue",
+      "instr3_prompt": "Ready to begin the test? Press <i>OK</i> to start",
+      "trial_txt": "<i>Same</i> or <i>Different</i>?",
+      "choices": {
+        "same": "Same",
+        "dif": "Different"
+      }
+    }
+  },
+
   "instructions": {
     "text0": "Verá imágenes de objetos comunes uno a uno. Para cada imagen, seleccionará <b>Viejo</b> si usted ha visto esta imagen exacta antes, <b>Similar</b> si es similar, pero no es exactamente idéntica a la imagen que vió antes, o <b>Nuevo</b> si es una imagen totalmente nueva. <p> La manera de pensar en <i>Similar</i> es si el objeto tiene el mismo nombre, pero es una imagen diferente de algún modo. <p> Unas pruebas de práctica le ayudaran a entender mejor esta tarea",
     "cor_new": "¡Muy Bien!! Todavía no ha visto esta imagen, así que ha seleccionado correctamente <b>Nuevo</b>",

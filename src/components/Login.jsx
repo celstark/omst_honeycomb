@@ -51,6 +51,7 @@ import { writeOrderfile, loadOrderfile } from '../config/cont';
 import { loadExptBlock1 } from '../config/experiment';
 import { defaultBlockSettings } from '../config/main';
 
+import { refresh_pcon_trials } from '../trials/pcon_demos';
 import { refresh_instr_trials} from '../trials/instructions';
 import { refresh_cont_trials} from '../trials/contOmst';
 
@@ -221,9 +222,10 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     exptBlock1 = loadExptBlock1(trial_stim, stim_set);
 
     // refresh trails based on Login options
-    console.log('refreshing instr trials');
+    console.log('refreshing trials');
     refresh_instr_trials();
     refresh_cont_trials();
+    refresh_pcon_trials();
 
     // Save the user-selected options to localStorage
     localStorage.setItem(`${studyId}_stimset`, chooseStimset);
