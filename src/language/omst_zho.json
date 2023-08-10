@@ -74,7 +74,7 @@
       "instr1_prompt": "Press <i>spacebar</i> to see a sample",
       "instr2_prompt": "Press <i>spacebar</i> to continue",
       "instr3_prompt": "Ready to begin the test? Press <i>spacebar</i> to start",
-      "trial_txt": "<b>S</b>ame or <b>D</b>ifferent?",
+      "trial_txt": "Same (<b>s</b>) or Different (<b>d</b>)?",
       "choices": {
         "same": "S",
         "dif": "D"

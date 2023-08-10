@@ -37,6 +37,7 @@ import { buildTimeline, jsPsychOptions } from '../timelines/main';
 import { dataCalcFunction } from '../trials/contOmst';
 import { pconDataCalcFunction } from '../trials/pcon_demos';
 import { getFormattedDate } from '../lib/utils';
+import { include_pcon } from './Login';
 
 
 //----------------------- 2 ----------------------
@@ -62,7 +63,10 @@ function JsPsychExperiment({
     display_element: experimentDivId,
     on_data_update: (data) => dataUpdateFunction(data),
     on_finish: (data) => {
-      const pconsummary = (pconDataCalcFunction(data));
+      var pconsummary = null;
+      if (include_pcon) {
+        pconsummary = (pconDataCalcFunction(data));
+      }
       const contsummary =  (dataCalcFunction(data));
       const summary = {pconsummary, contsummary };
       const end_date = getFormattedDate(new Date());

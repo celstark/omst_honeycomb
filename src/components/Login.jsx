@@ -30,11 +30,13 @@
 //        7/31/23 (AGH): added var login_data and conditional vars to record the 
 //                       login options at the first included trial (in 
 //                       checkConfigOptions)
+//        8/9/23  (AGH): updated for new 2x3 orderfiles, removed trialorder
+//                       state var and changed run to "sublist"
 //
 //   --------------------
 //   This file creates a Login screen that logs in the participant
-//   and allows selection of experiment options (stim_set, trialorder, 
-//   run, twochoice, selfpaced, orderfile, resp_mode).
+//   and allows selection of experiment options (stim_set, sublist,
+//   twochoice, selfpaced, orderfile, resp_mode).
 //
 //*******************************************************************
 
@@ -62,8 +64,7 @@ import { getFormattedDate } from '../lib/utils';
 
 var start_date;
 var stim_set = '1';
-var trialorder = '1';
-var run = '1';
+var sublist = '1';
 var twochoice;
 var selfpaced;
 var orderfile = './jsOrders/cMST_Imbal2_orders_1_1_1';
@@ -95,8 +96,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
   const [isError, setIsError] = useState(false);
 
   const [chooseStimset, setStimset] = useState('1');
-  const [chooseTrialorder, setTrialorder] = useState('1');
-  const [chooseRun, setRun] = useState('1');
+  const [chooseSublist, setSublist] = useState('1');
   const [chooseRespmode, setRespmode] = useState('button');
   const [chooseLang, setLang] = useState('English');
   const [chooseTwochoice, setTwochoice] = useState(false);
@@ -114,8 +114,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     if (!studyId) return; // Return early if studyId is empty or null
 
     const storedStimset = localStorage.getItem(`${studyId}_stimset`);
-    const storedTrialorder = localStorage.getItem(`${studyId}_trialorder`);
-    const storedRun = localStorage.getItem(`${studyId}_run`);
+    const storedSublist = localStorage.getItem(`${studyId}_sublist`);
     const storedRespmode = localStorage.getItem(`${studyId}_respmode`);
     const storedLang = localStorage.getItem(`${studyId}_lang`);
     const storedTwochoice = localStorage.getItem(`${studyId}_twochoice`);
@@ -127,8 +126,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
 
     // Set the stored options as the initial state if available
     setStimset(storedStimset || '1');
-    setTrialorder(storedTrialorder || '1');
-    setRun(storedRun || '1');
+    setSublist(storedSublist || '1');
     setRespmode(storedRespmode || 'button');
     setLang(storedLang || 'English');
     setTwochoice(storedTwochoice == 'true');
@@ -149,7 +147,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     });
   }
   
-  // Function to check the states of all the options and assign chosen values to each variable
+  // Function to check the states of all the options and assign chosen values to each variable, called when Login button is pressed
   function checkConfigOptions() {
 
     start_date = getFormattedDate(new Date());
@@ -158,13 +156,9 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     stim_set = chooseStimset;
       console.log('stimset = ' + chooseStimset);
 
-    //  [trialorder=#]: Which base order file? (1-2, 1=default)  -- controls ordering of conditions in a run
-    trialorder = chooseTrialorder;
-      console.log('trialorder = ' + chooseTrialorder);
-
-    // [run=#]: Which particular run? (1-1, 1=default) -- controls which actual stimuli in that set are plugged into the order
-    run = chooseRun;
-      console.log('run = ' + chooseRun);
+    // [run=#]: Which particular run? (1-3, 1=default) -- controls which actual stimuli in that set are plugged into the order
+    sublist = chooseSublist;
+      console.log('sublist = ' + chooseSublist);
 
     // [resp_mode='']: Respond with buttons or keyboard? (default = button)
     resp_mode = chooseRespmode;
@@ -214,7 +208,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
 
     // load trial stim from jsOrders file
     // both writeOrderfile and loadOrderfil defined in /config/cont.js
-    orderfile = writeOrderfile(stim_set, trialorder, run);
+    orderfile = writeOrderfile(stim_set, sublist);
     trial_stim = loadOrderfile(orderfile);
 
     // load exptBlock conditions from timeline variables
@@ -229,8 +223,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
 
     // Save the user-selected options to localStorage
     localStorage.setItem(`${studyId}_stimset`, chooseStimset);
-    localStorage.setItem(`${studyId}_trialorder`, chooseTrialorder);
-    localStorage.setItem(`${studyId}_run`, chooseRun);
+    localStorage.setItem(`${studyId}_sublist`, chooseSublist);
     localStorage.setItem(`${studyId}_respmode`, chooseRespmode);
     localStorage.setItem(`${studyId}_lang`, chooseLang);
     localStorage.setItem(`${studyId}_twochoice`, chooseTwochoice);
@@ -242,7 +235,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
 
 
     // load login options to be recorded in data file
-    var login_data = { start_date: start_date, "stimset": stim_set, "trialorder": trialorder, "run": run, "respmode": resp_mode, "language": language, "include_consent": include_consent, "include_demog": include_demog, "include_pcon": include_pcon, "include_instr": include_instr, "twochoice": twochoice, "selfpaced": selfpaced };
+    var login_data = { start_date: start_date, "stimset": stim_set, "sublist": sublist, "respmode": resp_mode, "language": language, "include_consent": include_consent, "include_demog": include_demog, "include_pcon": include_pcon, "include_instr": include_instr, "twochoice": twochoice, "selfpaced": selfpaced };
 
     // record login_data at first included trial
     if (!include_consent) {
@@ -312,17 +305,12 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
                       <option value='6'>6</option>
                     </Form.Control>
                   </Form.Group>
-                  <Form.Group controlId='trialorder'>
-                    <Form.Label>Trial order:</Form.Label>
-                    <Form.Control as='select' value={chooseTrialorder} onChange={(e) => setTrialorder(e.target.value)}>
+                  <Form.Group controlId='sublist'>
+                    <Form.Label>Sublist:</Form.Label>
+                    <Form.Control as='select' value={chooseSublist} onChange={(e) => setSublist(e.target.value)}>
                       <option value='1'>1</option>
                       <option value='2'>2</option>
-                    </Form.Control>
-                  </Form.Group>
-                  <Form.Group controlId='run'>
-                    <Form.Label>Run:</Form.Label>
-                    <Form.Control as='select' value={chooseRun} onChange={(e) => setRun(e.target.value)}>
-                      <option value='1'>1</option>
+                      <option value='3'>3</option>
                     </Form.Control>
                   </Form.Group>
                 </div>
@@ -339,7 +327,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
                   </div>
                   <div className='response-options'>
                     <Form.Group controlId='lang'>
-                      <Form.Label>Response mode:</Form.Label>
+                      <Form.Label>Language:</Form.Label>
                       <Form.Control as='select' value={chooseLang} onChange={(e) => setLang(e.target.value)}>
                         <option value='English'>English</option>
                         <option value='Spanish'>Español</option>
@@ -492,4 +480,4 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
 //----------------------- 5 ----------------------
 //---------------------EXPORTS -------------------
 
-export { Login, stim_set, trialorder, run, resp_mode, lang, language, include_consent, include_demog, include_pcon, include_instr, twochoice, selfpaced, orderfile, trial_stim, exptBlock1, consent_login_data, demog_login_data, pcon_login_data, instr_login_data, cont_login_data };
+export { Login, stim_set, sublist, resp_mode, lang, language, include_consent, include_demog, include_pcon, include_instr, twochoice, selfpaced, orderfile, trial_stim, exptBlock1, consent_login_data, demog_login_data, pcon_login_data, instr_login_data, cont_login_data };

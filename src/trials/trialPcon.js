@@ -36,9 +36,9 @@ import { lang, resp_mode } from '../components/Login';
 
 var trial_prompt = function () {
   if (resp_mode == 'button') {
-      return lang.pcon.button.trial_txt;
+      return "<p>" + lang.pcon.button.trial_txt + "</p>";
     } else {
-      return lang.pcon.key.trial_txt;
+      return "<p>" + lang.pcon.key.trial_txt + "</p>";
     }
 };
 

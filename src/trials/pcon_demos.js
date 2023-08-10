@@ -49,7 +49,7 @@ var instr_choice = function () {
 };
 
 var wait = function () {
-    return '<p>' + lang.pcon.wait;
+    return "<p>" + lang.pcon.wait;
 }
 
 var instr1_prompt = function () {
@@ -104,9 +104,9 @@ var trial_choices = function () {
 
 var trial_prompt = function () {
     if (resp_mode == 'button') {
-        return lang.pcon.button.trial_txt;
+        return "<p>" + lang.pcon.button.trial_txt + "</p>";
       } else {
-        return lang.pcon.key.trial_txt;
+        return "<p>" + lang.pcon.key.trial_txt + "</p>";
       }
 }
 
