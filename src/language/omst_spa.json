@@ -60,19 +60,19 @@
   },
 
   "pcon": {
-    "instr1_stim": "In this task, you will see two objects appear on the screen, one after the other, with a bit of \"static\" for a few seconds between them. Your job is to determine if the two images are <i>exactly the same</i> or not.",
-    "instr2_stim": "Here are those images again. You should have said <b>Same</b> for that one as they were the same images.",
-    "instr3_stim":  "Here are those images again. You should have said <b>Different</b> for that one as they were not exactly the same.",
-    "ready": "Get ready...",
-    "wait": "Wait...",
-    "ty": "Thank You",
+    "instr1_stim": "En esta prueba, verá aparecer dos objetos en la pantalla, uno a uno, con un poco de \"estática\" durante unos segundos entre ellos. Su trabajo es determinar si las dos imágenes son <i>exactamente iguales</i> or no.",
+    "instr2_stim": "Aquí están las imágenes de nuevo. Debería haber dicho <b>Iguales</b> para estas porque eran las mismas imágenes.",
+    "instr3_stim":  "Aquí están las imágenes de nuevo. Debería haber dicho <b>Diferentes</b> para estas porque no eran exactamente iguales</p>",
+    "ready": "Prepárese...",
+    "wait": "Espere...",
+    "ty": "Muchas Gracias",
 
     "key": {
       "instr_choice": " ",
-      "instr1_prompt": "Press <i>spacebar</i> to see a sample",
-      "instr2_prompt": "Press <i>spacebar</i> to continue",
-      "instr3_prompt": "Ready to begin the test? Press <i>spacebar</i> to start",
-      "trial_txt": "Same (<b>s</b>) or Different (<b>d</b>)?",
+      "instr1_prompt": "Presione <i>la barra espaciadora</i> para ver un ejemplo",
+      "instr2_prompt": "Presione <i>la barra espaciadora</i> para continuar",
+      "instr3_prompt": "¿Está listo a comenzar la prueba? Presione <i>la barra espaciadora</i> para comenzar",
+      "trial_txt": "¿Iguales (<b>s</b>) or Differentes (<b>d</b>)?",
       "choices": {
         "same": "S",
         "dif": "D"
@@ -81,13 +81,13 @@
     
     "button": {
       "instr_choice": "OK",
-      "instr1_prompt": "Press <i>OK</i> to see a sample",
-      "instr2_prompt": "Press <i>OK</i> to continue",
-      "instr3_prompt": "Ready to begin the test? Press <i>OK</i> to start",
-      "trial_txt": "<i>Same</i> or <i>Different</i>?",
+      "instr1_prompt": "Presione <i>OK</i> para ver un ejemplo",
+      "instr2_prompt": "Presione <i>OK</i> para continuar",
+      "instr3_prompt": "¿Está listo a comenzar la prueba? Presione <i>OK</i> para comenzar",
+      "trial_txt": "¿<i>Iguales</i> or <i>Diferentes</i>?",
       "choices": {
-        "same": "Same",
-        "dif": "Different"
+        "same": "Iguales",
+        "dif": "Differentes"
       }
     }
   },

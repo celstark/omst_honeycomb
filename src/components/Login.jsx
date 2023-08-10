@@ -147,7 +147,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     });
   }
   
-  // Function to check the states of all the options and assign chosen values to each variable
+  // Function to check the states of all the options and assign chosen values to each variable, called when Login button is pressed
   function checkConfigOptions() {
 
     start_date = getFormattedDate(new Date());
@@ -327,7 +327,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
                   </div>
                   <div className='response-options'>
                     <Form.Group controlId='lang'>
-                      <Form.Label>Response mode:</Form.Label>
+                      <Form.Label>Language:</Form.Label>
                       <Form.Control as='select' value={chooseLang} onChange={(e) => setLang(e.target.value)}>
                         <option value='English'>English</option>
                         <option value='Spanish'>Español</option>
