@@ -11,6 +11,7 @@
 //        8/1/23  (AGH): added wait method to allow formatting
 //                       modified side by side display stimuli
 //                       (instr2_stim and instr3_stim)
+//        8/11/23 (AGH): changed trial_txt to trial_text for consistency
 //
 //   --------------------
 //   This file includes the instruction and demo trials of the perceptual  
@@ -104,9 +105,9 @@ var trial_choices = function () {
 
 var trial_prompt = function () {
     if (resp_mode == 'button') {
-        return "<p>" + lang.pcon.button.trial_txt + "</p>";
+        return "<p>" + lang.pcon.button.trial_text + "</p>";
       } else {
-        return "<p>" + lang.pcon.key.trial_txt + "</p>";
+        return "<p>" + lang.pcon.key.trial_text + "</p>";
       }
 }
 

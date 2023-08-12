@@ -8,6 +8,7 @@
 //   Changes:
 //        7/31/23 (AGH): initial convert from pcon.html into honeycomb
 //                       template
+//        8/11/23 (AGH): changed trial_txt to trial_text for consistency
 //
 //   --------------------
 //   This file contains the default options for the two variable
@@ -36,9 +37,9 @@ import { lang, resp_mode } from '../components/Login';
 
 var trial_prompt = function () {
   if (resp_mode == 'button') {
-      return "<p>" + lang.pcon.button.trial_txt + "</p>";
+      return "<p>" + lang.pcon.button.trial_text + "</p>";
     } else {
-      return "<p>" + lang.pcon.key.trial_txt + "</p>";
+      return "<p>" + lang.pcon.key.trial_text + "</p>";
     }
 };
 

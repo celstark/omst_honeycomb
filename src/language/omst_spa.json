@@ -72,7 +72,7 @@
       "instr1_prompt": "Presione <i>la barra espaciadora</i> para ver un ejemplo",
       "instr2_prompt": "Presione <i>la barra espaciadora</i> para continuar",
       "instr3_prompt": "¿Está listo a comenzar la prueba? Presione <i>la barra espaciadora</i> para comenzar",
-      "trial_txt": "¿Iguales (<b>s</b>) or Differentes (<b>d</b>)?",
+      "trial_text": "¿Iguales (<b>s</b>) or Differentes (<b>d</b>)?",
       "choices": {
         "same": "S",
         "dif": "D"
@@ -84,7 +84,7 @@
       "instr1_prompt": "Presione <i>OK</i> para ver un ejemplo",
       "instr2_prompt": "Presione <i>OK</i> para continuar",
       "instr3_prompt": "¿Está listo a comenzar la prueba? Presione <i>OK</i> para comenzar",
-      "trial_txt": "¿<i>Iguales</i> or <i>Diferentes</i>?",
+      "trial_text": "¿<i>Iguales</i> or <i>Diferentes</i>?",
       "choices": {
         "same": "Iguales",
         "dif": "Differentes"
