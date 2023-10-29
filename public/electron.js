@@ -67,14 +67,13 @@ const saveDataAndQuit = () => {
         const fullPath = getFullPath(filename); // Set the full path for the data file
         // Ensure that the savePath directory exists before moving the file
         fsExtra.ensureDirSync(savePath); //7/24/23 (AGH) ADDED
-        fsExtra.move(preSavePath, fullPath, (err) => {
-          //7/24/23 (AGH) CHANGED
-          if (err) {
-            console.error('Error moving JSON data file:', err);
-          } else {
-            console.log('JSON data file saved:', fullPath);
-          }
-        });
+        //console.log('JSON move',preSavePath,savePath)
+        try {
+          fsExtra.copySync(preSavePath, fullPath);
+          //console.log('JSON copied');
+        } catch (err) {
+          console.log(err);
+        }
       }
     });
   }
@@ -87,14 +86,13 @@ const saveDataAndQuit = () => {
         const fullPath = getFullPath(filename); // Set the full path for the data file
         // Ensure that the savePath directory exists before moving the file
         fsExtra.ensureDirSync(savePath); //7/24/23 (AGH) ADDED
-        fsExtra.move(preSavePath_csv, fullPath, (err) => {
-          //7/24/23 (AGH) CHANGED
-          if (err) {
-            console.error('Error moving CSV data file:', err);
-          } else {
-            console.log('CSV data file saved:', fullPath);
-          }
-        });
+        //console.log('CSV move',preSavePath_csv,savePath)
+        try {
+          fsExtra.copySync(preSavePath_csv, fullPath);
+          //console.log('CSV copied');
+        } catch (err) {
+          console.log(err);
+        }
       }
     });
   }
@@ -149,6 +147,7 @@ function createWindow() {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
+    //console.log('on closed');
     saveDataAndQuit(); // 7/10/23 (AGH) ADDED
     mainWindow = null;
   });
@@ -391,7 +390,7 @@ ipc.on('data', (event, args) => {
     } else if (args.trial_type == 'preload') {
       // Use this to figure out when this sub-task starts
       trial_offset = args.trial_index;
-      console.log('OFFSET IS', trial_offset);
+      //console.log('OFFSET IS', trial_offset);
     } else if (args.task == 'pcon') {
       //const d=args;
       const trial_num = (args.trial_index - trial_offset) / 4 - 3; // Factor out when the task started, and the multi-steps per actual trial
@@ -419,10 +418,10 @@ ipc.on('data', (event, args) => {
       }
     } else if (args.task == 'oMSTCont') {
       const trial_num = args.trial_index - trial_offset - 2; // pull off the offset, preload, and instruction screen
-      console.log('OMST ', trial_offset, args.trial_index, args.correct_response, trial_num);
+      //console.log('OMST ', trial_offset, args.trial_index, args.correct_response, trial_num);
       if (trial_num == 1) {
         // Should get triggered on the first actual data trial
-        console.log('FIRST TRIAL');
+        //console.log('FIRST TRIAL');
         stream_csv.write('Trial, CResp, Resp, Resp-raw, Correct, RT, cond, lbin, stim\n');
       }
       if (typeof args.correct_response !== 'undefined') {
@@ -452,10 +451,16 @@ ipc.on('data', (event, args) => {
       // else {
       //   console.log('WTF',args);
       // }
+    } else if (args.task == 'end') {
+      stream_csv.write('End\n' + args.login_data + '\n');
+    } else if (typeof args.summary !== 'undefined') {
+      // final summary
+      stream_csv.write('\nSummary\n');
+      stream_csv.write('Perceptual control\n' + args.summary.pconsummary + '\n');
+      stream_csv.write('oMST\n' + args.summary.contsummary + '\n');
     }
     // else {
-    //   console.log(args.task);
-    //   stream_csv.write(args.task + '\n\n');
+    //   console.log('UNKNOWN', args);
     // }
   }
 });
@@ -482,7 +487,8 @@ ipc.on('save_video', (event, videoFileName, buffer) => {
 // EXPERIMENT END
 ipc.on('end', () => {
   // quit app
-  //app.quit();
+  //console.log('on end')
+  app.quit();
 });
 
 // Error state sent from front end to back end (e.g. wrong number of images)
@@ -537,6 +543,7 @@ app.on('activate', function () {
 
 // EXPERIMENT END
 app.on('will-quit', () => {
+  //console.log('on will-quit')
   if (fileCreated) {
     // finish writing file
     //stream.write(']');
@@ -547,6 +554,7 @@ app.on('will-quit', () => {
     stream = false;
 
     // copy file to config location
+    //console.log('  will-quit, copyFileSync bit...')
     fs.mkdir(savePath, { recursive: true }, (err) => {
       log.error(err);
       fs.copyFileSync(preSavePath, getFullPath(`pid_${participantID}_${today.getTime()}.json`));
