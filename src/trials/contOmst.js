@@ -128,13 +128,14 @@
 //        7/6/23 (AGH):  deleted preload
 //        7/13/23 (AGH): added task data property to trials
 //        7/14/23 (AGH): split instructions into keyboard and button version
-//        7/21/23 (AGH): made debrief data calculations a seperate function o 
+//        7/21/23 (AGH): made debrief data calculations a seperate function o
 //                       exported to /components/JsPsychExperiment
-//        7/26/23 (AGH): consolodated key and button constructions with 
+//        7/26/23 (AGH): consolodated key and button constructions with
 //                       refresh_cont_trials called at Login
-//        7/27/23 (AGH): added paragraph markers to param functions (previously 
+//        7/27/23 (AGH): added paragraph markers to param functions (previously
 //                       within text file)
 //        8/1/23 (AGH):  moved invNormcdf function to utils, now imported
+//        10/28/23 (CELS): Added preloading
 //
 //   --------------------
 //   This file includes the continuous oMST instructions and debrief trials
@@ -148,10 +149,11 @@
 
 import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import jsPsychHtmlButtonResponse from '@jspsych/plugin-html-button-response';
+import jsPsychPreload from '@jspsych/plugin-preload';
 
 import { twochoice, lang, resp_mode } from '../components/Login';
 
-import {invNormcdf } from '../lib/utils';
+import { invNormcdf } from '../lib/utils';
 
 // <script>
 // function waitFor(conditionFunction) {
@@ -230,6 +232,11 @@ import {invNormcdf } from '../lib/utils';
 //---------------- HELPER METHODS ----------------
 // helper methods that setup prompts and response options based on keyboard/button and 2/3 choices
 
+var omst_preload = {
+  type: jsPsychPreload,
+  auto_preload: true,
+};
+
 var instr_choice = function () {
   if (resp_mode == 'button') {
     return [lang.cont.button.instr_choice];
@@ -240,24 +247,24 @@ var instr_choice = function () {
 
 var instr_prompt = function () {
   if (resp_mode == 'button') {
-    return "<p>" + lang.cont.button.instr_prompt + "</p>";
+    return '<p>' + lang.cont.button.instr_prompt + '</p>';
   } else {
-    return "<p>" + lang.cont.key.instr_prompt + "</p>";
+    return '<p>' + lang.cont.key.instr_prompt + '</p>';
   }
 };
 
 var instr_stim = function () {
   if (resp_mode == 'button') {
     if (twochoice == 0) {
-      return "<p>" + lang.cont.button.threechoice.instr_stim + "</p>";
+      return '<p>' + lang.cont.button.threechoice.instr_stim + '</p>';
     } else {
-      return "<p>" + lang.cont.button.twochoice.instr_stim + "</p>";
+      return '<p>' + lang.cont.button.twochoice.instr_stim + '</p>';
     }
   } else {
     if (twochoice == 0) {
-      return "<p>" + lang.cont.key.threechoice.instr_stim + "</p>";
+      return '<p>' + lang.cont.key.threechoice.instr_stim + '</p>';
     } else {
-      return "<p>" + lang.cont.key.twochoice.instr_stim + "</p>";
+      return '<p>' + lang.cont.key.twochoice.instr_stim + '</p>';
     }
   }
 };
@@ -271,7 +278,7 @@ var instr_trial = {};
 
 function refresh_cont_trials() {
   instr_trial = {
-    type: (resp_mode == 'button' ? jsPsychHtmlButtonResponse: jsPsychHtmlKeyboardResponse),
+    type: resp_mode == 'button' ? jsPsychHtmlButtonResponse : jsPsychHtmlKeyboardResponse,
     choices: instr_choice,
     prompt: instr_prompt,
     margin_horizontal: '40px',
@@ -280,8 +287,8 @@ function refresh_cont_trials() {
     stimulus: instr_stim,
     // add task name to data collection
     data: { task: 'oMSTCont' },
-  }
-};
+  };
+}
 
 //---------------thank you--------------
 // (button type not necessary)
@@ -292,237 +299,232 @@ var debrief_block = {
     return lang.cont.ty;
   },
   // add task name to data collection
-  data: { task: 'oMSTCont'},
+  data: { task: 'oMSTCont' },
 };
 
 var retstr;
 
 var dataCalcFunction = (data) => {
-   let validtrials = data.filterCustom(function (trial) {
-      return trial.resp !== null;
-    });
-    let targets = validtrials.filter({ condition: 'target' });
-    let lures = validtrials.filter({ condition: 'lure' });
-    let foils = validtrials.filter({ condition: 'foil' });
+  let validtrials = data.filterCustom(function (trial) {
+    return trial.resp !== null;
+  });
+  let targets = validtrials.filter({ condition: 'target' });
+  let lures = validtrials.filter({ condition: 'lure' });
+  let foils = validtrials.filter({ condition: 'foil' });
 
-    console.log('validtrials: ' + validtrials.count());
-    console.log('targets: ' + targets.count());
-    console.log('lures: ' + lures.count());
-    console.log('foils: ' + foils.count());
+  console.log('validtrials: ' + validtrials.count());
+  console.log('targets: ' + targets.count());
+  console.log('lures: ' + lures.count());
+  console.log('foils: ' + foils.count());
 
-    if (twochoice == 1) {
-      let corr_targs = targets.filter({ correct: true });
-      let corr_lures = lures.filter({ correct: true });
-      let corr_foils = foils.filter({ correct: true });
-      let hits = Math.round((corr_targs.count() / targets.count()) * 100);
-      let cr_lure = Math.round((corr_lures.count() / lures.count()) * 100);
-      let cr_foil = Math.round((corr_foils.count() / foils.count()) * 100);
-      let p_fa_foil = 0.0;
-      let p_fa_lure = 0.0;
-      let p_hit = 0.0;
-      if (corr_targs.count() == 0) {
-        p_hit = 0.5 / targets.count();
-      } else if (corr_targs.count() == targets.count()) {
-        p_hit = (targets.count() - 0.5) / targets.count();
-      } else {
-        p_hit = corr_targs.count() / targets.count();
-      }
-
-      if (corr_lures.count() == lures.count()) {
-        p_fa_lure = 0.5 / lures.count();
-      } else if (corr_lures.count() == 0) {
-        p_fa_lure = (lures.count() - 0.5) / lures.count();
-      } else {
-        p_fa_lure = 1 - corr_lures.count() / lures.count();
-      }
-
-      if (corr_foils.count() == foils.count()) {
-        p_fa_foil = 0.5 / foils.count();
-      } else if (corr_foils.count() == 0) {
-        p_fa_foil = (foils.count() - 0.5) / foils.count();
-      } else {
-        p_fa_foil = 1 - corr_foils.count() / foils.count();
-      }
-
-      console.log(corr_targs.count() + ' ' + targets.count() + ' ' + p_hit);
-      console.log(corr_lures.count() + ' ' + lures.count() + ' ' + p_fa_lure);
-      console.log(corr_foils.count() + ' ' + foils.count() + ' ' + p_fa_foil);
-      console.log(invNormcdf(p_hit));
-      console.log(invNormcdf(p_fa_lure));
-      console.log(invNormcdf(p_fa_foil));
-
-      let dpTF = invNormcdf(p_hit) - invNormcdf(p_fa_foil);
-      let dpTL = invNormcdf(p_hit) - invNormcdf(p_fa_lure);
-
-      retstr =
-        'HR, ' +
-        hits +
-        ', CR-L, ' +
-        cr_lure +
-        ', CR-F rate, ' +
-        cr_foil +
-        ", d'T:F, " +
-        dpTF.toFixed(3) +
-        ", d'T:L, " +
-        dpTL.toFixed(3);
-
-      console.log('retstr:' + retstr);
-
-      return (retstr);
-
+  if (twochoice == 1) {
+    let corr_targs = targets.filter({ correct: true });
+    let corr_lures = lures.filter({ correct: true });
+    let corr_foils = foils.filter({ correct: true });
+    let hits = Math.round((corr_targs.count() / targets.count()) * 100);
+    let cr_lure = Math.round((corr_lures.count() / lures.count()) * 100);
+    let cr_foil = Math.round((corr_foils.count() / foils.count()) * 100);
+    let p_fa_foil = 0.0;
+    let p_fa_lure = 0.0;
+    let p_hit = 0.0;
+    if (corr_targs.count() == 0) {
+      p_hit = 0.5 / targets.count();
+    } else if (corr_targs.count() == targets.count()) {
+      p_hit = (targets.count() - 0.5) / targets.count();
     } else {
-      // OSN
-      let targ_old = targets.filter({ resp: 'o' });
-      let targ_sim = targets.filter({ resp: 's' });
-      let targ_new = targets.filter({ resp: 'n' });
-      let lure_old = lures.filter({ resp: 'o' });
-      let lure_sim = lures.filter({ resp: 's' });
-      let lure_new = lures.filter({ resp: 'n' });
-      let foil_old = foils.filter({ resp: 'o' });
-      let foil_sim = foils.filter({ resp: 's' });
-      let foil_new = foils.filter({ resp: 'n' });
-
-      let rec = targ_old.count() / targets.count() - foil_old.count() / foils.count();
-      let ldi = lure_sim.count() / lures.count() - foil_sim.count() / foils.count();
-      // removed var
-      retstr = 'Valid, ' + targets.count() + ', ' + lures.count() + ', ' + foils.count() + '\n';
-      retstr +=
-        'Old, ' + targ_old.count() + ', ' + lure_old.count() + ', ' + foil_old.count() + '\n';
-      retstr +=
-        'Similar, ' + targ_sim.count() + ', ' + lure_sim.count() + ', ' + foil_sim.count() + '\n';
-      retstr +=
-        'New, ' + targ_new.count() + ', ' + lure_new.count() + ', ' + foil_new.count() + '\n';
-      retstr += 'REC, ' + rec.toFixed(3) + ', LDI, ' + ldi.toFixed(3);
-
-      console.log('ldi: ' + ldi);
-      console.log('retstr: ' + retstr);
-
-      return (retstr);
+      p_hit = corr_targs.count() / targets.count();
     }
 
-    // let date = new Date();
-    // let dcode = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + (date.getDate()+1) +
-    //   "-" + date.getHours() + "-" + date.getMinutes() + "-" + date.getSeconds();
+    if (corr_lures.count() == lures.count()) {
+      p_fa_lure = 0.5 / lures.count();
+    } else if (corr_lures.count() == 0) {
+      p_fa_lure = (lures.count() - 0.5) / lures.count();
+    } else {
+      p_fa_lure = 1 - corr_lures.count() / lures.count();
+    }
 
-    // if (!jatos.batchSession.defined("/" + sid)) {  // Should have this by now, but to be safe -- make sure to create this as an array
-    //   jatos.batchSession.add("/" + sid,[phasename+"_"+dcode+"_"+retstr]);
-    // }
-    // else { // Append to array
-    //   jatos.batchSession.add("/" + sid + "/-",phasename+"_"+dcode+"_"+retstr);
-    // }
-    // data.summary = retstr;
-    //jatos.batchSession.add("/"+idcode,{ [phasename + "_results"]: data.summary });
-    //return '<p>Hit rate: ' + hits + '</p><p>CR-L rate: ' + cr_lure + '</p><p>CR-F rate: ' + cr_foil + '</p>'
-    //return 'HR, ' + hits + ', CR-L, ' + cr_lure + ', CR-F rate, ' + cr_foil + ", d'T:F, " + dpTF.toFixed(3) + ", d'T:L, " + dpTL.toFixed(3)
-    
+    if (corr_foils.count() == foils.count()) {
+      p_fa_foil = 0.5 / foils.count();
+    } else if (corr_foils.count() == 0) {
+      p_fa_foil = (foils.count() - 0.5) / foils.count();
+    } else {
+      p_fa_foil = 1 - corr_foils.count() / foils.count();
+    }
+
+    console.log(corr_targs.count() + ' ' + targets.count() + ' ' + p_hit);
+    console.log(corr_lures.count() + ' ' + lures.count() + ' ' + p_fa_lure);
+    console.log(corr_foils.count() + ' ' + foils.count() + ' ' + p_fa_foil);
+    console.log(invNormcdf(p_hit));
+    console.log(invNormcdf(p_fa_lure));
+    console.log(invNormcdf(p_fa_foil));
+
+    let dpTF = invNormcdf(p_hit) - invNormcdf(p_fa_foil);
+    let dpTL = invNormcdf(p_hit) - invNormcdf(p_fa_lure);
+
+    retstr =
+      'HR, ' +
+      hits +
+      ', CR-L, ' +
+      cr_lure +
+      ', CR-F rate, ' +
+      cr_foil +
+      ", d'T:F, " +
+      dpTF.toFixed(3) +
+      ", d'T:L, " +
+      dpTL.toFixed(3);
+
+    console.log('retstr:' + retstr);
+
+    return retstr;
+  } else {
+    // OSN
+    let targ_old = targets.filter({ resp: 'o' });
+    let targ_sim = targets.filter({ resp: 's' });
+    let targ_new = targets.filter({ resp: 'n' });
+    let lure_old = lures.filter({ resp: 'o' });
+    let lure_sim = lures.filter({ resp: 's' });
+    let lure_new = lures.filter({ resp: 'n' });
+    let foil_old = foils.filter({ resp: 'o' });
+    let foil_sim = foils.filter({ resp: 's' });
+    let foil_new = foils.filter({ resp: 'n' });
+
+    let rec = targ_old.count() / targets.count() - foil_old.count() / foils.count();
+    let ldi = lure_sim.count() / lures.count() - foil_sim.count() / foils.count();
+    // removed var
+    retstr = 'Valid, ' + targets.count() + ', ' + lures.count() + ', ' + foils.count() + '\n';
+    retstr += 'Old, ' + targ_old.count() + ', ' + lure_old.count() + ', ' + foil_old.count() + '\n';
+    retstr +=
+      'Similar, ' + targ_sim.count() + ', ' + lure_sim.count() + ', ' + foil_sim.count() + '\n';
+    retstr += 'New, ' + targ_new.count() + ', ' + lure_new.count() + ', ' + foil_new.count() + '\n';
+    retstr += 'REC, ' + rec.toFixed(3) + ', LDI, ' + ldi.toFixed(3);
+
+    console.log('ldi: ' + ldi);
+    console.log('retstr: ' + retstr);
+
+    return retstr;
+  }
+
+  // let date = new Date();
+  // let dcode = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + (date.getDate()+1) +
+  //   "-" + date.getHours() + "-" + date.getMinutes() + "-" + date.getSeconds();
+
+  // if (!jatos.batchSession.defined("/" + sid)) {  // Should have this by now, but to be safe -- make sure to create this as an array
+  //   jatos.batchSession.add("/" + sid,[phasename+"_"+dcode+"_"+retstr]);
+  // }
+  // else { // Append to array
+  //   jatos.batchSession.add("/" + sid + "/-",phasename+"_"+dcode+"_"+retstr);
+  // }
+  // data.summary = retstr;
+  //jatos.batchSession.add("/"+idcode,{ [phasename + "_results"]: data.summary });
+  //return '<p>Hit rate: ' + hits + '</p><p>CR-L rate: ' + cr_lure + '</p><p>CR-F rate: ' + cr_foil + '</p>'
+  //return 'HR, ' + hits + ', CR-L, ' + cr_lure + ', CR-F rate, ' + cr_foil + ", d'T:F, " + dpTF.toFixed(3) + ", d'T:L, " + dpTL.toFixed(3)
 };
 
-  //   let validtrials = jsPsych.data.get().filterCustom(function (trial) {
-  //     return trial.resp !== null;
-  //   });
-  //   let targets = validtrials.filter({ condition: 'target' });
-  //   let lures = validtrials.filter({ condition: 'lure' });
-  //   let foils = validtrials.filter({ condition: 'foil' });
+//   let validtrials = jsPsych.data.get().filterCustom(function (trial) {
+//     return trial.resp !== null;
+//   });
+//   let targets = validtrials.filter({ condition: 'target' });
+//   let lures = validtrials.filter({ condition: 'lure' });
+//   let foils = validtrials.filter({ condition: 'foil' });
 
-  //   if (twochoice == 1) {
-  //     let corr_targs = targets.filter({ correct: true });
-  //     let corr_lures = lures.filter({ correct: true });
-  //     let corr_foils = foils.filter({ correct: true });
-  //     let hits = Math.round((corr_targs.count() / targets.count()) * 100);
-  //     let cr_lure = Math.round((corr_lures.count() / lures.count()) * 100);
-  //     let cr_foil = Math.round((corr_foils.count() / foils.count()) * 100);
-  //     let p_fa_foil = 0.0;
-  //     let p_fa_lure = 0.0;
-  //     let p_hit = 0.0;
-  //     if (corr_targs.count() == 0) {
-  //       p_hit = 0.5 / targets.count();
-  //     } else if (corr_targs.count() == targets.count()) {
-  //       p_hit = (targets.count() - 0.5) / targets.count();
-  //     } else {
-  //       p_hit = corr_targs.count() / targets.count();
-  //     }
+//   if (twochoice == 1) {
+//     let corr_targs = targets.filter({ correct: true });
+//     let corr_lures = lures.filter({ correct: true });
+//     let corr_foils = foils.filter({ correct: true });
+//     let hits = Math.round((corr_targs.count() / targets.count()) * 100);
+//     let cr_lure = Math.round((corr_lures.count() / lures.count()) * 100);
+//     let cr_foil = Math.round((corr_foils.count() / foils.count()) * 100);
+//     let p_fa_foil = 0.0;
+//     let p_fa_lure = 0.0;
+//     let p_hit = 0.0;
+//     if (corr_targs.count() == 0) {
+//       p_hit = 0.5 / targets.count();
+//     } else if (corr_targs.count() == targets.count()) {
+//       p_hit = (targets.count() - 0.5) / targets.count();
+//     } else {
+//       p_hit = corr_targs.count() / targets.count();
+//     }
 
-  //     if (corr_lures.count() == lures.count()) {
-  //       p_fa_lure = 0.5 / lures.count();
-  //     } else if (corr_lures.count() == 0) {
-  //       p_fa_lure = (lures.count() - 0.5) / lures.count();
-  //     } else {
-  //       p_fa_lure = 1 - corr_lures.count() / lures.count();
-  //     }
+//     if (corr_lures.count() == lures.count()) {
+//       p_fa_lure = 0.5 / lures.count();
+//     } else if (corr_lures.count() == 0) {
+//       p_fa_lure = (lures.count() - 0.5) / lures.count();
+//     } else {
+//       p_fa_lure = 1 - corr_lures.count() / lures.count();
+//     }
 
-  //     if (corr_foils.count() == foils.count()) {
-  //       p_fa_foil = 0.5 / foils.count();
-  //     } else if (corr_foils.count() == 0) {
-  //       p_fa_foil = (foils.count() - 0.5) / foils.count();
-  //     } else {
-  //       p_fa_foil = 1 - corr_foils.count() / foils.count();
-  //     }
+//     if (corr_foils.count() == foils.count()) {
+//       p_fa_foil = 0.5 / foils.count();
+//     } else if (corr_foils.count() == 0) {
+//       p_fa_foil = (foils.count() - 0.5) / foils.count();
+//     } else {
+//       p_fa_foil = 1 - corr_foils.count() / foils.count();
+//     }
 
-  //     console.log(corr_targs.count() + ' ' + targets.count() + ' ' + p_hit);
-  //     console.log(corr_lures.count() + ' ' + lures.count() + ' ' + p_fa_lure);
-  //     console.log(corr_foils.count() + ' ' + foils.count() + ' ' + p_fa_foil);
-  //     console.log(invNormcdf(p_hit));
-  //     console.log(invNormcdf(p_fa_lure));
-  //     console.log(invNormcdf(p_fa_foil));
+//     console.log(corr_targs.count() + ' ' + targets.count() + ' ' + p_hit);
+//     console.log(corr_lures.count() + ' ' + lures.count() + ' ' + p_fa_lure);
+//     console.log(corr_foils.count() + ' ' + foils.count() + ' ' + p_fa_foil);
+//     console.log(invNormcdf(p_hit));
+//     console.log(invNormcdf(p_fa_lure));
+//     console.log(invNormcdf(p_fa_foil));
 
-  //     let dpTF = invNormcdf(p_hit) - invNormcdf(p_fa_foil);
-  //     let dpTL = invNormcdf(p_hit) - invNormcdf(p_fa_lure);
+//     let dpTF = invNormcdf(p_hit) - invNormcdf(p_fa_foil);
+//     let dpTL = invNormcdf(p_hit) - invNormcdf(p_fa_lure);
 
-  //     var retstr =
-  //       'HR, ' +
-  //       hits +
-  //       ', CR-L, ' +
-  //       cr_lure +
-  //       ', CR-F rate, ' +
-  //       cr_foil +
-  //       ", d'T:F, " +
-  //       dpTF.toFixed(3) +
-  //       ", d'T:L, " +
-  //       dpTL.toFixed(3);
-  //   } else {
-  //     // OSN
-  //     let targ_old = targets.filter({ resp: 'o' });
-  //     let targ_sim = targets.filter({ resp: 's' });
-  //     let targ_new = targets.filter({ resp: 'n' });
-  //     let lure_old = lures.filter({ resp: 'o' });
-  //     let lure_sim = lures.filter({ resp: 's' });
-  //     let lure_new = lures.filter({ resp: 'n' });
-  //     let foil_old = foils.filter({ resp: 'o' });
-  //     let foil_sim = foils.filter({ resp: 's' });
-  //     let foil_new = foils.filter({ resp: 'n' });
+//     var retstr =
+//       'HR, ' +
+//       hits +
+//       ', CR-L, ' +
+//       cr_lure +
+//       ', CR-F rate, ' +
+//       cr_foil +
+//       ", d'T:F, " +
+//       dpTF.toFixed(3) +
+//       ", d'T:L, " +
+//       dpTL.toFixed(3);
+//   } else {
+//     // OSN
+//     let targ_old = targets.filter({ resp: 'o' });
+//     let targ_sim = targets.filter({ resp: 's' });
+//     let targ_new = targets.filter({ resp: 'n' });
+//     let lure_old = lures.filter({ resp: 'o' });
+//     let lure_sim = lures.filter({ resp: 's' });
+//     let lure_new = lures.filter({ resp: 'n' });
+//     let foil_old = foils.filter({ resp: 'o' });
+//     let foil_sim = foils.filter({ resp: 's' });
+//     let foil_new = foils.filter({ resp: 'n' });
 
-  //     let rec = targ_old.count() / targets.count() - foil_old.count() / foils.count();
-  //     let ldi = lure_sim.count() / lures.count() - foil_sim.count() / foils.count();
-  //     // removed var
-  //     retstr = 'Valid, ' + targets.count() + ', ' + lures.count() + ', ' + foils.count() + '\n';
-  //     retstr +=
-  //       'Old, ' + targ_old.count() + ', ' + lure_old.count() + ', ' + foil_old.count() + '\n';
-  //     retstr +=
-  //       'Similar, ' + targ_sim.count() + ', ' + lure_sim.count() + ', ' + foil_sim.count() + '\n';
-  //     retstr +=
-  //       'New, ' + targ_new.count() + ', ' + lure_new.count() + ', ' + foil_new.count() + '\n';
-  //     retstr += 'REC, ' + rec.toFixed(3) + ', LDI, ' + ldi.toFixed(3);
-  //   }
+//     let rec = targ_old.count() / targets.count() - foil_old.count() / foils.count();
+//     let ldi = lure_sim.count() / lures.count() - foil_sim.count() / foils.count();
+//     // removed var
+//     retstr = 'Valid, ' + targets.count() + ', ' + lures.count() + ', ' + foils.count() + '\n';
+//     retstr +=
+//       'Old, ' + targ_old.count() + ', ' + lure_old.count() + ', ' + foil_old.count() + '\n';
+//     retstr +=
+//       'Similar, ' + targ_sim.count() + ', ' + lure_sim.count() + ', ' + foil_sim.count() + '\n';
+//     retstr +=
+//       'New, ' + targ_new.count() + ', ' + lure_new.count() + ', ' + foil_new.count() + '\n';
+//     retstr += 'REC, ' + rec.toFixed(3) + ', LDI, ' + ldi.toFixed(3);
+//   }
 
-  //   // let date = new Date();
-  //   // let dcode = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + (date.getDate()+1) +
-  //   //   "-" + date.getHours() + "-" + date.getMinutes() + "-" + date.getSeconds();
+//   // let date = new Date();
+//   // let dcode = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + (date.getDate()+1) +
+//   //   "-" + date.getHours() + "-" + date.getMinutes() + "-" + date.getSeconds();
 
-  //   // if (!jatos.batchSession.defined("/" + sid)) {  // Should have this by now, but to be safe -- make sure to create this as an array
-  //   //   jatos.batchSession.add("/" + sid,[phasename+"_"+dcode+"_"+retstr]);
-  //   // }
-  //   // else { // Append to array
-  //   //   jatos.batchSession.add("/" + sid + "/-",phasename+"_"+dcode+"_"+retstr);
-  //   // }
-  //   data.summary = retstr;
-  //   //jatos.batchSession.add("/"+idcode,{ [phasename + "_results"]: data.summary });
-  //   //return '<p>Hit rate: ' + hits + '</p><p>CR-L rate: ' + cr_lure + '</p><p>CR-F rate: ' + cr_foil + '</p>'
-  //   //return 'HR, ' + hits + ', CR-L, ' + cr_lure + ', CR-F rate, ' + cr_foil + ", d'T:F, " + dpTF.toFixed(3) + ", d'T:L, " + dpTL.toFixed(3)
-  // },
+//   // if (!jatos.batchSession.defined("/" + sid)) {  // Should have this by now, but to be safe -- make sure to create this as an array
+//   //   jatos.batchSession.add("/" + sid,[phasename+"_"+dcode+"_"+retstr]);
+//   // }
+//   // else { // Append to array
+//   //   jatos.batchSession.add("/" + sid + "/-",phasename+"_"+dcode+"_"+retstr);
+//   // }
+//   data.summary = retstr;
+//   //jatos.batchSession.add("/"+idcode,{ [phasename + "_results"]: data.summary });
+//   //return '<p>Hit rate: ' + hits + '</p><p>CR-L rate: ' + cr_lure + '</p><p>CR-F rate: ' + cr_foil + '</p>'
+//   //return 'HR, ' + hits + ', CR-L, ' + cr_lure + ', CR-F rate, ' + cr_foil + ", d'T:F, " + dpTF.toFixed(3) + ", d'T:L, " + dpTL.toFixed(3)
+// },
 //};
 
 //----------------------- 4 ----------------------
 //--------------------- EXPORTS -------------------
 
-export { refresh_cont_trials, instr_trial, debrief_block, dataCalcFunction, retstr };
-
+export { refresh_cont_trials, omst_preload, instr_trial, debrief_block, dataCalcFunction, retstr };
