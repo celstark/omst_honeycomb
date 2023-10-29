@@ -19,7 +19,6 @@
 //-------------------- IMPORTS -------------------
 
 import { initJsPsych } from 'jspsych';
-import { eventCodes } from './trigger';
 import { init } from '@brown-ccv/behavioral-task-trials';
 import { getProlificId } from '../lib/utils';
 import packageInfo from '../../package.json';
@@ -44,12 +43,6 @@ const keys = {
   F: 70,
   J: 74,
   space: 32,
-};
-
-// audio codes
-const audioCodes = {
-  frequency: 100 * (eventCodes.open_task - 9),
-  type: 'sine',
 };
 
 // is this mechanical turk?
@@ -105,8 +98,6 @@ export {
   keys,
   defaultBlockSettings,
   //lang,
-  eventCodes,
   config,
-  audioCodes,
   turkUniqueId,
 };
