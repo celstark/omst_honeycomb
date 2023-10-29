@@ -14,19 +14,20 @@
 //        7/9/23 (AGH):  added conditional timelines based on user
 //                       consent
 //        7/10/23 (AGH): added end_message
-//        7/18/23 (AGH): removed select_resp_type trial, changed import path of 
+//        7/18/23 (AGH): removed select_resp_type trial, changed import path of
 //                       resp_mode and exptBlock1 to /components/Login
-//        7/26/23 (AGH): removed keyboard and button conditional timelines 
+//        7/26/23 (AGH): removed keyboard and button conditional timelines
 //                       (refresh trial functions now called at Login)
 //        7/27/23 (AGH): removed language selection trial
 //                       added conditional incl_consent, incl_demog, incl_pcon
-//                       timelines 
-//        7/31/23 (AGH): fixed notConsented timeline conditional to include 
+//                       timelines
+//        7/31/23 (AGH): fixed notConsented timeline conditional to include
 //                       && include_consent
 //                       added login_data properties specific to each conditional
 //                       timeline so the login options are added to the recorded
 //                       data of the first included trial
 //                       added pcon trials
+//        10/28/23 (CELS): Set to pre-load the oMST as well
 //
 //   --------------------
 //   This file builds the primaryTimeline from all of the trials.
@@ -41,20 +42,53 @@
 import { config } from '../config/main';
 
 // Login options
-import { include_consent, include_demog, include_pcon, include_instr, exptBlock1, consent_login_data, demog_login_data, pcon_login_data, instr_login_data, cont_login_data } from '../components/Login.jsx';
+import {
+  include_consent,
+  include_demog,
+  include_pcon,
+  include_instr,
+  exptBlock1,
+  consent_login_data,
+  demog_login_data,
+  pcon_login_data,
+  instr_login_data,
+  cont_login_data,
+} from '../components/Login.jsx';
 
 // consent, demog
 import { consent_trial, consentGiven, not_consented } from '../trials/consent_trial';
 import { demogform } from '../trials/demographics';
 
 // pcon
-import { preload, instr1_trial, demo1_trial, instr2_trial, demo2_trial, instr3_trial, pcon_end } from '../trials/pcon_demos';
+import {
+  pcon_preload,
+  instr1_trial,
+  demo1_trial,
+  instr2_trial,
+  demo2_trial,
+  instr3_trial,
+  pcon_end,
+} from '../trials/pcon_demos';
 import { pconBlock1 } from '../config/pcon_config';
 import pconBlock from './pconBlock';
 
 // contomst
-import { intro, new1, new2, new3, repeat1, lure1, side_by_side1, new4, new5, repeat2, lure2, side_by_side2, outtro, } from '../trials/instructions';
-import { instr_trial, debrief_block } from '../trials/contOmst';
+import {
+  intro,
+  new1,
+  new2,
+  new3,
+  repeat1,
+  lure1,
+  side_by_side1,
+  new4,
+  new5,
+  repeat2,
+  lure2,
+  side_by_side2,
+  outtro,
+} from '../trials/instructions';
+import { omst_preload, instr_trial, debrief_block } from '../trials/contOmst';
 import testBlock from './testBlock';
 import { end_message } from '../trials/end';
 
@@ -65,7 +99,7 @@ import { tutorialBlock } from '../config/tutorial';
 
 //----------------------- 2 ----------------------
 //-------------------- OPTIONS -------------------
-// Honeycomb will combine these custom options with other options needed by Honyecomb. 
+// Honeycomb will combine these custom options with other options needed by Honyecomb.
 
 const jsPsychOptions = {
   on_trial_finish: function (data) {
@@ -87,25 +121,21 @@ const buildPrimaryTimeline = () => {
 
   // conditional timeline if consent form is included
   var incl_consent = {
-    timeline: [
-      consent_trial,
-    ],
+    timeline: [consent_trial],
     conditional_function: function () {
-      if (include_consent) { 
+      if (include_consent) {
         return true;
       } else {
         return false;
       }
     },
     // if this is the first included trial, add login options to data here
-    data: { login_data: consent_login_data }, 
+    data: { login_data: consent_login_data },
   };
 
   // conditional timeline if demog form is included
   var incl_demog = {
-    timeline: [
-      demogform,
-    ],
+    timeline: [demogform],
     conditional_function: function () {
       if (include_demog) {
         return true;
@@ -120,17 +150,17 @@ const buildPrimaryTimeline = () => {
   // conditional timeline if pcon is included
   var incl_pcon = {
     timeline: [
-      preload,
+      pcon_preload,
       instr1_trial, // instructions and demos
-      demo1_trial, 
-      instr2_trial, 
-      demo2_trial, 
+      demo1_trial,
+      instr2_trial,
+      demo2_trial,
       instr3_trial,
       pconBlock(pconBlock1), // loop through test trials
       pcon_end, // ty message
     ],
     conditional_function: function () {
-      if (include_pcon) { 
+      if (include_pcon) {
         return true;
       } else {
         return false;
@@ -158,7 +188,7 @@ const buildPrimaryTimeline = () => {
       outtro,
     ],
     conditional_function: function () {
-      if (include_instr) { 
+      if (include_instr) {
         return true;
       } else {
         return false;
@@ -174,8 +204,9 @@ const buildPrimaryTimeline = () => {
       incl_demog, // demographics form
       incl_pcon, // perceptual control task
       incl_instr, // instructions
-      
+
       // continuous omst
+      omst_preload,
       instr_trial, // instructions
       testBlock(exptBlock1), // looping trials
       debrief_block, // thank you
@@ -185,7 +216,7 @@ const buildPrimaryTimeline = () => {
     conditional_function: function () {
       // if consent was given in consent trial or consent form not included,
       // run above timeline
-      if (consentGiven || !include_consent) { 
+      if (consentGiven || !include_consent) {
         return true;
       } else {
         return false;
