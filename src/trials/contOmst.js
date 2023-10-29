@@ -135,6 +135,7 @@
 //        7/27/23 (AGH): added paragraph markers to param functions (previously
 //                       within text file)
 //        8/1/23 (AGH):  moved invNormcdf function to utils, now imported
+//        10/28/23 (CELS): Added preloading
 //
 //   --------------------
 //   This file includes the continuous oMST instructions and debrief trials
