@@ -452,7 +452,8 @@ ipc.on('data', (event, args) => {
       //   console.log('WTF',args);
       // }
     } else if (args.task == 'end') {
-      stream_csv.write('End\n' + args.login_data + '\n');
+      //stream_csv.write('End\n' + args.login_data + '\n');
+      console.log(args.login_data);
     } else if (typeof args.summary !== 'undefined') {
       // final summary
       stream_csv.write('\nSummary\n');
