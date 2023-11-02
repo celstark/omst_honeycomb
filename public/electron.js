@@ -102,13 +102,16 @@ const saveDataAndQuit = () => {
 
 function createWindow() {
   // Create the browser window.
+  const nativeImage = require('electron').nativeImage
+  const image = nativeImage.createFromPath('public/MSTLogo256.png')
+  app.dock.setIcon(image);
   if (process.env.ELECTRON_START_URL) {
     // in dev mode, disable web security to allow local file loading
     console.log(process.env.ELECTRON_START_URL);
     mainWindow = new BrowserWindow({
       width: 1500,
       height: 900,
-      icon: './public/favicon.ico',
+      icon: './public/MST.ico',
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: false,
@@ -117,7 +120,7 @@ function createWindow() {
   } else {
     mainWindow = new BrowserWindow({
       fullscreen: true,
-      icon: './public/favicon.ico',
+      icon: './public/MST.ico',
       frame: false,
       webPreferences: {
         nodeIntegration: true,
@@ -125,7 +128,7 @@ function createWindow() {
         contextIsolation: false,
       },
     });
-
+    
     mainWindow.on('closed', function () {
       //7/24/23 (AGH) ADDED
       saveDataAndQuit();
