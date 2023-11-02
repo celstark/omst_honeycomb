@@ -312,16 +312,6 @@ var pconDataCalcFunction = (data) => {
   let dpTF = invNormcdf(p_hit) - invNormcdf(p_fa);
 
   var retstr = 'HR, ' + hits + ', CR rate, ' + crs + ", d'T:F, " + dpTF.toFixed(3);
-  //   let date = new Date();
-  //   let dcode = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + (date.getDate()+1) +
-  //     "-" + date.getHours() + "-" + date.getMinutes() + "-" + date.getSeconds();
-
-  //   if (!jatos.batchSession.defined("/" + sid)) {  // Should have this by now, but to be safe -- make sure to create this as an array
-  //     jatos.batchSession.add("/" + sid,[phasename+"_"+dcode+"_"+retstr]);
-  //   }
-  //   else { // Append to array
-  //     jatos.batchSession.add("/" + sid + "/-",phasename+"_"+dcode+"_"+retstr);
-  //   }
   data.summary = retstr;
   console.log('retstr:' + retstr);
   return retstr;

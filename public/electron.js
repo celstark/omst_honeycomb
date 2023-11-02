@@ -108,7 +108,7 @@ function createWindow() {
     mainWindow = new BrowserWindow({
       width: 1500,
       height: 900,
-      icon: './favicon.ico',
+      icon: './public/favicon.ico',
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: false,
@@ -117,7 +117,7 @@ function createWindow() {
   } else {
     mainWindow = new BrowserWindow({
       fullscreen: true,
-      icon: './favicon.ico',
+      icon: './public/favicon.ico',
       frame: false,
       webPreferences: {
         nodeIntegration: true,

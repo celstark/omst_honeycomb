@@ -92,11 +92,6 @@ import { omst_preload, instr_trial, debrief_block } from '../trials/contOmst';
 import testBlock from './testBlock';
 import { end_message } from '../trials/end';
 
-// to delete
-import preamble from './preamble';
-import taskBlock from './taskBlock';
-import { tutorialBlock } from '../config/tutorial';
-
 //----------------------- 2 ----------------------
 //-------------------- OPTIONS -------------------
 // Honeycomb will combine these custom options with other options needed by Honyecomb.
@@ -244,11 +239,11 @@ const buildPrimaryTimeline = () => {
 
 // for future mturk use??
 const mturkTimeline = [
-  preamble,
+  //preamble,
   //countdown({ message: lang.countdown.message1 }),
-  taskBlock(tutorialBlock),
+  //taskBlock(tutorialBlock),
   //countdown({ message: lang.countdown.message2 }),
-  taskBlock(exptBlock1),
+  //taskBlock(exptBlock1),
   // showMessage(config, {
   //   duration: 5000,
   //   message: lang.task.end,
