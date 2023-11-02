@@ -102,9 +102,13 @@ const saveDataAndQuit = () => {
 
 function createWindow() {
   // Create the browser window.
-  const nativeImage = require('electron').nativeImage
-  const image = nativeImage.createFromPath('public/MSTLogo256.png')
-  app.dock.setIcon(image);
+  const os = require('os');
+  if (os.platform() === 'darwin') {
+    const nativeImage = require('electron').nativeImage;
+    const image = nativeImage.createFromPath('public/MSTLogo256.png');
+    console.log(image);
+    app.dock.setIcon(image);
+  }
   if (process.env.ELECTRON_START_URL) {
     // in dev mode, disable web security to allow local file loading
     console.log(process.env.ELECTRON_START_URL);
@@ -128,7 +132,7 @@ function createWindow() {
         contextIsolation: false,
       },
     });
-    
+
     mainWindow.on('closed', function () {
       //7/24/23 (AGH) ADDED
       saveDataAndQuit();
