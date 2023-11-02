@@ -11,11 +11,13 @@
 //                       a participantID and studyID
 //                       added saveDataandQuit to save data if window
 //                       is closed before experiment end
-//        7/24/23 (AGH): added fsExtra and made changes 
+//        7/24/23 (AGH): added fsExtra and made changes
 //                       saveDataandQuit to correct for stream errors
 //
+//        10/28/23 (CELS): Used streams to create a parallel CSV output to the JSON output
+//
 //   --------------------
-//   This file handles the Electron framework integration for the 
+//   This file handles the Electron framework integration for the
 //   application, managing data storage, event handling, etc.
 //
 //*******************************************************************
@@ -56,31 +58,45 @@ let mainWindow;
 // 7/10/23 (AGH) ADDED: this function was added to allow the application to save data if the window is
 // closed before the completion of the experiment
 const saveDataAndQuit = () => {
+  const dcode = today.getTime();
   if (stream) {
     stream.end(']');
     stream.on('finish', () => {
       if (preSavePath && savePath) {
-        const filename = `pid_${participantID}_${today.getTime()}.json`; // Generate a unique filename using the current timestamp
+        const filename = `pid_${participantID}_${dcode}.json`; // Generate a unique filename using the current timestamp
         const fullPath = getFullPath(filename); // Set the full path for the data file
-
         // Ensure that the savePath directory exists before moving the file
         fsExtra.ensureDirSync(savePath); //7/24/23 (AGH) ADDED
-
-        fsExtra.move(preSavePath, fullPath, (err) => { //7/24/23 (AGH) CHANGED
-          if (err) {
-            console.error('Error moving data file:', err);
-          } else {
-            console.log('Data file saved:', fullPath);
-          }
-          app.quit(); // Quit the app after the data is saved
-        });
-      } else {
-        app.quit(); // Quit the app if preSavePath or savePath is missing
+        //console.log('JSON move',preSavePath,savePath)
+        try {
+          fsExtra.copySync(preSavePath, fullPath);
+          //console.log('JSON copied');
+        } catch (err) {
+          console.log(err);
+        }
       }
     });
-  } else {
-    app.quit(); // Quit the app if the stream is not available
   }
+  if (stream_csv) {
+    // CELS - added
+    stream_csv.end('\n');
+    stream_csv.on('finish', () => {
+      if (preSavePath_csv && savePath) {
+        const filename = `pid_${participantID}_${dcode}.csv`; // Generate a unique filename using the current timestamp
+        const fullPath = getFullPath(filename); // Set the full path for the data file
+        // Ensure that the savePath directory exists before moving the file
+        fsExtra.ensureDirSync(savePath); //7/24/23 (AGH) ADDED
+        //console.log('CSV move',preSavePath_csv,savePath)
+        try {
+          fsExtra.copySync(preSavePath_csv, fullPath);
+          //console.log('CSV copied');
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    });
+  }
+  app.quit(); // Quit the app - either we flushed it all or no stream available
 };
 // END OF ADDED SECTION
 
@@ -92,7 +108,7 @@ function createWindow() {
     mainWindow = new BrowserWindow({
       width: 1500,
       height: 900,
-      icon: './favicon.ico',
+      icon: './public/favicon.ico',
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: false,
@@ -101,7 +117,7 @@ function createWindow() {
   } else {
     mainWindow = new BrowserWindow({
       fullscreen: true,
-      icon: './favicon.ico',
+      icon: './public/favicon.ico',
       frame: false,
       webPreferences: {
         nodeIntegration: true,
@@ -110,7 +126,8 @@ function createWindow() {
       },
     });
 
-    mainWindow.on('closed', function () { //7/24/23 (AGH) ADDED
+    mainWindow.on('closed', function () {
+      //7/24/23 (AGH) ADDED
       saveDataAndQuit();
       mainWindow = null;
     });
@@ -130,6 +147,7 @@ function createWindow() {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
+    //console.log('on closed');
     saveDataAndQuit(); // 7/10/23 (AGH) ADDED
     mainWindow = null;
   });
@@ -244,12 +262,15 @@ ipc.on('trigger', (event, args) => {
 let stream = false;
 let fileCreated = false;
 let preSavePath = '';
+let stream_csv = false;
+let preSavePath_csv = '';
 let savePath = '';
 let participantID = '';
 let studyID = '';
-const images = [];
+//const images = [];
 let startTrial = -1;
 const today = new Date();
+let trial_offset = 0;
 
 /**
  * Abstracts constructing the filepath for saving data for this participant and study.
@@ -290,23 +311,42 @@ ipc.on('syncCredentials', (event) => {
 
 // listener for new data
 ipc.on('data', (event, args) => {
-  // initialize file - we got a participant_id to save the data to
   if (args.participant_id && args.study_id && !fileCreated) {
+    // initialize file - we got a participant_id to save the data to -- should have args.login_data by now too
     const dir = app.getPath('userData');
+    const dcode = today.getTime();
     participantID = args.participant_id;
     studyID = args.study_id;
-    preSavePath = path.resolve(dir, `pid_${participantID}_${today.getTime()}.json`);
+    preSavePath = path.resolve(dir, `pid_${participantID}_${dcode}.json`);
     startTrial = args.trial_index;
     log.warn(preSavePath);
     stream = fs.createWriteStream(preSavePath, { flags: 'ax+' });
     stream.write('[');
+
+    preSavePath_csv = path.resolve(dir, `pid_${participantID}_${dcode}.csv`);
+    log.warn(preSavePath_csv);
+    //console.log('first test of CSV file: ',preSavePath_csv)
+    stream_csv = fs.createWriteStream(preSavePath_csv, { flags: 'ax+' });
+    stream_csv.write('Start: ' + args.login_data.start_date + '\n');
+    stream_csv.write('Resp mode: ' + args.login_data.respmode + '\n');
+    stream_csv.write('Two-choice mode: ' + args.login_data.twochoice + '\n');
+    stream_csv.write('Self-paced mode: ' + args.login_data.selfpaced + '\n');
+    stream_csv.write(
+      'Set.Subset: ' + `${args.login_data.stimset}.${args.login_data.sublist}` + '\n'
+    );
+    stream_csv.write('Language: ' + args.login_data.language + '\n');
+    stream_csv.write('Consent included: ' + args.login_data.include_consent + '\n');
+    stream_csv.write('Demographics included: ' + args.login_data.include_demog + '\n');
+    stream_csv.write('Perceptual control included: ' + args.login_data.include_pcon + '\n');
+    stream_csv.write('Instructions included: ' + args.login_data.include_instr + '\n');
+    stream_csv.write('\n');
     fileCreated = true;
   }
 
   if (savePath === '') {
     savePath = getSavePath(participantID, studyID);
   }
-
+  //console.log(' RAW ', args.trial_type, args.trial_index, args.task )
   // we have a set up stream to write to, write to it!
   if (stream) {
     // write intermediate commas
@@ -315,13 +355,114 @@ ipc.on('data', (event, args) => {
     }
 
     // write the data
-    data = JSON.stringify({ ...args, git });
+    let data = JSON.stringify({ ...args, git });
     data = data.replace('{"summary"', ',{"summary"');
-    stream.write(data); 
+    stream.write(data);
 
     // Copy provocation images to participant's data folder
-    if (args.trial_type === 'image-keyboard-response') images.push(args.stimulus.slice(7));
-
+    // CELS: NO CLUE WHAT / WHY FOR THIS LINE
+    // if (args.trial_type === 'image-keyboard-response') images.push(args.stimulus.slice(7));
+  }
+  if (stream_csv) {
+    // format the output here based on the task
+    if (args.task == 'consent') {
+      stream_csv.write('Consent\n');
+      if (args.response == 0) {
+        stream_csv.write('Yes\n');
+      } else {
+        stream_csv.write('No');
+      }
+      stream_csv.write('\n');
+    } else if (args.task == 'demographics') {
+      stream_csv.write('Name, DOB, Gender, Ethnicity, Race\n');
+      stream_csv.write(
+        args.response.fullname +
+          ', ' +
+          args.response.dob +
+          ', ' +
+          args.response.gender +
+          ', ' +
+          args.response.ethnicity +
+          ', ' +
+          args.response.race +
+          '\n'
+      );
+    } else if (args.trial_type == 'preload') {
+      // Use this to figure out when this sub-task starts
+      trial_offset = args.trial_index;
+      //console.log('OFFSET IS', trial_offset);
+    } else if (args.task == 'pcon') {
+      //const d=args;
+      const trial_num = (args.trial_index - trial_offset) / 4 - 3; // Factor out when the task started, and the multi-steps per actual trial
+      //console.log('TRIAL ', args.trial_index, trial_num);
+      if (trial_num == 1) {
+        // Should get triggered on the first actual data trial
+        //console.log('FIRST TRIAL');
+        stream_csv.write('Trial, CResp, Resp, Correct, RT\n');
+      }
+      if (typeof args.cresp !== 'undefined') {
+        // actual data trial
+        //console.log ('DATA TRIAL', d.trial_index, (d.trial_index - trial_offset)/4-3, d.resp, d.response, trial_offset )
+        stream_csv.write(
+          trial_num +
+            ', ' +
+            args.cresp +
+            ', ' +
+            args.resp +
+            ', ' +
+            args.correct +
+            ', ' +
+            args.rt +
+            '\n'
+        );
+      }
+    } else if (args.task == 'oMSTCont') {
+      const trial_num = args.trial_index - trial_offset - 2; // pull off the offset, preload, and instruction screen
+      //console.log('OMST ', trial_offset, args.trial_index, args.correct_response, trial_num);
+      if (trial_num == 1) {
+        // Should get triggered on the first actual data trial
+        //console.log('FIRST TRIAL');
+        stream_csv.write('Trial, CResp, Resp, Resp-raw, Correct, RT, cond, lbin, stim\n');
+      }
+      if (typeof args.correct_response !== 'undefined') {
+        // actual data trial -- they may all be??
+        //console.log ('DATA TRIAL', d.trial_index, (d.trial_index - trial_offset)/4-3, d.resp, d.response, trial_offset )
+        stream_csv.write(
+          trial_num +
+            ', ' +
+            args.correct_response +
+            ', ' +
+            args.resp +
+            ', ' +
+            args.response +
+            ', ' +
+            args.correct +
+            ', ' +
+            args.rt +
+            ', ' +
+            args.condition +
+            ', ' +
+            args.lbin +
+            ', ' +
+            args.stimulus +
+            '\n'
+        );
+      }
+      // else {
+      //   console.log('WTF',args);
+      // }
+    } else if (args.task == 'end') {
+      //stream_csv.write('End\n' + args.login_data + '\n');
+      console.log(args.login_data);
+    } else if (typeof args.summary !== 'undefined') {
+      // final summary
+      stream_csv.write('\nSummary\n');
+      stream_csv.write('Perceptual control\n' + args.summary.pconsummary + '\n');
+      stream_csv.write('oMST\n' + args.summary.contsummary + '\n');
+    }
+    // else {
+    //   console.log('UNKNOWN', args);
+    // }
   }
 });
 
@@ -347,7 +488,8 @@ ipc.on('save_video', (event, videoFileName, buffer) => {
 // EXPERIMENT END
 ipc.on('end', () => {
   // quit app
-  //app.quit();
+  //console.log('on end')
+  app.quit();
 });
 
 // Error state sent from front end to back end (e.g. wrong number of images)
@@ -402,13 +544,18 @@ app.on('activate', function () {
 
 // EXPERIMENT END
 app.on('will-quit', () => {
+  //console.log('on will-quit')
   if (fileCreated) {
     // finish writing file
-    stream.write(']');
-    stream.end();
+    //stream.write(']');
+    //console.log('will-quit - stream status', stream.closed, stream.destroyed, !stream.closed, stream.writable)
+    if (stream.writable) {
+      stream.end(']');
+    }
     stream = false;
 
     // copy file to config location
+    //console.log('  will-quit, copyFileSync bit...')
     fs.mkdir(savePath, { recursive: true }, (err) => {
       log.error(err);
       fs.copyFileSync(preSavePath, getFullPath(`pid_${participantID}_${today.getTime()}.json`));
