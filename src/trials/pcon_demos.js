@@ -112,17 +112,17 @@ var instr3_stim = function () {
 
 var trial_choices = function () {
   if (resp_mode == 'button') {
-    return [`${lang.pcon.button.choices.same}`, `${lang.pcon.button.choices.dif}`];
+    return [`${lang.pcon.button.trial_choices.same}`, `${lang.pcon.button.trial_choices.dif}`];
   } else {
-    return [`${lang.pcon.key.choices.same}`, `${lang.pcon.key.choices.dif}`];
+    return [`${lang.pcon.key.trial_choices.same}`, `${lang.pcon.key.trial_choices.dif}`];
   }
 };
 
 var trial_prompt = function () {
   if (resp_mode == 'button') {
-    return '<p>' + lang.pcon.button.trial_text + '</p>';
+    return '<p>' + lang.pcon.button.trial_txt + '</p>';
   } else {
-    return '<p>' + lang.pcon.key.trial_text + '</p>';
+    return '<p>' + lang.pcon.key.trial_txt + '</p>';
   }
 };
 

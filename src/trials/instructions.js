@@ -174,12 +174,12 @@ var prompt_test = function () {
       '<p>' +
       lang.instructions.prompt_test +
       '</p><p>' +
-      lang.instructions.button.trial_text +
+      lang.instructions.button.trial_txt +
       '</p>'
     );
   } else {
     return (
-      '<p>' + lang.instructions.prompt_test + '</p><p>' + lang.instructions.key.trial_text + '</p>'
+      '<p>' + lang.instructions.prompt_test + '</p><p>' + lang.instructions.key.trial_txt + '</p>'
     );
   }
 };
@@ -230,7 +230,7 @@ function refresh_instr_trials() {
     choices: instr_choice,
     prompt: prompt0,
     stimulus: function () {
-      return lang.instructions.text0;
+      return lang.instructions.txt0;
     },
     data: { task: phasename },
   };

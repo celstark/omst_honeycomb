@@ -5,7 +5,6 @@
     "stuID": "Study ID",
     "end": "This experiment has ended."
   },
-
   "consent": {
     "title": "IRB Consent Form",
     "study": {
@@ -27,7 +26,6 @@
       "cancel": "Cancel"
     }
   },
-
   "resp": {
     "prompt": "Please select if you prefer to use your device's keyboard or if you prefer to use your mouse to click buttons on your screen",
     "choices": {
@@ -35,7 +33,6 @@
       "buttons": "Buttons"
     }
   },
-
   "demog": {
     "preamble": "The National Institute of Health (NIH) mandates that we collect demographic information from participants and that we collect it <i>in this specific format</i>.",
     "name": "Full name:",
@@ -60,52 +57,47 @@
       "m": "More than one race or Other"
     }
   },
-
   "pcon": {
     "instr1_stim": "In this task, you will see two objects appear on the screen, one after the other, with a bit of \"static\" for a few seconds between them. Your job is to determine if the two images are <i>exactly the same</i> or not.",
     "instr2_stim": "Here are those images again. You should have said <b>Same</b> for that one as they were the same images.",
-    "instr3_stim":  "Here are those images again. You should have said <b>Different</b> for that one as they were not exactly the same.",
+    "instr3_stim": "Here are those images again. You should have said <b>Different</b> for that one as they were not exactly the same.",
     "ready": "Get ready...",
     "wait": "Wait...",
     "ty": "Thank You",
-
     "key": {
       "instr_choice": " ",
       "instr1_prompt": "Press <i>spacebar</i> to see a sample",
       "instr2_prompt": "Press <i>spacebar</i> to continue",
       "instr3_prompt": "Ready to begin the test? Press <i>spacebar</i> to start",
-      "trial_text": "Same (<b>s</b>) or Different (<b>d</b>)?",
-      "choices": {
+      "trial_txt": "Same (<b>s</b>) or Different (<b>d</b>)?",
+      "trial_choices": {
         "same": "S",
         "dif": "D"
       }
     },
-    
     "button": {
       "instr_choice": "OK",
       "instr1_prompt": "Press <i>OK</i> to see a sample",
       "instr2_prompt": "Press <i>OK</i> to continue",
       "instr3_prompt": "Ready to begin the test? Press <i>OK</i> to start",
-      "trial_text": "<i>Same</i> or <i>Different</i>?",
-      "choices": {
+      "trial_txt": "<i>Same</i> or <i>Different</i>?",
+      "trial_choices": {
         "same": "Same",
         "dif": "Different"
       }
     }
   },
-
   "instructions": {
-    "text0": "You are going to see pictures of everyday items, one at a time. For each one, you will select <b>Old</b> if you have seen this exact picture before, <b>Similar</b> if it is similar, but not exactly the same as one you saw before, or <b>New</b> if it is entirely a new picture.</p> <p>The way to think of <i>Similar</i> is whether it has the same name, but is a different picture in any way.</p> <p>A few practice trials should make this clear.",
+    "txt0": "You are going to see pictures of everyday items, one at a time. For each one, you will select <b>Old</b> if you have seen this exact picture before, <b>Similar</b> if it is similar, but not exactly the same as one you saw before, or <b>New</b> if it is entirely a new picture.</p> <p>The way to think of <i>Similar</i> is whether it has the same name, but is a different picture in any way.</p> <p>A few practice trials should make this clear.",
     "cor_new": "Good! You have not seen this image yet, so you correctly selected <b>New</b>",
     "cor_rep": "Good! You have seen this exact image, so you correctly selected <b>Old</b>",
     "cor_lure": "Good! You have not seen this <i>exact</i> image, so you correctly selected <b>Similar</b>",
     "prompt_test": "Your turn. Have you seen this?",
     "side_by_side": "As you can see, these items are similar, but not exactly the same. For this kind of image, you should select <b>Similar</b> to indicate that you saw something similar to this but have not seen that exact item before during this session.",
     "end": "That's the idea. Now, we'll do the actual test.</p> <p><i>As you do the actual task, if the picture disappears before you respond, don't worry. Just make your response even if the screen is blank.</i>",
-
     "key": {
       "instr_choice": " ",
-      "trial_text": "<i>Old</i> (<b>v</b>), <i>Similar</i> (<b>b</b>), or <i>New</i> (<b>n</b>)?",
+      "trial_txt": "<i>Old</i> (<b>v</b>), <i>Similar</i> (<b>b</b>), or <i>New</i> (<b>n</b>)?",
       "trial_choices": {
         "old": "v",
         "sim": "b",
@@ -120,10 +112,9 @@
       "inc_lure": "You saw one <i>similar to this, but not exactly the same</i>, so press <i>Similar</i> (<b>b</b>)",
       "continue": "(Press <i>spacebar</i> to continue)"
     },
-
     "button": {
       "instr_choice": "OK",
-      "trial_text": "<i>Old</i>, <i>Similar</i>, or <i>New</i>?",
+      "trial_txt": "<i>Old</i>, <i>Similar</i>, or <i>New</i>?",
       "trial_choices": {
         "old": "Old",
         "sim": "Similar",
@@ -139,7 +130,6 @@
       "continue": "(Press <i>OK</i> to continue)"
     }
   },
-
   "cont": {
     "key": {
       "instr_choice": " ",
@@ -185,7 +175,6 @@
     },
     "ty": "Thank You"
   },
-
   "end": {
     "nc": "Consent not given. The experiment has ended.",
     "ty": "Thank you for your participation in the experiment. You may close this window if you are not redirected"

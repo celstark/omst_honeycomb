@@ -5,7 +5,6 @@
     "stuID": "Study ID",
     "end": "This experiment has ended."
   },
-
   "consent": {
     "title": "IRB Consent Form",
     "study": {
@@ -27,7 +26,6 @@
       "cancel": "Cancel"
     }
   },
-
   "resp": {
     "prompt": "Please select if you prefer to use your device's keyboard or if you prefer to use your mouse to click buttons on your screen",
     "choices": {
@@ -35,7 +33,6 @@
       "buttons": "Buttons"
     }
   },
-
   "demog": {
     "preamble": "The National Institute of Health (NIH) mandates that we collect demographic information from participants and that we collect it <i>in this specific format</i>.",
     "name": "Full name:",
@@ -60,52 +57,47 @@
       "m": "More than one race or Other"
     }
   },
-
   "pcon": {
     "instr1_stim": "In this task, you will see two objects appear on the screen, one after the other, with a bit of \"static\" for a few seconds between them. Your job is to determine if the two images are <i>exactly the same</i> or not.",
     "instr2_stim": "Here are those images again. You should have said <b>Same</b> for that one as they were the same images.",
-    "instr3_stim":  "Here are those images again. You should have said <b>Different</b> for that one as they were not exactly the same.",
+    "instr3_stim": "Here are those images again. You should have said <b>Different</b> for that one as they were not exactly the same.",
     "ready": "Get ready...",
     "wait": "Wait...",
     "ty": "Thank You",
-
     "key": {
       "instr_choice": " ",
       "instr1_prompt": "Press <i>spacebar</i> to see a sample",
       "instr2_prompt": "Press <i>spacebar</i> to continue",
       "instr3_prompt": "Ready to begin the test? Press <i>spacebar</i> to start",
-      "trial_text": "Same (<b>s</b>) or Different (<b>d</b>)?",
-      "choices": {
+      "trial_txt": "Same (<b>s</b>) or Different (<b>d</b>)?",
+      "trial_choices": {
         "same": "S",
         "dif": "D"
       }
     },
-    
     "button": {
       "instr_choice": "OK",
       "instr1_prompt": "Press <i>OK</i> to see a sample",
       "instr2_prompt": "Press <i>OK</i> to continue",
       "instr3_prompt": "Ready to begin the test? Press <i>OK</i> to start",
-      "trial_text": "<i>Same</i> or <i>Different</i>?",
-      "choices": {
+      "trial_txt": "<i>Same</i> or <i>Different</i>?",
+      "trial_choices": {
         "same": "Same",
         "dif": "Different"
       }
     }
   },
-
   "instructions": {
-    "text0": "您接下来会一一看到日常物品的图片。为每一个图片,您会选择<b>旧</b>如果您看到过一模一样的图片，<b>相近</b>如果您看到过类似但不完全一样的图片，或者<b>新</b>如果这是一个崭新的图片。<p>决定一个图片是<b>相近</b>的思考方式是如果这个物品的名字跟您以前看到的一样但图片本身跟以前看到的有所不同。<p>一些练习试验会帮助解释这一点。.",
+    "txt0": "您接下来会一一看到日常物品的图片。为每一个图片,您会选择<b>旧</b>如果您看到过一模一样的图片，<b>相近</b>如果您看到过类似但不完全一样的图片，或者<b>新</b>如果这是一个崭新的图片。<p>决定一个图片是<b>相近</b>的思考方式是如果这个物品的名字跟您以前看到的一样但图片本身跟以前看到的有所不同。<p>一些练习试验会帮助解释这一点。.",
     "cor_new": "好! 您还没有看过这个图片所以您正确的选择了<b>新</b>",
     "cor_rep": "好! 您已经看过了一模一样的图片所以您正确的选择了<b>旧</b>",
     "cor_lure": "好! 您没有看过<i>一模一样的</i>图片所以您正确的选择了<b>相近</b>",
     "prompt_test": "到您了。您看到过这个图片吗？",
     "side_by_side": "如您所见，这两个物品类似但不是一模一样。在这种情况下您应该选择<b>相近</b>，表明您在试验过程中看到过类似但不完全一样的物品。",
     "end": "大体就是这样。现在我们会开始真正的试验。<p><i>在真正的试验过程，如果图片在您答复前消失，不用担心。请继续您的答复即使屏幕是空白的。</i>",
-
     "key": {
       "instr_choice": " ",
-      "trial_text": "<i>旧</i>(<b>v</b>), <i>相近</i>(<b>b</b>），或<i>新</i>(<b>n</b>)?",
+      "trial_txt": "<i>旧</i>(<b>v</b>), <i>相近</i>(<b>b</b>），或<i>新</i>(<b>n</b>)?",
       "trial_choices": {
         "old": "v",
         "sim": "b",
@@ -120,10 +112,9 @@
       "inc_lure": "您看过一个<i>类似但不是一模一样的</i>图片，所以请按<i>相近</i> (<b>b</b>)",
       "continue": "(请按<i>空格键</i>继续)"
     },
-
     "button": {
       "instr_choice": "OK",
-      "trial_text": "<i>旧</i>, <i>相近</i>, 或<i>新</i>?",
+      "trial_txt": "<i>旧</i>, <i>相近</i>, 或<i>新</i>?",
       "trial_choices": {
         "old": "旧",
         "sim": "相近",
@@ -139,7 +130,6 @@
       "continue": "(请按<i>OK</i>继续)"
     }
   },
-
   "cont": {
     "key": {
       "instr_choice": " ",
@@ -185,7 +175,6 @@
     },
     "ty": "谢谢"
   },
-
   "end": {
     "nc": "Consent not given. The experiment has ended.",
     "ty": "Thank you for your participation in the experiment. You may close this window if you are not redirected"

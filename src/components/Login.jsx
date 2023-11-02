@@ -9,14 +9,14 @@
 //        7/18/23 (AGH): moved the timeline variables for contOMST
 //                       test_trials from ./trials (stim_set, trialorder,
 //                       run, twochoice, selfpaced, orderfile);
-//                       set up each as state variables defined when the 
+//                       set up each as state variables defined when the
 //                       user submits the Login page
 //                       changed the resp_mode selection from a trial (in
 //                       /trials/setRepType) to a state variable
-//                       moved exptBlock1 from /config/experiment so that 
+//                       moved exptBlock1 from /config/experiment so that
 //                       the experiment conditions are updated based on
 //                       the user selection of the state variables on Login
-//                       (now calls the function loadExptBlock1 from 
+//                       (now calls the function loadExptBlock1 from
 //                       /config/experiment)
 //        7/21/23 (AGH): reformatted login page in App.css
 //        7/26/23 (AGH): added UseEffect for a studyID change and localstorage
@@ -27,8 +27,8 @@
 //                       includePcon and includeInstr
 //        7/28/23 (AGH): added showExperimentView to create hide and show element
 //                       for participant view and experiment view login screens
-//        7/31/23 (AGH): added var login_data and conditional vars to record the 
-//                       login options at the first included trial (in 
+//        7/31/23 (AGH): added var login_data and conditional vars to record the
+//                       login options at the first included trial (in
 //                       checkConfigOptions)
 //        8/9/23  (AGH): updated for new 2x3 orderfiles, removed trialorder
 //                       state var and changed run to "sublist"
@@ -54,8 +54,8 @@ import { loadExptBlock1 } from '../config/experiment';
 import { defaultBlockSettings } from '../config/main';
 
 import { refresh_pcon_trials } from '../trials/pcon_demos';
-import { refresh_instr_trials} from '../trials/instructions';
-import { refresh_cont_trials} from '../trials/contOmst';
+import { refresh_instr_trials } from '../trials/instructions';
+import { refresh_cont_trials } from '../trials/contOmst';
 
 import { getFormattedDate } from '../lib/utils';
 
@@ -88,8 +88,7 @@ var cont_login_data;
 //----------------------- 3 ----------------------
 //------------------- FUNCTIONS ------------------
 
-function Login({ handleLogin, initialParticipantID, initialStudyID, validationFunction}) {
-  
+function Login({ handleLogin, initialParticipantID, initialStudyID, validationFunction }) {
   // State variables for login screen
   const [participantId, setParticipant] = useState(initialParticipantID);
   const [studyId, setStudy] = useState(initialStudyID);
@@ -107,7 +106,6 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
   const [includeInstr, setInstr] = useState(false);
   const [showExperimenterView, setShowExperimenterView] = useState(false); // Toggle for experimenter view
 
- 
   // Function to check and retrieve the stored options from localStorage
   // This function will be called when the Login component mounts
   useEffect(() => {
@@ -146,37 +144,38 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
       if (isValid) handleLogin(participantId, studyId);
     });
   }
-  
+
   // Function to check the states of all the options and assign chosen values to each variable, called when Login button is pressed
   function checkConfigOptions() {
-
     start_date = getFormattedDate(new Date());
 
     // [set=#]: Stimulus set -- 1-6 (1=default) -- used in loading the order file
     stim_set = chooseStimset;
-      console.log('stimset = ' + chooseStimset);
+    console.log('stimset = ' + chooseStimset);
 
     // [run=#]: Which particular run? (1-3, 1=default) -- controls which actual stimuli in that set are plugged into the order
     sublist = chooseSublist;
-      console.log('sublist = ' + chooseSublist);
+    console.log('sublist = ' + chooseSublist);
 
     // [resp_mode='']: Respond with buttons or keyboard? (default = button)
     resp_mode = chooseRespmode;
-      console.log('respmode = ' + chooseRespmode);
+    console.log('respmode = ' + chooseRespmode);
 
     // [lang='']: Which language file? (default = English)
     if (chooseLang == 'Spanish') {
-      lang = require('../language/omst_spa.json');
+      lang = require('../language/omst_es.json');
     } else if (chooseLang == 'Korean') {
-      lang = require('../language/omst_kor.json');
+      lang = require('../language/omst_kr.json');
     } else if (chooseLang == 'Chinese') {
-      lang = require('../language/omst_zho.json');
+      lang = require('../language/omst_cn.json');
+    } else if (chooseLang == 'Russian') {
+      lang = require('../language/omst_ru.json');
     } else {
       lang = require('../language/omst_en.json');
     }
 
     language = chooseLang;
-      console.log('language = ' + chooseLang);
+    console.log('language = ' + chooseLang);
 
     // [twochoice=#]: 0=OSN, 1=ON response choices (0=default)
     if (chooseTwochoice === true) {
@@ -184,7 +183,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     } else {
       twochoice = 0;
     }
-      console.log('twochoice =' + twochoice);
+    console.log('twochoice =' + twochoice);
 
     // [selfpaced=#]: Should we allow infinite time with blank screen to make the response? (default =1)
     if (chooseSelfpaced === true) {
@@ -192,19 +191,19 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     } else {
       selfpaced = 0;
     }
-      console.log('selfpaced =' + selfpaced);
+    console.log('selfpaced =' + selfpaced);
 
     include_consent = includeConsent;
-      console.log('include consent =' + includeConsent);
+    console.log('include consent =' + includeConsent);
 
     include_demog = includeDemog;
-      console.log('include demog =' + includeDemog);
-    
+    console.log('include demog =' + includeDemog);
+
     include_pcon = includePcon;
-      console.log('include pcon =' + includePcon);
+    console.log('include pcon =' + includePcon);
 
     include_instr = includeInstr;
-      console.log('include instr =' + includeInstr);
+    console.log('include instr =' + includeInstr);
 
     // load trial stim from jsOrders file
     // both writeOrderfile and loadOrderfil defined in /config/cont.js
@@ -233,31 +232,41 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     localStorage.setItem(`${studyId}_pcon`, includePcon);
     localStorage.setItem(`${studyId}_instr`, includeInstr);
 
-
     // load login options to be recorded in data file
-    var login_data = { start_date: start_date, "stimset": stim_set, "sublist": sublist, "respmode": resp_mode, "language": language, "include_consent": include_consent, "include_demog": include_demog, "include_pcon": include_pcon, "include_instr": include_instr, "twochoice": twochoice, "selfpaced": selfpaced };
+    var login_data = {
+      start_date: start_date,
+      stimset: stim_set,
+      sublist: sublist,
+      respmode: resp_mode,
+      language: language,
+      include_consent: include_consent,
+      include_demog: include_demog,
+      include_pcon: include_pcon,
+      include_instr: include_instr,
+      twochoice: twochoice,
+      selfpaced: selfpaced,
+    };
 
     // record login_data at first included trial
     if (!include_consent) {
-      console.log("login data at demog");
+      console.log('login data at demog');
       demog_login_data = login_data;
       if (!include_demog) {
-        console.log("overwrite: login data at pcon");
+        console.log('overwrite: login data at pcon');
         pcon_login_data = login_data;
         if (!include_pcon) {
-          console.log("overwrite: login data at instr");
+          console.log('overwrite: login data at instr');
           instr_login_data = login_data;
           if (!include_instr) {
-            console.log("overwrite: login data at cont");
+            console.log('overwrite: login data at cont');
             cont_login_data = login_data;
           }
         }
       }
     } else {
-      console.log("login data at consent");
+      console.log('login data at consent');
       consent_login_data = login_data;
     }
-
   }
 
   // Toggle between experimenter view and participant view
@@ -265,13 +274,14 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     setShowExperimenterView((prevShow) => !prevShow);
   }
 
-//----------------------- 4 ----------------------
-//--------------------LOGIN FORM -----------------
+  //----------------------- 4 ----------------------
+  //--------------------LOGIN FORM -----------------
 
   const renderLoginForm = () => {
-    if (showExperimenterView) { 
-      return ( // show all options
-        <div className='centered-h-v'> 
+    if (showExperimenterView) {
+      return (
+        // show all options
+        <div className='centered-h-v'>
           <div className='login-form'>
             <Form className='centered-h-v' onSubmit={handleSubmit}>
               <Form.Group className='login' size='lg' controlId='participantId'>
@@ -292,11 +302,15 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
                 />
               </Form.Group>
 
-              <div className="num-options-container">
+              <div className='num-options-container'>
                 <div className='num-options'>
                   <Form.Group controlId='stim_set'>
                     <Form.Label>Stimulus set:</Form.Label>
-                    <Form.Control as='select' value={chooseStimset} onChange={(e) => setStimset(e.target.value)}>
+                    <Form.Control
+                      as='select'
+                      value={chooseStimset}
+                      onChange={(e) => setStimset(e.target.value)}
+                    >
                       <option value='1'>1</option>
                       <option value='2'>2</option>
                       <option value='3'>3</option>
@@ -307,7 +321,11 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
                   </Form.Group>
                   <Form.Group controlId='sublist'>
                     <Form.Label>Sublist:</Form.Label>
-                    <Form.Control as='select' value={chooseSublist} onChange={(e) => setSublist(e.target.value)}>
+                    <Form.Control
+                      as='select'
+                      value={chooseSublist}
+                      onChange={(e) => setSublist(e.target.value)}
+                    >
                       <option value='1'>1</option>
                       <option value='2'>2</option>
                       <option value='3'>3</option>
@@ -315,11 +333,15 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
                   </Form.Group>
                 </div>
 
-                <div className="response-options-container">
+                <div className='response-options-container'>
                   <div className='response-options'>
                     <Form.Group controlId='respmode'>
                       <Form.Label>Response mode:</Form.Label>
-                      <Form.Control as='select' value={chooseRespmode} onChange={(e) => setRespmode(e.target.value)}>
+                      <Form.Control
+                        as='select'
+                        value={chooseRespmode}
+                        onChange={(e) => setRespmode(e.target.value)}
+                      >
                         <option value='button'>Buttons</option>
                         <option value='keyboard'>Keyboard</option>
                       </Form.Control>
@@ -328,11 +350,16 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
                   <div className='response-options'>
                     <Form.Group controlId='lang'>
                       <Form.Label>Language:</Form.Label>
-                      <Form.Control as='select' value={chooseLang} onChange={(e) => setLang(e.target.value)}>
+                      <Form.Control
+                        as='select'
+                        value={chooseLang}
+                        onChange={(e) => setLang(e.target.value)}
+                      >
                         <option value='English'>English</option>
                         <option value='Spanish'>Español</option>
                         <option value='Korean'>한국인</option>
                         <option value='Chinese'>中文</option>
+                        <option value='Russian'>Pyccкий</option>
                       </Form.Control>
                     </Form.Group>
                   </div>
@@ -423,7 +450,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
       );
     } else {
       return (
-        <div className='centered-h-v'> 
+        <div className='centered-h-v'>
           <div className='login-form'>
             <Form className='centered-h-v' onSubmit={handleSubmit}>
               <Form.Group className='login' size='lg' controlId='participantId'>
@@ -459,7 +486,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
                 No matching experiment found for this participant and study
               </div>
             ) : null}
-            </div>
+          </div>
         </div>
       );
     }
@@ -467,12 +494,12 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
 
   return (
     <div className='centered-h-v'>
-        {/* Toggle button to switch between experimenter and participant views */}
-          <Button className='toggle-button' onClick={toggleExperimenterView}>
-            {showExperimenterView ? 'Switch to Participant View' : 'Switch to Experimenter View'}
-          </Button>
-        {/* Render the appropriate login form */}
-        {renderLoginForm()}
+      {/* Toggle button to switch between experimenter and participant views */}
+      <Button className='toggle-button' onClick={toggleExperimenterView}>
+        {showExperimenterView ? 'Switch to Participant View' : 'Switch to Experimenter View'}
+      </Button>
+      {/* Render the appropriate login form */}
+      {renderLoginForm()}
     </div>
   );
 }
@@ -480,4 +507,25 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
 //----------------------- 5 ----------------------
 //---------------------EXPORTS -------------------
 
-export { Login, stim_set, sublist, resp_mode, lang, language, include_consent, include_demog, include_pcon, include_instr, twochoice, selfpaced, orderfile, trial_stim, exptBlock1, consent_login_data, demog_login_data, pcon_login_data, instr_login_data, cont_login_data };
+export {
+  Login,
+  stim_set,
+  sublist,
+  resp_mode,
+  lang,
+  language,
+  include_consent,
+  include_demog,
+  include_pcon,
+  include_instr,
+  twochoice,
+  selfpaced,
+  orderfile,
+  trial_stim,
+  exptBlock1,
+  consent_login_data,
+  demog_login_data,
+  pcon_login_data,
+  instr_login_data,
+  cont_login_data,
+};
