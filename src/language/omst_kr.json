@@ -34,7 +34,7 @@
   "demog": {
     "preamble": "국립 보건원은 (National Institute of Health) 우리가 참가자들의 인구통계학적 정보를 수집하도록 요구합니다. 또한, 우리가 참가자들의 인구통계학적 정보를 <i>특정한 형식으로</i> 수집하도록 지시합니다.",
     "name": "성함:",
-    "dob": "생년월일 (DD/MM/YYYY):",
+    "dob": "생년월일 (MM/DD/YYYY):",
     "gender": {
       "prompt": "성별:",
       "m": "남자",

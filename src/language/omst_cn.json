@@ -36,7 +36,7 @@
   "demog": {
     "preamble": "The National Institute of Health (NIH) mandates that we collect demographic information from participants and that we collect it <i>in this specific format</i>.",
     "name": "Full name:",
-    "dob": "Date of birth (DD/MM/YYYY):",
+    "dob": "Date of birth (MM/DD/YYYY):",
     "gender": {
       "prompt": "Gender:",
       "m": "Male",

@@ -34,7 +34,7 @@
   "demog": {
     "preamble": "El Instituto Nacional de Sanidad (NIH) dicta que recopilamos información demográfica de participantes y que lo recopilamos <i>en este formato específico</i>.",
     "name": "Nombre completo:",
-    "dob": "Fecha de nacimiento (DD/MM/AAAA):",
+    "dob": "Fecha de nacimiento (MM/DD/AAAA):",
     "gender": {
       "prompt": "Género:",
       "m": "Masculino",
