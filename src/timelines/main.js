@@ -53,7 +53,7 @@ import {
   pcon_login_data,
   instr_login_data,
   cont_login_data,
-} from "../components/Login.jsx";
+} from "../App/components/Login.jsx";
 
 // consent, demog
 import { consent_trial, consentGiven, not_consented } from "../trials/consent_trial";

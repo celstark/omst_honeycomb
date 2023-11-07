@@ -67,6 +67,15 @@ const USE_CAMERA = process.env.REACT_APP_VIDEO === "true" && USE_ELECTRON; // wh
 const USE_EEG = process.env.REACT_APP_USE_EEG === "true" && USE_ELECTRON; // whether or not the EEG/event marker is available
 const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === "true" && USE_ELECTRON; // whether or not the photodiode is in use
 
+const defaultBlockSettings = {
+  // FIX -- this really is vestigial
+  conditions: ["a", "b", "c"],
+  repeats_per_condition: 1, // number of times every condition is repeated
+  is_practice: false,
+  is_tutorial: false,
+  photodiode_active: false,
+};
+
 /**
  * Configuration object for Honeycomb
  */
@@ -112,6 +121,7 @@ export {
   config,
   // eventCodes,
   //language,
+  defaultBlockSettings,
   taskName,
   taskSettings,
   taskVersion,

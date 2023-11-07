@@ -38,13 +38,13 @@
 //----------------------- 1 ----------------------
 //-------------------- IMPORTS -------------------
 
-import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-import jsPsychHtmlButtonResponse from '@jspsych/plugin-html-button-response';
-import jsPsychPreload from '@jspsych/plugin-preload';
+import jsPsychHtmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import jsPsychHtmlButtonResponse from "@jspsych/plugin-html-button-response";
+import jsPsychPreload from "@jspsych/plugin-preload";
 
-import { twochoice, lang, resp_mode } from '../components/Login';
+import { twochoice, lang, resp_mode } from "../App/components/Login";
 
-import { invNormcdf } from '../lib/utils';
+import { invNormcdf } from "../lib/utils";
 
 // <script>
 // function waitFor(conditionFunction) {
@@ -129,7 +129,7 @@ var omst_preload = {
 };
 
 var instr_choice = function () {
-  if (resp_mode == 'button') {
+  if (resp_mode == "button") {
     return [lang.cont.button.instr_choice];
   } else {
     return lang.cont.key.instr_choice;
@@ -137,25 +137,25 @@ var instr_choice = function () {
 };
 
 var instr_prompt = function () {
-  if (resp_mode == 'button') {
-    return '<p>' + lang.cont.button.instr_prompt + '</p>';
+  if (resp_mode == "button") {
+    return "<p>" + lang.cont.button.instr_prompt + "</p>";
   } else {
-    return '<p>' + lang.cont.key.instr_prompt + '</p>';
+    return "<p>" + lang.cont.key.instr_prompt + "</p>";
   }
 };
 
 var instr_stim = function () {
-  if (resp_mode == 'button') {
+  if (resp_mode == "button") {
     if (twochoice == 0) {
-      return '<p>' + lang.cont.button.threechoice.instr_stim + '</p>';
+      return "<p>" + lang.cont.button.threechoice.instr_stim + "</p>";
     } else {
-      return '<p>' + lang.cont.button.twochoice.instr_stim + '</p>';
+      return "<p>" + lang.cont.button.twochoice.instr_stim + "</p>";
     }
   } else {
     if (twochoice == 0) {
-      return '<p>' + lang.cont.key.threechoice.instr_stim + '</p>';
+      return "<p>" + lang.cont.key.threechoice.instr_stim + "</p>";
     } else {
-      return '<p>' + lang.cont.key.twochoice.instr_stim + '</p>';
+      return "<p>" + lang.cont.key.twochoice.instr_stim + "</p>";
     }
   }
 };
@@ -169,15 +169,15 @@ var instr_trial = {};
 
 function refresh_cont_trials() {
   instr_trial = {
-    type: resp_mode == 'button' ? jsPsychHtmlButtonResponse : jsPsychHtmlKeyboardResponse,
+    type: resp_mode == "button" ? jsPsychHtmlButtonResponse : jsPsychHtmlKeyboardResponse,
     choices: instr_choice,
     prompt: instr_prompt,
-    margin_horizontal: '40px',
-    margin_vertical: '20px',
+    margin_horizontal: "40px",
+    margin_vertical: "20px",
     //        button_html: '<button style="font-size: 150%" class="jspsych-btn">%choice%</button>',
     stimulus: instr_stim,
     // add task name to data collection
-    data: { task: 'oMSTCont' },
+    data: { task: "oMSTCont" },
   };
 }
 
@@ -190,7 +190,7 @@ var debrief_block = {
     return lang.cont.ty;
   },
   // add task name to data collection
-  data: { task: 'oMSTCont' },
+  data: { task: "oMSTCont" },
 };
 
 var retstr;
@@ -199,14 +199,14 @@ var dataCalcFunction = (data) => {
   let validtrials = data.filterCustom(function (trial) {
     return trial.resp !== null;
   });
-  let targets = validtrials.filter({ condition: 'target' });
-  let lures = validtrials.filter({ condition: 'lure' });
-  let foils = validtrials.filter({ condition: 'foil' });
+  let targets = validtrials.filter({ condition: "target" });
+  let lures = validtrials.filter({ condition: "lure" });
+  let foils = validtrials.filter({ condition: "foil" });
 
-  console.log('validtrials: ' + validtrials.count());
-  console.log('targets: ' + targets.count());
-  console.log('lures: ' + lures.count());
-  console.log('foils: ' + foils.count());
+  console.log("validtrials: " + validtrials.count());
+  console.log("targets: " + targets.count());
+  console.log("lures: " + lures.count());
+  console.log("foils: " + foils.count());
 
   if (twochoice == 1) {
     let corr_targs = targets.filter({ correct: true });
@@ -242,9 +242,9 @@ var dataCalcFunction = (data) => {
       p_fa_foil = 1 - corr_foils.count() / foils.count();
     }
 
-    console.log(corr_targs.count() + ' ' + targets.count() + ' ' + p_hit);
-    console.log(corr_lures.count() + ' ' + lures.count() + ' ' + p_fa_lure);
-    console.log(corr_foils.count() + ' ' + foils.count() + ' ' + p_fa_foil);
+    console.log(corr_targs.count() + " " + targets.count() + " " + p_hit);
+    console.log(corr_lures.count() + " " + lures.count() + " " + p_fa_lure);
+    console.log(corr_foils.count() + " " + foils.count() + " " + p_fa_foil);
     console.log(invNormcdf(p_hit));
     console.log(invNormcdf(p_fa_lure));
     console.log(invNormcdf(p_fa_foil));
@@ -253,44 +253,44 @@ var dataCalcFunction = (data) => {
     let dpTL = invNormcdf(p_hit) - invNormcdf(p_fa_lure);
 
     retstr =
-      'HR, ' +
+      "HR, " +
       hits +
-      ', CR-L, ' +
+      ", CR-L, " +
       cr_lure +
-      ', CR-F rate, ' +
+      ", CR-F rate, " +
       cr_foil +
       ", d'T:F, " +
       dpTF.toFixed(3) +
       ", d'T:L, " +
       dpTL.toFixed(3);
 
-    console.log('retstr:' + retstr);
+    console.log("retstr:" + retstr);
 
     return retstr;
   } else {
     // OSN
-    let targ_old = targets.filter({ resp: 'o' });
-    let targ_sim = targets.filter({ resp: 's' });
-    let targ_new = targets.filter({ resp: 'n' });
-    let lure_old = lures.filter({ resp: 'o' });
-    let lure_sim = lures.filter({ resp: 's' });
-    let lure_new = lures.filter({ resp: 'n' });
-    let foil_old = foils.filter({ resp: 'o' });
-    let foil_sim = foils.filter({ resp: 's' });
-    let foil_new = foils.filter({ resp: 'n' });
+    let targ_old = targets.filter({ resp: "o" });
+    let targ_sim = targets.filter({ resp: "s" });
+    let targ_new = targets.filter({ resp: "n" });
+    let lure_old = lures.filter({ resp: "o" });
+    let lure_sim = lures.filter({ resp: "s" });
+    let lure_new = lures.filter({ resp: "n" });
+    let foil_old = foils.filter({ resp: "o" });
+    let foil_sim = foils.filter({ resp: "s" });
+    let foil_new = foils.filter({ resp: "n" });
 
     let rec = targ_old.count() / targets.count() - foil_old.count() / foils.count();
     let ldi = lure_sim.count() / lures.count() - foil_sim.count() / foils.count();
     // removed var
-    retstr = 'Valid, ' + targets.count() + ', ' + lures.count() + ', ' + foils.count() + '\n';
-    retstr += 'Old, ' + targ_old.count() + ', ' + lure_old.count() + ', ' + foil_old.count() + '\n';
+    retstr = "Valid, " + targets.count() + ", " + lures.count() + ", " + foils.count() + "\n";
+    retstr += "Old, " + targ_old.count() + ", " + lure_old.count() + ", " + foil_old.count() + "\n";
     retstr +=
-      'Similar, ' + targ_sim.count() + ', ' + lure_sim.count() + ', ' + foil_sim.count() + '\n';
-    retstr += 'New, ' + targ_new.count() + ', ' + lure_new.count() + ', ' + foil_new.count() + '\n';
-    retstr += 'REC, ' + rec.toFixed(3) + ', LDI, ' + ldi.toFixed(3);
+      "Similar, " + targ_sim.count() + ", " + lure_sim.count() + ", " + foil_sim.count() + "\n";
+    retstr += "New, " + targ_new.count() + ", " + lure_new.count() + ", " + foil_new.count() + "\n";
+    retstr += "REC, " + rec.toFixed(3) + ", LDI, " + ldi.toFixed(3);
 
-    console.log('ldi: ' + ldi);
-    console.log('retstr: ' + retstr);
+    console.log("ldi: " + ldi);
+    console.log("retstr: " + retstr);
 
     return retstr;
   }

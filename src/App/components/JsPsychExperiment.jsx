@@ -31,12 +31,12 @@
 import { initJsPsych } from "jspsych";
 import React, { useEffect, useMemo, useRef } from "react";
 
-import { config } from "../config/main";
-import { initParticipant } from "../firebase";
-import { buildTimeline, jsPsychOptions } from "../timelines/main";
-import { dataCalcFunction } from "../trials/contOmst";
-import { pconDataCalcFunction } from "../trials/pcon_demos";
-import { getFormattedDate } from "../lib/utils";
+import { config } from "../../config/main";
+import { initParticipant } from "../deployments/firebase";
+import { buildTimeline, jsPsychOptions } from "../../timelines/main";
+import { dataCalcFunction } from "../../trials/contOmst";
+import { pconDataCalcFunction } from "../../trials/pcon_demos";
+import { getFormattedDate } from "../../lib/utils";
 import { include_pcon } from "./Login";
 
 //----------------------- 2 ----------------------

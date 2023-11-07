@@ -28,7 +28,7 @@
 
 import { defaultBlockSettings } from './main';
 import { deepCopy } from '../lib/utils';
-import { twochoice } from '../components/Login';
+import { twochoice } from '../App/components/Login';
 // image objects that allow image path of each set (based on stim_set)
 import {
   set1Images,

@@ -47,17 +47,17 @@ import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
-import { deepCopy } from "../lib/utils";
+import { deepCopy } from "../../lib/utils";
 
-import { writeOrderfile, loadOrderfile } from "../config/cont";
-import { loadExptBlock1 } from "../config/experiment";
-import { defaultBlockSettings } from "../config/main";
+import { writeOrderfile, loadOrderfile } from "../../config/cont";
+import { loadExptBlock1 } from "../../config/experiment";
+import { defaultBlockSettings } from "../../config/main";
 
-import { refresh_pcon_trials } from "../trials/pcon_demos";
-import { refresh_instr_trials } from "../trials/instructions";
-import { refresh_cont_trials } from "../trials/contOmst";
+import { refresh_pcon_trials } from "../../trials/pcon_demos";
+import { refresh_instr_trials } from "../../trials/instructions";
+import { refresh_cont_trials } from "../../trials/contOmst";
 
-import { getFormattedDate } from "../lib/utils";
+import { getFormattedDate } from "../../lib/utils";
 
 //----------------------- 2 ----------------------
 //------------------- VARIABLES ------------------
@@ -163,15 +163,15 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
 
     // [lang='']: Which language file? (default = English)
     if (chooseLang == "Spanish") {
-      lang = require("../language/omst_es.json");
+      lang = require("../../language/omst_es.json");
     } else if (chooseLang == "Korean") {
-      lang = require("../language/omst_kr.json");
+      lang = require("../../language/omst_kr.json");
     } else if (chooseLang == "Chinese") {
-      lang = require("../language/omst_cn.json");
+      lang = require("../../language/omst_cn.json");
     } else if (chooseLang == "Russian") {
-      lang = require("../language/omst_ru.json");
+      lang = require("../../language/omst_ru.json");
     } else {
-      lang = require("../language/omst_en.json");
+      lang = require("../../language/omst_en.json");
     }
 
     language = chooseLang;
