@@ -1,14 +1,14 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/firestore';
+import firebase from "firebase/compat/app";
+import "firebase/compat/firestore";
 
-// TODO: Upgrade to modular SDK instead of compat
+// TODO 183: Upgrade to modular SDK instead of compat
 
 // Initialize Firebase and Firestore
 firebase.initializeApp({
   apiKey: process.env.REACT_APP_apiKey,
   authDomain: process.env.REACT_APP_authDomain,
   databaseURL: process.env.REACT_APP_databaseURL,
-  projectId: process.env.REACT_APP_projectId || 'no-firebase',
+  projectId: process.env.REACT_APP_projectId || "no-firebase",
   storageBucket: process.env.REACT_APP_storageBucket,
   messagingSenderId: process.env.REACT_APP_messagingSenderId,
   appId: process.env.REACT_APP_appId,
@@ -17,7 +17,7 @@ const db = firebase.firestore();
 
 // Use emulator if on localhost
 // TODO 173: Refactor to use NODE_ENV
-if (window.location.hostname === 'localhost') db.useEmulator('localhost', 8080);
+if (window.location.hostname === "localhost") db.useEmulator("localhost", 8080);
 
 // Get a reference to the Firebase document at
 // "/participant_responses/{studyID}/participants/{participantID}"
@@ -35,14 +35,13 @@ const getExperimentRef = (studyID, participantID, startDate) =>
  * @param {string} participantID The ID of a given participant inside the studyID
  * @returns true if the given studyID & participantID combo is in Firebase, false otherwise
  */
-// TODO 174: Reverse participantID and studyID order
-async function validateParticipant(participantID, studyID) {
+async function validateParticipant(studyID, participantID) {
   try {
     // .get() will fail on an invalid path
     await getParticipantRef(studyID, participantID).get();
     return true;
   } catch (error) {
-    console.error('Unable to validate the experiment:\n', error);
+    console.error("Unable to validate the experiment:\n", error);
     return false;
   }
 }
@@ -55,8 +54,7 @@ async function validateParticipant(participantID, studyID) {
  * @param {string} startDate The ID of a given participant inside the studyID and participantID
  * @returns true if able to initialize the new experiment, false otherwise
  */
-// TODO 174: Reverse participantID and studyID order
-async function initParticipant(participantID, studyID, startDate) {
+async function initParticipant(studyID, participantID, startDate) {
   try {
     const experiment = getExperimentRef(studyID, participantID, startDate);
     await experiment.set({
@@ -66,10 +64,10 @@ async function initParticipant(participantID, studyID, startDate) {
       app_platform: window.navigator.platform,
       // TODO 175: Store participantID and studyID here, not on each trial
     });
-    console.log('Initialized experiment:', studyID, participantID, startDate);
+    console.log("Initialized experiment:", studyID, participantID, startDate);
     return true;
   } catch (error) {
-    console.error('Unable to initialize the experiment:\n', error);
+    console.error("Unable to initialize the experiment:\n", error);
     return false;
   }
 }
@@ -86,9 +84,9 @@ async function addToFirebase(data) {
 
   try {
     const experiment = getExperimentRef(studyID, participantID, startDate);
-    await experiment.collection('trials').add(data);
+    await experiment.collection("trials").add(data);
   } catch (error) {
-    console.error('Unable to add trial:\n', error);
+    console.error("Unable to add trial:\n", error);
   }
 }
 
