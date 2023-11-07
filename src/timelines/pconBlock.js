@@ -11,17 +11,17 @@
 //
 //   --------------------
 //   This file loops through pconTrial (/timelines/pconTrial.js) using
-//   the conditions (pconBlock1 from /config/pcon_config.js) passed into 
-//   it in /timelines/main.js. 
+//   the conditions (pconBlock1 from /config/pcon_config.js) passed into
+//   it in /timelines/main.js.
 //
 //*******************************************************************
 
 //----------------------- 1 ----------------------
 //-------------------- IMPORTS -------------------
 
-import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-import pconTrial from './pconTrial';
-import { generateStartingOpts } from '../lib/taskUtils';
+import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import pconTrial from "./pconTrial";
+import { generateStartingOpts } from "../lib/taskUtils";
 
 //----------------------- 2 ----------------------
 //-------------------- TIMELINE ------------------
@@ -43,7 +43,7 @@ const pconBlock = (blockSettings) => {
 
   const blockStart = {
     type: htmlKeyboardResponse,
-    stimulus: '',
+    stimulus: "",
     trial_duration: 1,
     on_finish: (data) => {
       data.block_settings = blockSettings;
