@@ -1,6 +1,6 @@
 // utilities specific to this app/task
 
-import _ from 'lodash';
+import _ from "lodash";
 
 // initialize starting conditions for each trial within a block
 const generateStartingOpts = (blockSettings) => {
@@ -9,7 +9,7 @@ const generateStartingOpts = (blockSettings) => {
     return _.range(blockSettings.repeats_per_condition).map(() => c);
   });
 
-  return /*_.shuffle*/ _.flatten(startingOptions); // 6/28/23 (AGH): removed shuffle so images appear in order
+  return _.shuffle(_.flatten(startingOptions));
 };
 
 export { generateStartingOpts };

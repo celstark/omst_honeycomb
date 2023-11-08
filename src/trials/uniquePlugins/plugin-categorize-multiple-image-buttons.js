@@ -1,68 +1,68 @@
-import { ParameterType } from 'jspsych';
+import { ParameterType } from "jspsych";
 
 const info = {
-  name: 'categorize-multiple-image-buttons',
+  name: "categorize-multiple-image-buttons",
   parameters: {
     /** The image content to be displayed. */
     stimulus: {
       type: ParameterType.IMAGE,
-      pretty_name: 'Stimulus',
+      pretty_name: "Stimulus",
       default: undefined,
     },
     /** The second image content to be displayed. */
     stimulus2: {
       type: ParameterType.IMAGE,
-      pretty_name: 'Stimulus',
+      pretty_name: "Stimulus",
       default: undefined,
     },
     /** The button to indicate the correct response. */
     button_answer: {
       type: ParameterType.INT,
-      pretty_name: 'Button answer',
+      pretty_name: "Button answer",
       default: undefined,
     },
     /** Array containing the button labels the subject is allowed to press to respond to the stimulus. */
     choices: {
       type: ParameterType.STRING,
-      pretty_name: 'Choices',
+      pretty_name: "Choices",
       default: undefined,
       array: true,
     },
     /** Label that is associated with the correct answer. */
     text_answer: {
       type: ParameterType.HTML_STRING,
-      pretty_name: 'Text answer',
+      pretty_name: "Text answer",
       default: null,
     },
     /** String to show when correct answer is given. */
     correct_text: {
       type: ParameterType.HTML_STRING,
-      pretty_name: 'Correct text',
+      pretty_name: "Correct text",
       default: "<p class='feedback'>Correct</p>",
     },
     /** String to show when incorrect answer is given. */
     incorrect_text: {
       type: ParameterType.HTML_STRING,
-      pretty_name: 'Incorrect text',
+      pretty_name: "Incorrect text",
       default: "<p class='feedback'>Wrong</p>",
     },
     /** The HTML for creating button. Can create own style. Use the "%choice%" string to indicate where the label from the choices parameter should be inserted. */
     button_html: {
       type: ParameterType.HTML_STRING,
-      pretty_name: 'Button HTML',
+      pretty_name: "Button HTML",
       default: '<button class="jspsych-btn">%choice%</button>',
       array: true,
     },
     /** Any content here will be displayed below the stimulus. */
     prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: 'Prompt',
+      pretty_name: "Prompt",
       default: null,
     },
     /** If set to true, then the subject must press the correct response key after feedback in order to advance to next trial. */
     force_correct_button_press: {
       type: ParameterType.BOOL,
-      pretty_name: 'Force correct button press',
+      pretty_name: "Force correct button press",
       default: false,
     },
     /** Whether or not the stimulus should be shown on the feedback screen. */
@@ -74,44 +74,44 @@ const info = {
     /** If true, stimulus will be shown during feedback. If false, only the text feedback will be displayed during feedback. */
     show_feedback_on_timeout: {
       type: ParameterType.BOOL,
-      pretty_name: 'Show feedback on timeout',
+      pretty_name: "Show feedback on timeout",
       default: false,
     },
     /** The message displayed on a timeout non-response. */
     timeout_message: {
       type: ParameterType.HTML_STRING,
-      pretty_name: 'Timeout message',
-      default: '<p>Please respond faster.</p>',
+      pretty_name: "Timeout message",
+      default: "<p>Please respond faster.</p>",
     },
     /** How long to show the stimulus. */
     stimulus_duration: {
       type: ParameterType.INT,
-      pretty_name: 'Stimulus duration',
+      pretty_name: "Stimulus duration",
       default: null,
     },
     /** How long to show the trial. */
     trial_duration: {
       type: ParameterType.INT,
-      pretty_name: 'Trial duration',
+      pretty_name: "Trial duration",
       default: null,
     },
     /** How long to show the feedback. */
     feedback_duration: {
       type: ParameterType.INT,
-      pretty_name: 'Feedback duration',
+      pretty_name: "Feedback duration",
       default: 2000,
     },
     /** The vertical margin of the button. */
     margin_vertical: {
       type: ParameterType.STRING,
-      pretty_name: 'Margin vertical',
-      default: '0px',
+      pretty_name: "Margin vertical",
+      default: "0px",
     },
     /** The horizontal margin of the button. */
     margin_horizontal: {
       type: ParameterType.STRING,
-      pretty_name: 'Margin horizontal',
-      default: '8px',
+      pretty_name: "Margin horizontal",
+      default: "8px",
     },
   },
 };
@@ -138,8 +138,8 @@ class CategorizeMultipleImageButtonsPlugin {
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(() => {
         display_element.querySelector(
-          '#jspsych-categorize-multiple-image-buttons-stimulus'
-        ).style.visibility = 'hidden';
+          "#jspsych-categorize-multiple-image-buttons-stimulus"
+        ).style.visibility = "hidden";
       }, trial.stimulus_duration);
     }
     var buttons = [];
@@ -148,7 +148,7 @@ class CategorizeMultipleImageButtonsPlugin {
         buttons = trial.button_html;
       } else {
         console.error(
-          'Error in categorize-multiple-image-buttons-response plugin. The length of the button_html array does not equal the length of the choices array'
+          "Error in categorize-multiple-image-buttons-response plugin. The length of the button_html array does not equal the length of the choices array"
         );
       }
     } else {
@@ -162,7 +162,7 @@ class CategorizeMultipleImageButtonsPlugin {
       html +=
         '<div class="jspsych-categorize-multiple-image-buttons-response-button" style="display: inline-block; margin:' +
         trial.margin_vertical +
-        ' ' +
+        " " +
         trial.margin_horizontal +
         '" id="jspsych-categorize-multiple-image-buttons-response-button-' +
         j +
@@ -170,9 +170,9 @@ class CategorizeMultipleImageButtonsPlugin {
         j +
         '">' +
         str +
-        '</div>';
+        "</div>";
     }
-    html += '</div>';
+    html += "</div>";
     display_element.innerHTML = html;
 
     // if prompt is set, show prompt
@@ -184,10 +184,10 @@ class CategorizeMultipleImageButtonsPlugin {
     var start_time = performance.now();
     for (var k = 0; k < trial.choices.length; k++) {
       display_element
-        .querySelector('#jspsych-categorize-multiple-image-buttons-response-button-' + k)
-        .addEventListener('click', (e) => {
+        .querySelector("#jspsych-categorize-multiple-image-buttons-response-button-" + k)
+        .addEventListener("click", (e) => {
           var btn_el = e.currentTarget;
-          var choice = btn_el.getAttribute('data-choice'); // don't use dataset for jsdom compatibility
+          var choice = btn_el.getAttribute("data-choice"); // don't use dataset for jsdom compatibility
           after_response(choice);
         });
     }
@@ -208,7 +208,7 @@ class CategorizeMultipleImageButtonsPlugin {
       //    response: response.button,
       //};
       // clear the display
-      display_element.innerHTML = '';
+      display_element.innerHTML = "";
       // move on to the next trial
       //console.log('et1');
       this.jsPsych.finishTrial(trial_data);
@@ -235,12 +235,12 @@ class CategorizeMultipleImageButtonsPlugin {
       //    " responded";
       // disable all the buttons after a response
       var btns = document.querySelectorAll(
-        '.jspsych-categorize-multiple-image-buttons-response-button button'
+        ".jspsych-categorize-multiple-image-buttons-response-button button"
       );
       for (var l = 0; l < btns.length; l++) {
         //console.log('ar - disabling button '+i);
         //btns[i].removeEventListener('click');
-        btns[l].setAttribute('disabled', 'disabled');
+        btns[l].setAttribute("disabled", "disabled");
       }
       //if (trial.response_ends_trial) {
       //    end_trial();
@@ -256,7 +256,7 @@ class CategorizeMultipleImageButtonsPlugin {
         stimulus: trial.stimulus,
         response: response.button,
       };
-      display_element.innerHTML = '';
+      display_element.innerHTML = "";
       var timeout = choice == null;
       //console.log('after_response - correct:' + trial_data.correct + " rt: "+ trial_data.rt + " response: " + trial_data.response + " timeout:" + timeout);
       doFeedback(correct, timeout);
@@ -266,8 +266,8 @@ class CategorizeMultipleImageButtonsPlugin {
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(() => {
         display_element.querySelector(
-          '#jspsych-categorize-multiple-image-buttons-response-stimulus'
-        ).style.visibility = 'hidden';
+          "#jspsych-categorize-multiple-image-buttons-response-stimulus"
+        ).style.visibility = "hidden";
       }, trial.stimulus_duration);
     }
     // end trial if time limit is set
@@ -277,14 +277,14 @@ class CategorizeMultipleImageButtonsPlugin {
       }, trial.trial_duration);
     } else if (trial.response_ends_trial === false) {
       console.warn(
-        'The experiment may be deadlocked. Try setting a trial duration or set response_ends_trial to true.'
+        "The experiment may be deadlocked. Try setting a trial duration or set response_ends_trial to true."
       );
     }
 
     const doFeedback = (correct, timeout) => {
       //console.log('dFB0 ',correct,timeout,trial.show_feedback_on_timeout);
       // substitute answer in feedback string.
-      var atext = '';
+      var atext = "";
       if (timeout && !trial.show_feedback_on_timeout) {
         //console.log('dFB1');
         display_element.innerHTML += trial.timeout_message;
@@ -301,9 +301,9 @@ class CategorizeMultipleImageButtonsPlugin {
         }
 
         if (correct) {
-          atext = trial.correct_text.replace('%ANS%', trial.text_answer);
+          atext = trial.correct_text.replace("%ANS%", trial.text_answer);
         } else {
-          atext = trial.incorrect_text.replace('%ANS%', trial.text_answer);
+          atext = trial.incorrect_text.replace("%ANS%", trial.text_answer);
         }
       }
 
@@ -324,7 +324,7 @@ class CategorizeMultipleImageButtonsPlugin {
         display_element.innerHTML +=
           '<div class="jspsych-categorize-multiple-image-buttons-response-button" style="display: inline-block; margin:' +
           trial.margin_vertical +
-          ' ' +
+          " " +
           trial.margin_horizontal +
           '" id="jspsych-categorize-multiple-image-buttons-response-button-' +
           n +
@@ -332,7 +332,7 @@ class CategorizeMultipleImageButtonsPlugin {
           n +
           '">' +
           str +
-          '</div>';
+          "</div>";
       }
       // show the feedback
       display_element.innerHTML += atext;
@@ -346,10 +346,10 @@ class CategorizeMultipleImageButtonsPlugin {
         // Add our listener to force the correct answer
         display_element
           .querySelector(
-            '#jspsych-categorize-multiple-image-buttons-response-button-' + trial.button_answer
+            "#jspsych-categorize-multiple-image-buttons-response-button-" + trial.button_answer
           )
           /*eslint no-unused-vars: ["error", { "args": "none" }]*/
-          .addEventListener('click', function (e) {
+          .addEventListener("click", function (e) {
             end_trial();
           });
       } else {

@@ -43,32 +43,32 @@
 //----------------------- 1 ----------------------
 //-------------------- IMPORTS -------------------
 
-import React, { useState, useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import React, { useState, useEffect } from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
-import { deepCopy } from '../lib/utils';
+import { deepCopy } from "../../lib/utils";
 
-import { writeOrderfile, loadOrderfile } from '../config/cont';
-import { loadExptBlock1 } from '../config/experiment';
-import { defaultBlockSettings } from '../config/main';
+import { writeOrderfile, loadOrderfile } from "../../config/cont";
+import { loadExptBlock1 } from "../../config/experiment";
+import { defaultBlockSettings } from "../../config/main";
 
-import { refresh_pcon_trials } from '../trials/pcon_demos';
-import { refresh_instr_trials } from '../trials/instructions';
-import { refresh_cont_trials } from '../trials/contOmst';
+import { refresh_pcon_trials } from "../../trials/pcon_demos";
+import { refresh_instr_trials } from "../../trials/instructions";
+import { refresh_cont_trials } from "../../trials/contOmst";
 
-import { getFormattedDate } from '../lib/utils';
+import { getFormattedDate } from "../../lib/utils";
 
 //----------------------- 2 ----------------------
 //------------------- VARIABLES ------------------
 
 var start_date;
-var stim_set = '1';
-var sublist = '1';
+var stim_set = "1";
+var sublist = "1";
 var twochoice;
 var selfpaced;
-var orderfile = './jsOrders/cMST_Imbal2_orders_1_1_1';
-var resp_mode = 'button';
+var orderfile = "./jsOrders/cMST_Imbal2_orders_1_1_1";
+var resp_mode = "button";
 var lang;
 var language;
 var include_consent;
@@ -94,10 +94,10 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
   const [studyId, setStudy] = useState(initialStudyID);
   const [isError, setIsError] = useState(false);
 
-  const [chooseStimset, setStimset] = useState('1');
-  const [chooseSublist, setSublist] = useState('1');
-  const [chooseRespmode, setRespmode] = useState('button');
-  const [chooseLang, setLang] = useState('English');
+  const [chooseStimset, setStimset] = useState("1");
+  const [chooseSublist, setSublist] = useState("1");
+  const [chooseRespmode, setRespmode] = useState("button");
+  const [chooseLang, setLang] = useState("English");
   const [chooseTwochoice, setTwochoice] = useState(false);
   const [chooseSelfpaced, setSelfpaced] = useState(false);
   const [includeConsent, setConsent] = useState(false);
@@ -123,16 +123,16 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     const storedInstr = localStorage.getItem(`${studyId}_instr`);
 
     // Set the stored options as the initial state if available
-    setStimset(storedStimset || '1');
-    setSublist(storedSublist || '1');
-    setRespmode(storedRespmode || 'button');
-    setLang(storedLang || 'English');
-    setTwochoice(storedTwochoice == 'true');
-    setSelfpaced(storedSelfpaced == 'true');
-    setConsent(storedConsent == 'true');
-    setDemog(storedDemog == 'true');
-    setPcon(storedPcon == 'true');
-    setInstr(storedInstr == 'true');
+    setStimset(storedStimset || "1");
+    setSublist(storedSublist || "1");
+    setRespmode(storedRespmode || "button");
+    setLang(storedLang || "English");
+    setTwochoice(storedTwochoice == "true");
+    setSelfpaced(storedSelfpaced == "true");
+    setConsent(storedConsent == "true");
+    setDemog(storedDemog == "true");
+    setPcon(storedPcon == "true");
+    setInstr(storedInstr == "true");
   }, [studyId]); // Only run this effect when studyId change
 
   // Function to log in participant
@@ -151,31 +151,31 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
 
     // [set=#]: Stimulus set -- 1-6 (1=default) -- used in loading the order file
     stim_set = chooseStimset;
-    console.log('stimset = ' + chooseStimset);
+    console.log("stimset = " + chooseStimset);
 
     // [run=#]: Which particular run? (1-3, 1=default) -- controls which actual stimuli in that set are plugged into the order
     sublist = chooseSublist;
-    console.log('sublist = ' + chooseSublist);
+    console.log("sublist = " + chooseSublist);
 
     // [resp_mode='']: Respond with buttons or keyboard? (default = button)
     resp_mode = chooseRespmode;
-    console.log('respmode = ' + chooseRespmode);
+    console.log("respmode = " + chooseRespmode);
 
     // [lang='']: Which language file? (default = English)
-    if (chooseLang == 'Spanish') {
-      lang = require('../language/omst_es.json');
-    } else if (chooseLang == 'Korean') {
-      lang = require('../language/omst_kr.json');
-    } else if (chooseLang == 'Chinese') {
-      lang = require('../language/omst_cn.json');
-    } else if (chooseLang == 'Russian') {
-      lang = require('../language/omst_ru.json');
+    if (chooseLang == "Spanish") {
+      lang = require("../../language/omst_es.json");
+    } else if (chooseLang == "Korean") {
+      lang = require("../../language/omst_kr.json");
+    } else if (chooseLang == "Chinese") {
+      lang = require("../../language/omst_cn.json");
+    } else if (chooseLang == "Russian") {
+      lang = require("../../language/omst_ru.json");
     } else {
-      lang = require('../language/omst_en.json');
+      lang = require("../../language/omst_en.json");
     }
 
     language = chooseLang;
-    console.log('language = ' + chooseLang);
+    console.log("language = " + chooseLang);
 
     // [twochoice=#]: 0=OSN, 1=ON response choices (0=default)
     if (chooseTwochoice === true) {
@@ -183,7 +183,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     } else {
       twochoice = 0;
     }
-    console.log('twochoice =' + twochoice);
+    console.log("twochoice =" + twochoice);
 
     // [selfpaced=#]: Should we allow infinite time with blank screen to make the response? (default =1)
     if (chooseSelfpaced === true) {
@@ -191,19 +191,19 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     } else {
       selfpaced = 0;
     }
-    console.log('selfpaced =' + selfpaced);
+    console.log("selfpaced =" + selfpaced);
 
     include_consent = includeConsent;
-    console.log('include consent =' + includeConsent);
+    console.log("include consent =" + includeConsent);
 
     include_demog = includeDemog;
-    console.log('include demog =' + includeDemog);
+    console.log("include demog =" + includeDemog);
 
     include_pcon = includePcon;
-    console.log('include pcon =' + includePcon);
+    console.log("include pcon =" + includePcon);
 
     include_instr = includeInstr;
-    console.log('include instr =' + includeInstr);
+    console.log("include instr =" + includeInstr);
 
     // load trial stim from jsOrders file
     // both writeOrderfile and loadOrderfil defined in /config/cont.js
@@ -215,7 +215,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     exptBlock1 = loadExptBlock1(trial_stim, stim_set);
 
     // refresh trails based on Login options
-    console.log('refreshing trials');
+    console.log("refreshing trials");
     refresh_instr_trials();
     refresh_cont_trials();
     refresh_pcon_trials();
@@ -249,22 +249,22 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
 
     // record login_data at first included trial
     if (!include_consent) {
-      console.log('login data at demog');
+      console.log("login data at demog");
       demog_login_data = login_data;
       if (!include_demog) {
-        console.log('overwrite: login data at pcon');
+        console.log("overwrite: login data at pcon");
         pcon_login_data = login_data;
         if (!include_pcon) {
-          console.log('overwrite: login data at instr');
+          console.log("overwrite: login data at instr");
           instr_login_data = login_data;
           if (!include_instr) {
-            console.log('overwrite: login data at cont');
+            console.log("overwrite: login data at cont");
             cont_login_data = login_data;
           }
         }
       }
     } else {
-      console.log('login data at consent');
+      console.log("login data at consent");
       consent_login_data = login_data;
     }
   }
@@ -281,147 +281,147 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     if (showExperimenterView) {
       return (
         // show all options
-        <div className='centered-h-v'>
-          <div className='login-form'>
-            <Form className='centered-h-v' onSubmit={handleSubmit}>
-              <Form.Group className='login' size='lg' controlId='participantId'>
+        <div className="centered-h-v">
+          <div className="login-form">
+            <Form className="centered-h-v" onSubmit={handleSubmit}>
+              <Form.Group className="login" size="lg" controlId="participantId">
                 <Form.Label>Participant ID</Form.Label>
                 <Form.Control
                   autoFocus
-                  type='participantId'
+                  type="participantId"
                   value={participantId}
                   onChange={(e) => setParticipant(e.target.value)}
                 />
               </Form.Group>
-              <Form.Group className='login' size='lg' controlId='studyId'>
+              <Form.Group className="login" size="lg" controlId="studyId">
                 <Form.Label>Study ID</Form.Label>
                 <Form.Control
-                  type='studyId'
+                  type="studyId"
                   value={studyId}
                   onChange={(e) => setStudy(e.target.value)}
                 />
               </Form.Group>
 
-              <div className='num-options-container'>
-                <div className='num-options'>
-                  <Form.Group controlId='stim_set'>
+              <div className="num-options-container">
+                <div className="num-options">
+                  <Form.Group controlId="stim_set">
                     <Form.Label>Stimulus set:</Form.Label>
                     <Form.Control
-                      as='select'
+                      as="select"
                       value={chooseStimset}
                       onChange={(e) => setStimset(e.target.value)}
                     >
-                      <option value='1'>1</option>
-                      <option value='2'>2</option>
-                      <option value='3'>3</option>
-                      <option value='4'>4</option>
-                      <option value='5'>5</option>
-                      <option value='6'>6</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
                     </Form.Control>
                   </Form.Group>
-                  <Form.Group controlId='sublist'>
+                  <Form.Group controlId="sublist">
                     <Form.Label>Sublist:</Form.Label>
                     <Form.Control
-                      as='select'
+                      as="select"
                       value={chooseSublist}
                       onChange={(e) => setSublist(e.target.value)}
                     >
-                      <option value='1'>1</option>
-                      <option value='2'>2</option>
-                      <option value='3'>3</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
                     </Form.Control>
                   </Form.Group>
                 </div>
 
-                <div className='response-options-container'>
-                  <div className='response-options'>
-                    <Form.Group controlId='respmode'>
+                <div className="response-options-container">
+                  <div className="response-options">
+                    <Form.Group controlId="respmode">
                       <Form.Label>Response mode:</Form.Label>
                       <Form.Control
-                        as='select'
+                        as="select"
                         value={chooseRespmode}
                         onChange={(e) => setRespmode(e.target.value)}
                       >
-                        <option value='button'>Buttons</option>
-                        <option value='keyboard'>Keyboard</option>
+                        <option value="button">Buttons</option>
+                        <option value="keyboard">Keyboard</option>
                       </Form.Control>
                     </Form.Group>
                   </div>
-                  <div className='response-options'>
-                    <Form.Group controlId='lang'>
+                  <div className="response-options">
+                    <Form.Group controlId="lang">
                       <Form.Label>Language:</Form.Label>
                       <Form.Control
-                        as='select'
+                        as="select"
                         value={chooseLang}
                         onChange={(e) => setLang(e.target.value)}
                       >
-                        <option value='English'>English</option>
-                        <option value='Spanish'>Español</option>
-                        <option value='Korean'>한국인</option>
-                        <option value='Chinese'>中文</option>
-                        <option value='Russian'>Pyccкий</option>
+                        <option value="English">English</option>
+                        <option value="Spanish">Español</option>
+                        <option value="Korean">한국인</option>
+                        <option value="Chinese">中文</option>
+                        <option value="Russian">Pyccкий</option>
                       </Form.Control>
                     </Form.Group>
                   </div>
                 </div>
               </div>
 
-              <div className='checkboxes-container'>
-                <div className='checkbox-option'>
-                  <Form.Group controlId='consent'>
+              <div className="checkboxes-container">
+                <div className="checkbox-option">
+                  <Form.Group controlId="consent">
                     <Form.Check
-                      type='checkbox'
-                      label='Consent'
+                      type="checkbox"
+                      label="Consent"
                       checked={includeConsent}
                       onChange={(e) => setConsent(e.target.checked)}
                     />
                   </Form.Group>
                 </div>
-                <div className='checkbox-option'>
-                  <Form.Group controlId='demog'>
+                <div className="checkbox-option">
+                  <Form.Group controlId="demog">
                     <Form.Check
-                      type='checkbox'
-                      label='Demographics'
+                      type="checkbox"
+                      label="Demographics"
                       checked={includeDemog}
                       onChange={(e) => setDemog(e.target.checked)}
                     />
                   </Form.Group>
                 </div>
-                <div className='checkbox-option'>
-                  <Form.Group controlId='pcon'>
+                <div className="checkbox-option">
+                  <Form.Group controlId="pcon">
                     <Form.Check
-                      type='checkbox'
-                      label='Perceptual Control'
+                      type="checkbox"
+                      label="Perceptual Control"
                       checked={includePcon}
                       onChange={(e) => setPcon(e.target.checked)}
                     />
                   </Form.Group>
                 </div>
-                <div className='checkbox-option'>
-                  <Form.Group controlId='instr'>
+                <div className="checkbox-option">
+                  <Form.Group controlId="instr">
                     <Form.Check
-                      type='checkbox'
-                      label='Instructions'
+                      type="checkbox"
+                      label="Instructions"
                       checked={includeInstr}
                       onChange={(e) => setInstr(e.target.checked)}
                     />
                   </Form.Group>
                 </div>
-                <div className='checkbox-option'>
-                  <Form.Group controlId='twochoice'>
+                <div className="checkbox-option">
+                  <Form.Group controlId="twochoice">
                     <Form.Check
-                      type='checkbox'
-                      label='Two Choice'
+                      type="checkbox"
+                      label="Two Choice"
                       checked={chooseTwochoice}
                       onChange={(e) => setTwochoice(e.target.checked)}
                     />
                   </Form.Group>
                 </div>
-                <div className='checkbox-option'>
-                  <Form.Group controlId='selfpaced'>
+                <div className="checkbox-option">
+                  <Form.Group controlId="selfpaced">
                     <Form.Check
-                      type='checkbox'
-                      label='Self-paced'
+                      type="checkbox"
+                      label="Self-paced"
                       checked={chooseSelfpaced}
                       onChange={(e) => setSelfpaced(e.target.checked)}
                     />
@@ -430,10 +430,10 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
               </div>
 
               <Button
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 block
-                size='lg'
-                type='submit'
+                size="lg"
+                type="submit"
                 disabled={participantId.length === 0 || studyId.length === 0}
                 onClick={checkConfigOptions}
               >
@@ -441,7 +441,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
               </Button>
             </Form>
             {isError ? (
-              <div className='alert alert-danger' role='alert'>
+              <div className="alert alert-danger" role="alert">
                 No matching experiment found for this participant and study
               </div>
             ) : null}
@@ -450,31 +450,31 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
       );
     } else {
       return (
-        <div className='centered-h-v'>
-          <div className='login-form'>
-            <Form className='centered-h-v' onSubmit={handleSubmit}>
-              <Form.Group className='login' size='lg' controlId='participantId'>
+        <div className="centered-h-v">
+          <div className="login-form">
+            <Form className="centered-h-v" onSubmit={handleSubmit}>
+              <Form.Group className="login" size="lg" controlId="participantId">
                 <Form.Label>Participant ID</Form.Label>
                 <Form.Control
                   autoFocus
-                  type='participantId'
+                  type="participantId"
                   value={participantId}
                   onChange={(e) => setParticipant(e.target.value)}
                 />
               </Form.Group>
-              <Form.Group className='login' size='lg' controlId='studyId'>
+              <Form.Group className="login" size="lg" controlId="studyId">
                 <Form.Label>Study ID</Form.Label>
                 <Form.Control
-                  type='studyId'
+                  type="studyId"
                   value={studyId}
                   onChange={(e) => setStudy(e.target.value)}
                 />
               </Form.Group>
               <Button
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 block
-                size='lg'
-                type='submit'
+                size="lg"
+                type="submit"
                 disabled={participantId.length === 0 || studyId.length === 0}
                 onClick={checkConfigOptions}
               >
@@ -482,7 +482,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
               </Button>
             </Form>
             {isError ? (
-              <div className='alert alert-danger' role='alert'>
+              <div className="alert alert-danger" role="alert">
                 No matching experiment found for this participant and study
               </div>
             ) : null}
@@ -493,10 +493,10 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
   };
 
   return (
-    <div className='centered-h-v'>
+    <div className="centered-h-v">
       {/* Toggle button to switch between experimenter and participant views */}
-      <Button className='toggle-button' onClick={toggleExperimenterView}>
-        {showExperimenterView ? 'Switch to Participant View' : 'Switch to Experimenter View'}
+      <Button className="toggle-button" onClick={toggleExperimenterView}>
+        {showExperimenterView ? "Switch to Participant View" : "Switch to Experimenter View"}
       </Button>
       {/* Render the appropriate login form */}
       {renderLoginForm()}

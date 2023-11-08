@@ -19,8 +19,8 @@
 //----------------------- 1 ----------------------
 //-------------------- IMPORTS -------------------
 
-import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-import { lang } from '../components/Login';
+import jsPsychHtmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import { lang } from "../App/components/Login";
 
 //----------------------- 2 ----------------------
 //--------------------- TRIAL --------------------
@@ -33,7 +33,7 @@ var end_message = {
   },
   trial_duration: 1000,
   response_ends_trial: true,
-  data: { task: 'end' }, // add task name to data collection
+  data: { task: "end" }, // add task name to data collection
 };
 
 //----------------------- 3 ----------------------

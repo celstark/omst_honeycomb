@@ -22,13 +22,13 @@
 //----------------------- 1 ----------------------
 //-------------------- IMPORTS -------------------
 
-import jsPsychImageKeyboardResponse from '@jspsych/plugin-image-keyboard-response';
-import jsPsychImageButtonResponse from '@jspsych/plugin-image-button-response';
+import jsPsychImageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
+import jsPsychImageButtonResponse from "@jspsych/plugin-image-button-response";
 
-import $ from 'jquery';
+import $ from "jquery";
 
 //import { resp_mode } from '../trials/selectRespType';
-import { lang, resp_mode } from '../components/Login';
+import { lang, resp_mode } from "../App/components/Login";
 
 //----------------------- 2 ----------------------
 //----------------- HELPER METHODS ---------------
@@ -36,15 +36,15 @@ import { lang, resp_mode } from '../components/Login';
 // and twochoice
 
 var trial_prompt = function () {
-  if (resp_mode == 'button') {
-    return '<p>' + lang.pcon.button.trial_txt + '</p>';
+  if (resp_mode == "button") {
+    return "<p>" + lang.pcon.button.trial_txt + "</p>";
   } else {
-    return '<p>' + lang.pcon.key.trial_txt + '</p>';
+    return "<p>" + lang.pcon.key.trial_txt + "</p>";
   }
 };
 
 var trial_choices = function () {
-  if (resp_mode == 'button') {
+  if (resp_mode == "button") {
     return [`${lang.pcon.button.trial_choices.same}`, `${lang.pcon.button.trial_choices.dif}`];
   } else {
     return [`${lang.pcon.key.trial_choices.same}`, `${lang.pcon.key.trial_choices.dif}`];
@@ -64,10 +64,10 @@ export function trialPcon(config, options) {
     responseType: jsPsychImageKeyboardResponse,
     stimulusHeight: 400,
     stimulusWidth: 400,
-    choices: 'NO_KEYS',
+    choices: "NO_KEYS",
     trialDuration: 2000,
     responseEndsTrial: false,
-    image: '', // image will be different for each
+    image: "", // image will be different for each
   };
   const {
     stimulusHeight,
@@ -86,10 +86,10 @@ export function trialPcon(config, options) {
     trial_duration: trialDuration,
     response_ends_trial: responseEndsTrial,
     on_load: () => {
-      $('#jspsych-image-keyboard-response-stimulus').addClass('image');
-      $('#jspsych-image-keyboard-response-stimulus').height(stimulusHeight);
-      $('#jspsych-image-keyboard-response-stimulus').width(stimulusWidth);
-      $('html').css('cursor', 'none');
+      $("#jspsych-image-keyboard-response-stimulus").addClass("image");
+      $("#jspsych-image-keyboard-response-stimulus").height(stimulusHeight);
+      $("#jspsych-image-keyboard-response-stimulus").width(stimulusWidth);
+      $("html").css("cursor", "none");
     },
   };
 }
@@ -110,9 +110,9 @@ export function keyPconTrial(config, options) {
     stimulusDuration: 2000,
     trialDuration: null,
     responseEndsTrial: true,
-    name: 'keyPcon',
-    image: '', // image and data will be different for each
-    data: '', // image and data will be different for each
+    name: "keyPcon",
+    image: "", // image and data will be different for each
+    data: "", // image and data will be different for each
   };
   const {
     stimulusHeight,
@@ -138,19 +138,19 @@ export function keyPconTrial(config, options) {
     response_ends_trial: responseEndsTrial,
     name: name,
     on_load: () => {
-      $('#jspsych-image-keyboard-response-stimulus').addClass('image');
-      $('#jspsych-image-keyboard-response-stimulus').height(stimulusHeight);
-      $('#jspsych-image-keyboard-response-stimulus').width(stimulusWidth);
-      $('html').css('cursor', 'none');
+      $("#jspsych-image-keyboard-response-stimulus").addClass("image");
+      $("#jspsych-image-keyboard-response-stimulus").height(stimulusHeight);
+      $("#jspsych-image-keyboard-response-stimulus").width(stimulusWidth);
+      $("html").css("cursor", "none");
     },
     on_finish: function (data) {
       // same = button 0 = 's'
       // different = button 1 = 'd'
       let resp = null;
-      if (data.response == 's') {
-        resp = 's';
-      } else if (data.response == 'd') {
-        resp = 'd';
+      if (data.response == "s") {
+        resp = "s";
+      } else if (data.response == "d") {
+        resp = "d";
       }
       //console.log(data.cresp, jsPsych.timelineVariable('cresp'))
       data.correct = resp == data.cresp;
@@ -173,9 +173,9 @@ export function buttonPconTrial(config, options) {
     stimulusDuration: 2000,
     trialDuration: null,
     responseEndsTrial: true,
-    name: 'buttonPcon',
-    image: '', // image and data will be different for each
-    data: '', // image and data will be different for each
+    name: "buttonPcon",
+    image: "", // image and data will be different for each
+    data: "", // image and data will be different for each
   };
   const {
     stimulusHeight,
@@ -201,19 +201,19 @@ export function buttonPconTrial(config, options) {
     response_ends_trial: responseEndsTrial,
     name: name,
     on_load: () => {
-      $('#jspsych-image-button-response-stimulus').addClass('image');
-      $('#jspsych-image-button-response-stimulus').height(stimulusHeight);
-      $('#jspsych-image-button-response-stimulus').width(stimulusWidth);
-      $('html').css('cursor', 'auto');
+      $("#jspsych-image-button-response-stimulus").addClass("image");
+      $("#jspsych-image-button-response-stimulus").height(stimulusHeight);
+      $("#jspsych-image-button-response-stimulus").width(stimulusWidth);
+      $("html").css("cursor", "auto");
     },
     on_finish: function (data) {
       // same = button 0 = 's'
       // different = button 1 = 'd'
       let resp = null;
       if (data.response == 0) {
-        resp = 's';
+        resp = "s";
       } else if (data.response == 1) {
-        resp = 'd';
+        resp = "d";
       }
       //console.log(data.cresp, jsPsych.timelineVariable('cresp'))
       data.correct = resp == data.cresp;

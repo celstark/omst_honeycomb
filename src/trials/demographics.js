@@ -21,8 +21,8 @@
 //----------------------- 1 ----------------------
 //-------------------- IMPORTS -------------------
 
-import { lang } from '../components/Login';
-import jsPsychSurveyHtmlForm from '@jspsych/plugin-survey-html-form';
+import { lang } from "../App/components/Login";
+import jsPsychSurveyHtmlForm from "@jspsych/plugin-survey-html-form";
 
 //----------------------- 2 ----------------------
 //--------------------- TRIAL --------------------
@@ -31,7 +31,7 @@ import jsPsychSurveyHtmlForm from '@jspsych/plugin-survey-html-form';
 var demogform = {
   type: jsPsychSurveyHtmlForm,
   preamble: function () {
-    return '<div id ="demogpramble">' + lang.demog.preamble + '</div>';
+    return '<div id ="demogpramble">' + lang.demog.preamble + "</div>";
   },
   html: function () {
     return (
@@ -50,8 +50,8 @@ var demogform = {
       '</label> \
          <br><input type="radio" id="female" name="gender" value="female" style="margin-left: 50px"  > <label for="female">' +
       lang.demog.gender.f +
-      '</label> \
-      <p> <b>' +
+      "</label> \
+      <p> <b>" +
       lang.demog.ethnicity.prompt +
       '</b>\
          <br><input type="radio" id="hispanic" name="ethnicity" value="hispanic" style="margin-left: 50px" required> <label for="hispanic">' +
@@ -59,8 +59,8 @@ var demogform = {
       '</label>  \
          <br><input type="radio" id="nonhispanic" name="ethnicity" value="nonhispanic" style="margin-left: 50px"> <label for="nonhispanic">' +
       lang.demog.ethnicity.nh +
-      '</label> \
-      <p> <b>' +
+      "</label> \
+      <p> <b>" +
       lang.demog.race.prompt +
       '</b>\
          <br><input type="radio" id="nativeamerican" name="race" value="nativeamerican" style="margin-left: 50px" required> <label for="nativeamerican">' +
@@ -80,12 +80,12 @@ var demogform = {
       '</label> \
          <br><input type="radio" id="more" name="race" value="more" style="margin-left: 50px"> <label for="more">' +
       lang.demog.race.m +
-      '</label> \
-      </div>'
+      "</label> \
+      </div>"
     );
   },
   // add task name to data collection
-  data: { task: 'demographics' },
+  data: { task: "demographics" },
 };
 
 //----------------------- 3 ----------------------

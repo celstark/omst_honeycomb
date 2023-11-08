@@ -12,35 +12,41 @@
 //   --------------------
 //   This file sets up an iteration of the pcon test timeline
 //   with the appropriate stimulus and data parameters for the variable
-//   elements. 
+//   elements.
 //
 //*******************************************************************
 
 //----------------------- 1 ----------------------
 //-------------------- IMPORTS -------------------
 
-import jsPsychImageKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-import jsPsychImageButtonResponse from '@jspsych/plugin-html-button-response';
-import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-import jsPsychAnimation from '@jspsych/plugin-animation';
+import jsPsychImageKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import jsPsychImageButtonResponse from "@jspsych/plugin-html-button-response";
+import jsPsychHtmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import jsPsychAnimation from "@jspsych/plugin-animation";
 
-import { config } from '../config/main';
-import { images } from '../lib/utils';
+import { config } from "../config/main";
+import { images } from "../lib/utils";
 
-import { lang, resp_mode } from '../components/Login';
+import { lang, resp_mode } from "../App/components/Login";
 
 // default settings for a pcon test trial
-import { trialPcon, keyPconTrial, buttonPconTrial } from '../trials/trialPcon';
+import { trialPcon, keyPconTrial, buttonPconTrial } from "../trials/trialPcon";
 
 //----------------------- 2 ----------------------
 //---------------- HELPER METHODS ----------------
 
 var wait = function () {
   return "<p>" + lang.pcon.wait;
-}
+};
 
 // noise animation sequence
-var noise_sequence = [images['noise_1.png'], images['noise_2.png'], images['noise_3.png'], images['noise_4.png'], images['noise_5.png']]; 
+var noise_sequence = [
+  images["noise_1.png"],
+  images["noise_2.png"],
+  images["noise_3.png"],
+  images["noise_4.png"],
+  images["noise_5.png"],
+];
 
 //----------------------- 3 ----------------------
 //-------------------- TIMELINE ------------------
@@ -51,17 +57,19 @@ var timeline = [];
 
 const pconTrial = (blockSettings, blockDetails, tlv) => {
   // if keyboard response, load stimulus and data specifications for keyboard trials into timeline
-  if (resp_mode == 'keyboard') {  
+  if (resp_mode == "keyboard") {
     timeline = [
       {
         type: jsPsychHtmlKeyboardResponse,
-        choices:  "NO_KEYS",
+        choices: "NO_KEYS",
         trial_duration: 500,
         response_ends_trial: false,
         stimulus: lang.pcon.ready,
       },
-      trialPcon(config, { 
-        image: function () { return tlv.img1; },
+      trialPcon(config, {
+        image: function () {
+          return tlv.img1;
+        },
       }),
       {
         type: jsPsychAnimation,
@@ -71,30 +79,34 @@ const pconTrial = (blockSettings, blockDetails, tlv) => {
         prompt: wait,
       },
       keyPconTrial(config, {
-        image: function () { return tlv.img2; },
+        image: function () {
+          return tlv.img2;
+        },
         data: function () {
           let cresp = tlv.cresp;
           //return with other data properties
           return {
             cresp,
-            task: 'pcon',
-          }
-        }
+            task: "pcon",
+          };
+        },
       }),
     ];
-  } 
+  }
   // if button response, load stimulus and data specifications for button trials into timeline
   else {
     timeline = [
       {
         type: jsPsychHtmlKeyboardResponse,
-        choices:  "NO_KEYS",
+        choices: "NO_KEYS",
         trial_duration: 500,
         response_ends_trial: false,
         stimulus: lang.pcon.ready,
       },
       trialPcon(config, {
-        image: function () { return tlv.img1; },
+        image: function () {
+          return tlv.img1;
+        },
       }),
       {
         type: jsPsychAnimation,
@@ -104,32 +116,34 @@ const pconTrial = (blockSettings, blockDetails, tlv) => {
         prompt: wait,
       },
       buttonPconTrial(config, {
-        image: function () { return tlv.img2; },
+        image: function () {
+          return tlv.img2;
+        },
         data: function () {
           let cresp = tlv.cresp;
           //return with other data properties
           return {
             cresp,
-            task: 'pcon',
-          }
-        }
+            task: "pcon",
+          };
+        },
       }),
     ];
-  } 
+  }
 
   // if keyboard response, return keyboard type and timeline
-  if (resp_mode == 'keyboard') {  
+  if (resp_mode == "keyboard") {
     return {
       type: jsPsychImageKeyboardResponse,
       timeline,
-    }
+    };
   }
   // if button response, return button type and timeline
-  else if (resp_mode == 'button') {
+  else if (resp_mode == "button") {
     return {
       type: jsPsychImageButtonResponse,
       timeline,
-    }
+    };
   }
 };
 

@@ -20,9 +20,9 @@
 //----------------------- 1 ----------------------
 //-------------------- IMPORTS -------------------
 
-import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-import testTrial from './testTrial';
-import { generateStartingOpts } from '../lib/taskUtils';
+import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import testTrial from "./testTrial";
+import { generateStartingOpts } from "../lib/taskUtils";
 
 //----------------------- 2 ----------------------
 //-------------------- TIMELINE ------------------
@@ -44,7 +44,7 @@ const testBlock = (blockSettings) => {
 
   const blockStart = {
     type: htmlKeyboardResponse,
-    stimulus: '',
+    stimulus: "",
     trial_duration: 1,
     on_finish: (data) => {
       data.block_settings = blockSettings;

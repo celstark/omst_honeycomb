@@ -6,9 +6,9 @@
 //   --------------------
 //
 //   Changes:
-//        7/13/23 (AGH): deleted start_date and task_version from 
+//        7/13/23 (AGH): deleted start_date and task_version from
 //                       added properties
-//        7/21/23 (AGH): added dataCalcFunction from contOmst to 
+//        7/21/23 (AGH): added dataCalcFunction from contOmst to
 //                       on_finish in combinedOptions
 //        7/24/23 (AGH): modified on_finish to update the data with
 //                       the added summary so it saves to the json
@@ -20,7 +20,7 @@
 //                       to the data file
 //
 //   --------------------
-//   This file holds the experiment, adds properties and builds the 
+//   This file holds the experiment, adds properties and builds the
 //   timelines
 //
 //*******************************************************************
@@ -28,17 +28,16 @@
 //----------------------- 1 ----------------------
 //-------------------- IMPORTS -------------------
 
-import { initJsPsych } from 'jspsych';
-import React, { useEffect, useMemo, useRef } from 'react';
+import { initJsPsych } from "jspsych";
+import React, { useEffect, useMemo, useRef } from "react";
 
-import { config } from '../config/main';
-import { initParticipant } from '../firebase';
-import { buildTimeline, jsPsychOptions } from '../timelines/main';
-import { dataCalcFunction } from '../trials/contOmst';
-import { pconDataCalcFunction } from '../trials/pcon_demos';
-import { getFormattedDate } from '../lib/utils';
-import { include_pcon } from './Login';
-
+import { config } from "../../config/main";
+import { initParticipant } from "../deployments/firebase";
+import { buildTimeline, jsPsychOptions } from "../../timelines/main";
+import { dataCalcFunction } from "../../trials/contOmst";
+import { pconDataCalcFunction } from "../../trials/pcon_demos";
+import { getFormattedDate } from "../../lib/utils";
+import { include_pcon } from "./Login";
 
 //----------------------- 2 ----------------------
 //-------------------- JSPSYCH -------------------
@@ -49,12 +48,12 @@ function JsPsychExperiment({
   taskVersion,
   dataUpdateFunction,
   dataFinishFunction,
-  height = '100%',
-  width = '100%',
+  height = "100%",
+  width = "100%",
 }) {
   // This will be the div in the dom that holds the experiment.
   // We reference it explicitly here so we can do some plumbing with react, jspsych, and events.
-  const experimentDivId = 'experimentWindow';
+  const experimentDivId = "experimentWindow";
   const experimentDiv = useRef(null);
 
   // Combine custom options imported from timelines/maine.js, with necessary Honeycomb options.
@@ -65,15 +64,15 @@ function JsPsychExperiment({
     on_finish: (data) => {
       var pconsummary = null;
       if (include_pcon) {
-        pconsummary = (pconDataCalcFunction(data));
+        pconsummary = pconDataCalcFunction(data);
       }
-      const contsummary =  (dataCalcFunction(data));
-      const summary = {pconsummary, contsummary };
+      const contsummary = dataCalcFunction(data);
+      const summary = { pconsummary, contsummary };
       const end_date = getFormattedDate(new Date());
-      dataUpdateFunction({summary, end_date});
+      dataUpdateFunction({ summary, end_date });
       const dataWithSummary = { ...data, summary, end_date };
       dataFinishFunction(dataWithSummary);
-    }, 
+    },
   };
 
   // Create the instance of jsPsych that we'll reuse within the scope of this JsPsychExperiment component.
@@ -111,23 +110,23 @@ function JsPsychExperiment({
   // These useEffect callbacks are similar to componentDidMount / componentWillUnmount.
   // If necessary, useLayoutEffect callbacks might be even more similar.
   useEffect(() => {
-    window.addEventListener('keyup', handleKeyEvent, true);
-    window.addEventListener('keydown', handleKeyEvent, true);
+    window.addEventListener("keyup", handleKeyEvent, true);
+    window.addEventListener("keydown", handleKeyEvent, true);
     jsPsych.run(timeline);
 
     return () => {
-      window.removeEventListener('keyup', handleKeyEvent, true);
-      window.removeEventListener('keydown', handleKeyEvent, true);
+      window.removeEventListener("keyup", handleKeyEvent, true);
+      window.removeEventListener("keydown", handleKeyEvent, true);
       try {
-        jsPsych.endExperiment('Ended Experiment');
+        jsPsych.endExperiment("Ended Experiment");
       } catch (e) {
-        console.error('Experiment closed before unmount');
+        console.error("Experiment closed before unmount");
       }
     };
   });
 
   return (
-    <div className='App'>
+    <div className="App">
       <div id={experimentDivId} style={{ height, width }} ref={experimentDiv} />
     </div>
   );

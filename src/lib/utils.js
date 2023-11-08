@@ -20,8 +20,7 @@
 //----------------------- 1 ----------------------
 //-------------------- IMPORTS -------------------
 
-import requireContext from 'require-context.macro';
-
+import requireContext from "require-context.macro";
 
 //----------------------- 2 ----------------------
 //----------------- IMAGE OBJECTS ----------------
@@ -35,37 +34,37 @@ import requireContext from 'require-context.macro';
 //   }
 const importAll = (r) => {
   const importImageByName = (allImages, imageName) => {
-    const friendlyName = imageName.replace('./', '');
+    const friendlyName = imageName.replace("./", "");
     return { ...allImages, [friendlyName]: r(imageName) };
   };
   return r.keys().reduce(importImageByName, {});
 };
 
-const images = importAll(requireContext('../assets/images', false, /\.(png|jpe?g|svg)$/));
+const images = importAll(requireContext("../../public/assets/images", false, /\.(png|jpe?g|svg)$/));
 
 // 6/28/23 (AGH): adapted images object to direct for the different order sets
 const set1Images = importAll(
-  requireContext('../assets/images/Set1_rs', false, /\.(png|jpe?g|svg)$/)
+  requireContext("../../public/assets/images/Set1_rs", false, /\.(png|jpe?g|svg)$/)
 );
 
 const set2Images = importAll(
-  requireContext('../assets/images/Set2_rs', false, /\.(png|jpe?g|svg)$/)
+  requireContext("../../public/assets/images/Set2_rs", false, /\.(png|jpe?g|svg)$/)
 );
 
 const set3Images = importAll(
-  requireContext('../assets/images/Set3_rs', false, /\.(png|jpe?g|svg)$/)
+  requireContext("../../public/assets/images/Set3_rs", false, /\.(png|jpe?g|svg)$/)
 );
 
 const set4Images = importAll(
-  requireContext('../assets/images/Set4_rs', false, /\.(png|jpe?g|svg)$/)
+  requireContext("../../public/assets/images/Set4_rs", false, /\.(png|jpe?g|svg)$/)
 );
 
 const set5Images = importAll(
-  requireContext('../assets/images/Set5_rs', false, /\.(png|jpe?g|svg)$/)
+  requireContext("../../public/assets/images/Set5_rs", false, /\.(png|jpe?g|svg)$/)
 );
 
 const set6Images = importAll(
-  requireContext('../assets/images/Set6_rs', false, /\.(png|jpe?g|svg)$/)
+  requireContext("../../public/assets/images/Set6_rs", false, /\.(png|jpe?g|svg)$/)
 );
 
 //----------------------- 3 ----------------------
@@ -100,7 +99,7 @@ function invNormcdf(p) {
   var retVal;
 
   if (p < 0 || p > 1) {
-    alert('NormSInv: Argument out of range. Probability must be between 0 and 1.');
+    alert("NormSInv: Argument out of range. Probability must be between 0 and 1.");
     retVal = 0;
   } else if (p < p_low) {
     q = Math.sqrt(-2 * Math.log(p));
@@ -124,8 +123,21 @@ function invNormcdf(p) {
 }
 
 function getFormattedDate(date) {
-  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
 
   const dayOfWeek = daysOfWeek[date.getUTCDay()];
   const month = months[date.getUTCMonth()];
@@ -137,79 +149,130 @@ function getFormattedDate(date) {
   const timezoneOffset = date.getTimezoneOffset();
   const timezoneOffsetHours = Math.abs(Math.floor(timezoneOffset / 60));
   const timezoneOffsetMinutes = Math.abs(timezoneOffset % 60);
-  const timezoneSign = timezoneOffset > 0 ? '-' : '+';
-  const timezoneName = 'Eastern Daylight Time'; // Replace this with the actual timezone name if needed.
+  const timezoneSign = timezoneOffset > 0 ? "-" : "+";
+  const timezoneName = "Eastern Daylight Time"; // Replace this with the actual timezone name if needed.
 
-  const formattedDate = `${dayOfWeek} ${month} ${day} ${year} ${hours}:${minutes}:${seconds} GMT${timezoneSign}${timezoneOffsetHours.toString().padStart(2, '0')}${timezoneOffsetMinutes.toString().padStart(2, '0')} (${timezoneName})`;
+  const formattedDate = `${dayOfWeek} ${month} ${day} ${year} ${hours}:${minutes}:${seconds} GMT${timezoneSign}${timezoneOffsetHours
+    .toString()
+    .padStart(2, "0")}${timezoneOffsetMinutes.toString().padStart(2, "0")} (${timezoneName})`;
   return formattedDate;
 }
 
-const sleep = (ms) => {
+function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
-};
+}
 
-// add a random number between 0 and offset to the base number
-const jitter = (base, offset) => base + Math.floor(Math.random() * Math.floor(offset));
+/**
+ * Add a random number between 0 and offset to the base number
+ * @param {number} base The starting number
+ * @param {number} offset The maximum addition to base
+ * @returns The base number jittered by the offset
+ */
+function jitter(base, offset) {
+  return base + Math.floor(Math.random() * Math.floor(offset));
+}
 
-// add a random number between 0 and 50 to the base number
-const jitter50 = (base) => jitter(base, 50);
+/**
+ * Add a random number between 0 and 50 to the base number
+ * @param {number} base The starting number
+ * @returns The base number jittered by 50
+ */
+function jitter50(base) {
+  return jitter(base, 50);
+}
 
-// flip a coin
-const randomTrue = () => Math.random() > 0.5;
+/**
+ * Flips a coin
+ * @returns Returns true or false randomly
+ */
+function randomTrue() {
+  return Math.random() > 0.5;
+}
 
-// deeply copy an object
-const deepCopy = (obj) => JSON.parse(JSON.stringify(obj));
+/**
+ * Deeply copies an object
+ * @param {Object} obj The starting object
+ * @returns An exact copy of obj
+ */
+function deepCopy(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
 
-// format a number as a dollar amount
-const formatDollars = (amount) => '$' + parseFloat(amount).toFixed(2);
+/**
+ * Format a number as a US dollar amount
+ * @param {number} amount Dollar amount
+ * @returns The string representation of amount in USD
+ */
+function formatDollars(amount) {
+  return "$" + parseFloat(amount).toFixed(2);
+}
 
-// create a pre-trial wait period
-const generateWaitSet = (trial, waitTime) => {
+/**
+ * Adds a wait period before a trial begins
+ * @param {Object} trial The trial to add a wait period to
+ * @param {number} waitTime The amount of time to wait by
+ * @returns The given trial with a waiting period before it
+ */
+// TODO 162: This should be a trial not a utility? It"s adding a separate trial in and of itself
+// TODO 162: JsPsych has a property for the wait time before moving to the next trial
+function generateWaitSet(trial, waitTime) {
   const waitTrial = Object.assign({}, trial);
   waitTrial.trial_duration = waitTime;
   waitTrial.response_ends_trial = false;
-  waitTrial.prompt = '-';
+  waitTrial.prompt = "-";
 
   return [waitTrial, trial];
-};
+}
 
-// As of jspsych 7, we instantiate jsPsych where needed insead of importing it globally.
-// The jsPsych instance passed in here should be the same one used for the running task.
-const startKeypressListener = (jsPsych) => {
+/**
+ * Starts the JsPsych keyboard response listener
+ * @param  jsPsych The jsPsych instance running the task.
+ */
+function startKeypressListener(jsPsych) {
   const keypressResponse = (info) => {
-    const data = {
-      key_press: info.key,
-    };
-
+    const data = { key_press: info.key };
     jsPsych.finishTrial(data);
   };
 
   const keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
     callback_function: keypressResponse,
-    valid_responses: ['ALL_KEYS'],
+    valid_responses: ["ALL_KEYS"],
     persist: false,
   });
 
   return keyboardListener;
-};
+}
 
-const getQueryVariable = (variable) => {
+/**
+ * Gets the value of a given variable from the URL search parameters
+ * @param {any} variable The key of the variable in the search parameters
+ * @returns The value of variable in the search parameters
+ */
+function getQueryVariable(variable) {
   const query = window.location.search.substring(1);
-  const vars = query.split('&');
+  const vars = query.split("&");
   for (let i = 0; i < vars.length; i++) {
-    const pair = vars[i].split('=');
+    const pair = vars[i].split("=");
     if (decodeURIComponent(pair[0]) === variable) {
       return decodeURIComponent(pair[1]);
     }
   }
-};
+}
 
-const getProlificId = () => {
-  const prolificId = getQueryVariable('PROLIFIC_PID');
+/**
+ * Gets the ID of a prolific user from the URL search parameters
+ * @returns
+ */
+function getProlificId() {
+  const prolificId = getQueryVariable("PROLIFIC_PID");
   return prolificId;
-};
+}
 
-const beep = (audioCodes) => {
+/**
+ * Emits an audible beep
+ * @param {Object} audioCodes The type/frequency of the beep
+ */
+function beep(audioCodes) {
   const context = new AudioContext(); // eslint-disable-line no-undef
   const o = context.createOscillator();
   const g = context.createGain();
@@ -220,20 +283,31 @@ const beep = (audioCodes) => {
   g.connect(context.destination);
   o.start();
   o.stop(context.currentTime + 0.4);
-};
+}
 
-
-//----------------------- 4 ----------------------
-//-------------------- EXPORTS -------------------
+/**
+ * Interleave a value before/after every element in an array
+ * @param {Array<any>} arr The original array
+ * @param {any} val The value to interleave inside the array
+ * @param {boolean} addBefore Whether to add val before or after each element in array
+ * @returns The original array with val interleaved between every element
+ */
+function interleave(arr, val, addBefore = true) {
+  return [].concat(...arr.map((n) => (addBefore ? [val, n] : [n, val])));
+}
 
 export {
-  sleep,
-  jitter,
-  jitter50,
-  randomTrue,
+  beep,
   deepCopy,
   formatDollars,
   generateWaitSet,
+  getProlificId,
+  interleave,
+  jitter,
+  jitter50,
+  randomTrue,
+  sleep,
+  startKeypressListener,
   images,
   set1Images,
   set2Images,
@@ -241,9 +315,6 @@ export {
   set4Images,
   set5Images,
   set6Images,
-  startKeypressListener,
-  getProlificId,
-  beep,
   getFormattedDate,
   invNormcdf,
 };

@@ -39,7 +39,7 @@
 //----------------------- 1 ----------------------
 //-------------------- IMPORTS -------------------
 
-import { config } from '../config/main';
+import { config } from "../config/main";
 
 // Login options
 import {
@@ -53,11 +53,11 @@ import {
   pcon_login_data,
   instr_login_data,
   cont_login_data,
-} from '../components/Login.jsx';
+} from "../App/components/Login.jsx";
 
 // consent, demog
-import { consent_trial, consentGiven, not_consented } from '../trials/consent_trial';
-import { demogform } from '../trials/demographics';
+import { consent_trial, consentGiven, not_consented } from "../trials/consent_trial";
+import { demogform } from "../trials/demographics";
 
 // pcon
 import {
@@ -68,9 +68,9 @@ import {
   demo2_trial,
   instr3_trial,
   pcon_end,
-} from '../trials/pcon_demos';
-import { pconBlock1 } from '../config/pcon_config';
-import pconBlock from './pconBlock';
+} from "../trials/pcon_demos";
+import { pconBlock1 } from "../config/pcon_config";
+import pconBlock from "./pconBlock";
 
 // contomst
 import {
@@ -87,20 +87,17 @@ import {
   lure2,
   side_by_side2,
   outtro,
-} from '../trials/instructions';
-import { omst_preload, instr_trial, debrief_block } from '../trials/contOmst';
-import testBlock from './testBlock';
-import { end_message } from '../trials/end';
+} from "../trials/instructions";
+import { omst_preload, instr_trial, debrief_block } from "../trials/contOmst";
+import testBlock from "./testBlock";
+import { end_message } from "../trials/end";
 
 //----------------------- 2 ----------------------
 //-------------------- OPTIONS -------------------
 // Honeycomb will combine these custom options with other options needed by Honyecomb.
 
 const jsPsychOptions = {
-  on_trial_finish: function (data) {
-    console.log('A trial just ended, here are the latest data:');
-    console.log(data);
-  },
+  on_trial_finish: (data) => console.log(`Trial ${data.internal_node_id} just finished:`, data),
   default_iti: 250,
 };
 
