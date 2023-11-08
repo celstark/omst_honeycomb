@@ -6,7 +6,7 @@
     "email": "starklab@uci.edu",
     "url": "https://faculty.sites.uci.edu/starklab/"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "hcversion": "3.2.3",
   "license": "MIT",
   "private": true,
