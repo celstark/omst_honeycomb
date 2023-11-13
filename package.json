@@ -100,7 +100,9 @@
     "rebuild": "electron-rebuild",
     "package:windows": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
     "package:linux": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-deb",
-    "package:mac": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-dmg"
+    "package:mac-intel": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-dmg",
+    "package:mac": "react-scripts build && electron-forge make --arch universal --targets @electron-forge/maker-dmg"
+
   },
   "browserslist": {
     "production": [
