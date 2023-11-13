@@ -32,24 +32,24 @@ const log = require("electron-log");
 const fsExtra = require("fs-extra"); // 7/24/23 (AGH) ADDED
 
 // Event Trigger
-const { eventCodes, vendorId, productId, comName } = require("./config/trigger");
-const { getPort, sendToPort } = require("event-marker");
+//const { eventCodes, vendorId, productId, comName } = require("./config/trigger");
+//const { getPort, sendToPort } = require("event-marker");
 
 // handle windows installer set up
 if (require("electron-squirrel-startup")) app.quit();
 
 // Define default environment variables
-let USE_EEG = false;
+//let USE_EEG = false;
 let VIDEO = false;
 
 // Override product ID if environment variable set
-const activeProductId = process.env.EVENT_MARKER_PRODUCT_ID || productId;
-const activeComName = process.env.EVENT_MARKER_COM_NAME || comName;
-if (activeProductId) {
-  log.info("Active product ID", activeProductId);
-} else {
-  log.info("COM Name", activeComName);
-}
+// const activeProductId = process.env.EVENT_MARKER_PRODUCT_ID || productId;
+// const activeComName = process.env.EVENT_MARKER_COM_NAME || comName;
+// if (activeProductId) {
+//   log.info("Active product ID", activeProductId);
+// } else {
+//   log.info("COM Name", activeComName);
+// }
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -161,105 +161,105 @@ function createWindow() {
 }
 
 // TRIGGER PORT HELPERS
-let triggerPort;
-let portAvailable;
-let SKIP_SENDING_DEV = false;
+// let triggerPort;
+// let portAvailable;
+// let SKIP_SENDING_DEV = false;
 
-const setUpPort = async () => {
-  let p;
-  if (activeProductId) {
-    p = await getPort(vendorId, activeProductId);
-  } else {
-    p = await getPort(activeComName);
-  }
-  if (p) {
-    triggerPort = p;
-    portAvailable = true;
+// const setUpPort = async () => {
+//   let p;
+//   if (activeProductId) {
+//     p = await getPort(vendorId, activeProductId);
+//   } else {
+//     p = await getPort(activeComName);
+//   }
+//   if (p) {
+//     triggerPort = p;
+//     portAvailable = true;
 
-    triggerPort.on("error", (err) => {
-      log.error(err);
-      const buttons = ["OK"];
-      if (process.env.ELECTRON_START_URL) {
-        buttons.push("Continue Anyway");
-      }
-      dialog
-        .showMessageBox(mainWindow, {
-          type: "error",
-          message: "Error communicating with event marker.",
-          title: "Task Error",
-          buttons,
-          defaultId: 0,
-        })
-        .then((opt) => {
-          if (opt.response === 0) {
-            app.exit();
-          } else {
-            SKIP_SENDING_DEV = true;
-            portAvailable = false;
-            triggerPort = false;
-          }
-        });
-    });
-  } else {
-    triggerPort = false;
-    portAvailable = false;
-  }
-};
+//     triggerPort.on("error", (err) => {
+//       log.error(err);
+//       const buttons = ["OK"];
+//       if (process.env.ELECTRON_START_URL) {
+//         buttons.push("Continue Anyway");
+//       }
+//       dialog
+//         .showMessageBox(mainWindow, {
+//           type: "error",
+//           message: "Error communicating with event marker.",
+//           title: "Task Error",
+//           buttons,
+//           defaultId: 0,
+//         })
+//         .then((opt) => {
+//           if (opt.response === 0) {
+//             app.exit();
+//           } else {
+//             SKIP_SENDING_DEV = true;
+//             portAvailable = false;
+//             triggerPort = false;
+//           }
+//         });
+//     });
+//   } else {
+//     triggerPort = false;
+//     portAvailable = false;
+//   }
+// };
 
-const handleEventSend = (code) => {
-  if (!portAvailable && !SKIP_SENDING_DEV) {
-    const message = "Event Marker not connected";
-    log.warn(message);
+// const handleEventSend = (code) => {
+//   if (!portAvailable && !SKIP_SENDING_DEV) {
+//     const message = "Event Marker not connected";
+//     log.warn(message);
 
-    const buttons = ["Quit", "Retry"];
-    if (process.env.ELECTRON_START_URL) {
-      buttons.push("Continue Anyway");
-    }
-    dialog
-      .showMessageBox(mainWindow, {
-        type: "error",
-        message,
-        title: "Task Error",
-        buttons,
-        defaultId: 0,
-      })
-      .then((resp) => {
-        const opt = resp.response;
-        if (opt === 0) {
-          // quit
-          app.exit();
-        } else if (opt === 1) {
-          // retry
-          setUpPort().then(() => handleEventSend(code));
-        } else if (opt === 2) {
-          SKIP_SENDING_DEV = true;
-        }
-      });
-  } else if (!SKIP_SENDING_DEV) {
-    sendToPort(triggerPort, code);
-  }
-};
+//     const buttons = ["Quit", "Retry"];
+//     if (process.env.ELECTRON_START_URL) {
+//       buttons.push("Continue Anyway");
+//     }
+//     dialog
+//       .showMessageBox(mainWindow, {
+//         type: "error",
+//         message,
+//         title: "Task Error",
+//         buttons,
+//         defaultId: 0,
+//       })
+//       .then((resp) => {
+//         const opt = resp.response;
+//         if (opt === 0) {
+//           // quit
+//           app.exit();
+//         } else if (opt === 1) {
+//           // retry
+//           setUpPort().then(() => handleEventSend(code));
+//         } else if (opt === 2) {
+//           SKIP_SENDING_DEV = true;
+//         }
+//       });
+//   } else if (!SKIP_SENDING_DEV) {
+//     sendToPort(triggerPort, code);
+//   }
+// };
 
 // Update env variables with buildtime values from frontend
 ipc.on("updateEnvironmentVariables", (event, args) => {
-  USE_EEG = args.USE_EEG;
+  //USE_EEG = args.USE_EEG;
   VIDEO = args.USE_CAMERA;
-  if (USE_EEG) {
-    setUpPort().then(() => handleEventSend(eventCodes.test_connect));
-  }
+  // if (USE_EEG) {
+  //   setUpPort().then(() => handleEventSend(eventCodes.test_connect));
+  // }
 });
 
 // EVENT TRIGGER
 
-ipc.on("trigger", (event, args) => {
-  const code = args;
-  if (code !== undefined) {
-    log.info(`Event: ${_.invert(eventCodes)[code]}, code: ${code}`);
-    if (USE_EEG) {
-      handleEventSend(code);
-    }
-  }
-});
+// ipc.on("trigger", (event, args) => {
+//   const code = args;
+//   if (code !== undefined) {
+//     log.info(`Event: ${_.invert(eventCodes)[code]}, code: ${code}`);
+//     if (USE_EEG) {
+//       handleEventSend(code);
+//     }
+//   }
+// });
 
 // <studyID> will be created on Desktop and used as root folder for saving data.
 // data save format is ~/Desktop/<studyID>/<participantID>/<date>/<filename>.json
