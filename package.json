@@ -121,7 +121,8 @@
     },
     "forge": {
       "packagerConfig": {
-        "asar": true
+        "asar": true,
+        "icon": "./public/MST"
       },
       "makers": [
         {
@@ -133,7 +134,7 @@
         {
           "name": "@electron-forge/maker-dmg",
           "config": {
-            "icon": "./assets/icons/mac/icon.icns",
+            "icon": "./public/MST.icns",
             "overwrite": true
           },
           "platforms": [
@@ -143,7 +144,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "iconUrl": "https://raw.githubusercontent.com/brown-ccv/honeycomb/main/assets/icons/win/icon.ico"
+            "icon": "./public/MST.ico"
           }
         }
       ]
