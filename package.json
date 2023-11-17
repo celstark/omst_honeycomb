@@ -144,7 +144,8 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "icon": "./public/MST.ico"
+            "iconUrl": "https://raw.githubusercontent.com/celstark/omst_honeycomb/oMST/public/MST.ico",
+            "setupIcon": "./public/MST.ico"
           }
         }
       ]
