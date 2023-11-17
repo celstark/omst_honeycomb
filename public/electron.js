@@ -92,7 +92,7 @@ function createWindow() {
   const os = require("os");
   if (os.platform() === "darwin") {
     const nativeImage = require("electron").nativeImage;
-    const image = nativeImage.createFromPath("public/MSTLogo256.png");
+    const image = nativeImage.createFromPath("public/MSTLogo512.png");
     console.log(image);
     app.dock.setIcon(image);
   }

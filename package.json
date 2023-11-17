@@ -134,7 +134,7 @@
         {
           "name": "@electron-forge/maker-dmg",
           "config": {
-            "icon": "./public/MST.icns",
+            "icon": "./public/icon_orig.icns",
             "overwrite": true
           },
           "platforms": [
