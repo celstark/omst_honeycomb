@@ -32,6 +32,7 @@
 //                       checkConfigOptions)
 //        8/9/23  (AGH): updated for new 2x3 orderfiles, removed trialorder
 //                       state var and changed run to "sublist"
+//        5/1/24 (CELS): Added "Format" option for oMST vs Classic-Full vs Classic-half
 //
 //   --------------------
 //   This file creates a Login screen that logs in the participant
@@ -69,6 +70,7 @@ var twochoice;
 var selfpaced;
 var orderfile = "./jsOrders/cMST_Imbal2_orders_1_1_1";
 var resp_mode = "button";
+var format = "omst";
 var lang;
 var language;
 var include_consent;
@@ -97,6 +99,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
   const [chooseStimset, setStimset] = useState("1");
   const [chooseSublist, setSublist] = useState("1");
   const [chooseRespmode, setRespmode] = useState("button");
+  const [chooseFormat, setFormat] = useState("omst");
   const [chooseLang, setLang] = useState("English");
   const [chooseTwochoice, setTwochoice] = useState(false);
   const [chooseSelfpaced, setSelfpaced] = useState(false);
@@ -114,6 +117,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     const storedStimset = localStorage.getItem(`${studyId}_stimset`);
     const storedSublist = localStorage.getItem(`${studyId}_sublist`);
     const storedRespmode = localStorage.getItem(`${studyId}_respmode`);
+    const storedFormat = localStorage.getItem(`${studyId}_format`);
     const storedLang = localStorage.getItem(`${studyId}_lang`);
     const storedTwochoice = localStorage.getItem(`${studyId}_twochoice`);
     const storedSelfpaced = localStorage.getItem(`${studyId}_selfpaced`);
@@ -126,6 +130,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     setStimset(storedStimset || "1");
     setSublist(storedSublist || "1");
     setRespmode(storedRespmode || "button");
+    setFormat(storedFormat || "omst");
     setLang(storedLang || "English");
     setTwochoice(storedTwochoice == "true");
     setSelfpaced(storedSelfpaced == "true");
@@ -160,6 +165,9 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     // [resp_mode='']: Respond with buttons or keyboard? (default = button)
     resp_mode = chooseRespmode;
     console.log("respmode = " + chooseRespmode);
+
+    format = chooseFormat;
+    console.log("format = " + chooseFormat);
 
     // [lang='']: Which language file? (default = English)
     if (chooseLang == "Spanish") {
@@ -224,6 +232,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     localStorage.setItem(`${studyId}_stimset`, chooseStimset);
     localStorage.setItem(`${studyId}_sublist`, chooseSublist);
     localStorage.setItem(`${studyId}_respmode`, chooseRespmode);
+    localStorage.setItem(`${studyId}_format`, chooseFormat);
     localStorage.setItem(`${studyId}_lang`, chooseLang);
     localStorage.setItem(`${studyId}_twochoice`, chooseTwochoice);
     localStorage.setItem(`${studyId}_selfpaced`, chooseSelfpaced);
@@ -238,6 +247,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
       stimset: stim_set,
       sublist: sublist,
       respmode: resp_mode,
+      format: format,
       language: language,
       include_consent: include_consent,
       include_demog: include_demog,
@@ -360,6 +370,20 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
                         <option value="Korean">한국인</option>
                         <option value="Chinese">中文</option>
                         <option value="Russian">Pyccкий</option>
+                      </Form.Control>
+                    </Form.Group>
+                  </div>
+                  <div className="response-options">
+                    <Form.Group controlId="format">
+                      <Form.Label>Format:</Form.Label>
+                      <Form.Control
+                        as="select"
+                        value={chooseFormat}
+                        onChange={(e) => setFormat(e.target.value)}
+                      >
+                        <option value="omst">oMST</option>
+                        <option value="st64">Classic-full</option>
+                        <option value="st32">Classic-half</option>
                       </Form.Control>
                     </Form.Group>
                   </div>
@@ -512,6 +536,7 @@ export {
   stim_set,
   sublist,
   resp_mode,
+  format,
   lang,
   language,
   include_consent,
