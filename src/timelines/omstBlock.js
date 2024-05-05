@@ -1,6 +1,6 @@
 //*******************************************************************
 //
-//   File: testBlock.js               Folder: timelines
+//   File: omstBlock.js               Folder: timelines
 //
 //   Author: Honeycomb, Audrey Hempel
 //   --------------------
@@ -9,6 +9,7 @@
 //        6/28/23 (AGH): copied from honeycomb taskBlock
 //                       imported copied testTrial
 //        7/13/23 (AGH): changed arg condition --> tlv
+//        5/5/24 (CELS): renamed omstBlock.js and all internal bits as such
 //
 //   --------------------
 //   This file loops through testTrial (/timelines/testTrial.js) using
@@ -21,7 +22,7 @@
 //-------------------- IMPORTS -------------------
 
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
-import testTrial from "./testTrial";
+import omstTrial from "./omstTrial";
 import { generateStartingOpts } from "../lib/taskUtils";
 
 //----------------------- 2 ----------------------
@@ -29,7 +30,7 @@ import { generateStartingOpts } from "../lib/taskUtils";
 
 // testBlock
 
-const testBlock = (blockSettings) => {
+const omstBlock = (blockSettings) => {
   // initialize block with starting options that set up looped trials
   const startingOpts = generateStartingOpts(blockSettings);
 
@@ -40,7 +41,7 @@ const testBlock = (blockSettings) => {
   };
 
   // timeline = loop through trials
-  const timeline = startingOpts.map((tlv) => testTrial(blockSettings, blockDetails, tlv));
+  const timeline = startingOpts.map((tlv) => omstTrial(blockSettings, blockDetails, tlv));
 
   const blockStart = {
     type: htmlKeyboardResponse,
@@ -62,4 +63,4 @@ const testBlock = (blockSettings) => {
 //----------------------- 3 ----------------------
 //--------------------- EXPORT -------------------
 
-export default testBlock;
+export default omstBlock;

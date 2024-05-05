@@ -28,6 +28,7 @@
 //                       data of the first included trial
 //                       added pcon trials
 //        10/28/23 (CELS): Set to pre-load the oMST as well
+//        5/5/24 (CELS): Changed testBlock/trial to omstBlock/Trial
 //
 //   --------------------
 //   This file builds the primaryTimeline from all of the trials.
@@ -89,7 +90,7 @@ import {
   outtro,
 } from "../trials/instructions";
 import { omst_preload, instr_trial, debrief_block } from "../trials/contOmst";
-import testBlock from "./testBlock";
+import omstBlock from "./omstBlock";
 import { end_message } from "../trials/end";
 
 //----------------------- 2 ----------------------
@@ -200,7 +201,7 @@ const buildPrimaryTimeline = () => {
       // continuous omst
       omst_preload,
       instr_trial, // instructions
-      testBlock(exptBlock1), // looping trials
+      omstBlock(exptBlock1), // looping trials
       debrief_block, // thank you
 
       end_message, // final thank you message

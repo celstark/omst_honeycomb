@@ -1,6 +1,6 @@
 //*******************************************************************
 //
-//   File: testTrial.js               Folder: timelines
+//   File: omstTrial.js               Folder: timelines
 //
 //   Author: Honeycomb, Audrey Hempel
 //   --------------------
@@ -22,6 +22,7 @@
 //        7/18/23 (AGH): changed the image parameter (the entire image path
 //                       including the directing image objects are now defined
 //                       within tlv.stimulus from /config/experiment)
+//        5/5/24 (CELS): renamed omstTrial.js and all internal bits as such
 //
 //   --------------------
 //   This file sets up an iteration of the test trial (/trials/trialCont.js)
@@ -50,7 +51,7 @@ import { keyContTrial, buttonContTrial } from "../trials/trialCont";
 // initialize timeline
 var timeline = [];
 
-const testTrial = (blockSettings, blockDetails, tlv) => {
+const omstTrial = (blockSettings, blockDetails, tlv) => {
   // if keyboard response, load stimulus and data specifications for keyboard trials into timeline
   if (resp_mode == "keyboard") {
     timeline = [
@@ -123,4 +124,4 @@ const testTrial = (blockSettings, blockDetails, tlv) => {
 //----------------------- 3 ----------------------
 //--------------------- EXPORT -------------------
 
-export default testTrial;
+export default omstTrial;
