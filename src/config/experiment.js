@@ -44,7 +44,7 @@ import {
 
 //  sets up the tlv array to include the appropriate info from the seleced jsOrders file
 
-function loadExptBlock1 (trial_stim, stim_set) {
+function loadOMSTBlock (trial_stim, stim_set) {
   var tlv = [];
   var ntrials = trial_stim.length;
   let DEBUGMODE = 0;
@@ -129,4 +129,4 @@ return exptBlock1;
 //----------------------- 4 ----------------------
 //--------------------- EXPORT -------------------
 
-export { loadExptBlock1 };
+export { loadOMSTBlock as loadOMSTBlock };
