@@ -51,7 +51,7 @@ import Form from "react-bootstrap/Form";
 import { deepCopy } from "../../lib/utils";
 
 import { writeOrderfile, loadOrderfile } from "../../config/cont";
-import { loadExptBlock1 } from "../../config/experiment";
+import { loadOMSTBlock } from "../../config/experiment";
 import { defaultBlockSettings } from "../../config/main";
 
 import { refresh_pcon_trials } from "../../trials/pcon_demos";
@@ -79,7 +79,7 @@ var include_pcon;
 var include_instr;
 
 var trial_stim;
-var exptBlock1 = deepCopy(defaultBlockSettings);
+var OMSTBlock = deepCopy(defaultBlockSettings);
 
 var consent_login_data;
 var demog_login_data;
@@ -220,7 +220,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
 
     // load exptBlock conditions from timeline variables
     // in /config/experiment.js
-    exptBlock1 = loadExptBlock1(trial_stim, stim_set);
+    OMSTBlock = loadOMSTBlock(trial_stim, stim_set);
 
     // refresh trails based on Login options
     console.log("refreshing trials");
@@ -547,7 +547,7 @@ export {
   selfpaced,
   orderfile,
   trial_stim,
-  exptBlock1,
+  OMSTBlock,
   consent_login_data,
   demog_login_data,
   pcon_login_data,
