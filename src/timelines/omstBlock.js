@@ -30,7 +30,7 @@ import { generateStartingOpts } from "../lib/taskUtils";
 
 // testBlock
 
-const omstBlock = (blockSettings) => {
+const setupomstBlock = (blockSettings) => {
   // initialize block with starting options that set up looped trials
   const startingOpts = generateStartingOpts(blockSettings);
 
@@ -63,4 +63,4 @@ const omstBlock = (blockSettings) => {
 //----------------------- 3 ----------------------
 //--------------------- EXPORT -------------------
 
-export default omstBlock;
+export default setupomstBlock;

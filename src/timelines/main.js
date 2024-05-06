@@ -90,7 +90,7 @@ import {
   outtro,
 } from "../trials/instructions";
 import { omst_preload, instr_trial, debrief_block } from "../trials/contOmst";
-import omstBlock from "./omstBlock";
+import setupomstBlock from "./omstBlock";
 import { end_message } from "../trials/end";
 
 //----------------------- 2 ----------------------
@@ -201,7 +201,7 @@ const buildPrimaryTimeline = () => {
       // continuous omst
       omst_preload,
       instr_trial, // instructions
-      omstBlock(omstBlock1), // looping trials
+      setupomstBlock(omstBlock1), // looping trials
       debrief_block, // thank you
 
       end_message, // final thank you message
