@@ -48,7 +48,7 @@ import {
   include_demog,
   include_pcon,
   include_instr,
-  omstBlock1,
+  omstBlock,
   consent_login_data,
   demog_login_data,
   pcon_login_data,
@@ -201,7 +201,7 @@ const buildPrimaryTimeline = () => {
       // continuous omst
       omst_preload,
       instr_trial, // instructions
-      setupomstBlock(omstBlock1), // looping trials
+      setupomstBlock(omstBlock), // looping trials
       debrief_block, // thank you
 
       end_message, // final thank you message
