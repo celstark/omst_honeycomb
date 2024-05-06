@@ -29,6 +29,7 @@
 //                       added pcon trials
 //        10/28/23 (CELS): Set to pre-load the oMST as well
 //        5/5/24 (CELS): Changed testBlock/trial to omstBlock/Trial
+//        5/6/24 (CELS): Cleanup some logic
 //
 //   --------------------
 //   This file builds the primaryTimeline from all of the trials.
@@ -111,16 +112,11 @@ const buildTimeline = () => (config.USE_MTURK ? mturkTimeline : buildPrimaryTime
 
 const buildPrimaryTimeline = () => {
   const primaryTimeline = [];
-
   // conditional timeline if consent form is included
-  var incl_consent = {
+  let incl_consent = {
     timeline: [consent_trial],
     conditional_function: function () {
-      if (include_consent) {
-        return true;
-      } else {
-        return false;
-      }
+      return include_consent;
     },
     // if this is the first included trial, add login options to data here
     data: { login_data: consent_login_data },
@@ -130,11 +126,7 @@ const buildPrimaryTimeline = () => {
   var incl_demog = {
     timeline: [demogform],
     conditional_function: function () {
-      if (include_demog) {
-        return true;
-      } else {
-        return false;
-      }
+      return include_demog;
     },
     // if this is the first included trial, add login options to data here
     data: { login_data: demog_login_data },
@@ -153,11 +145,7 @@ const buildPrimaryTimeline = () => {
       pcon_end, // ty message
     ],
     conditional_function: function () {
-      if (include_pcon) {
-        return true;
-      } else {
-        return false;
-      }
+      return include_pcon;
     },
     // if this is the first included trial, add login options to data here
     data: { login_data: pcon_login_data },
@@ -181,11 +169,7 @@ const buildPrimaryTimeline = () => {
       outtro,
     ],
     conditional_function: function () {
-      if (include_instr) {
-        return true;
-      } else {
-        return false;
-      }
+      return include_instr;
     },
     // if this is the first included trial, add login options to data here
     data: { login_data: instr_login_data },
@@ -202,6 +186,7 @@ const buildPrimaryTimeline = () => {
       omst_preload,
       instr_trial, // instructions
       setupomstBlock(omstBlock), // looping trials
+      //omstBlock,
       debrief_block, // thank you
 
       end_message, // final thank you message
@@ -209,11 +194,7 @@ const buildPrimaryTimeline = () => {
     conditional_function: function () {
       // if consent was given in consent trial or consent form not included,
       // run above timeline
-      if (consentGiven || !include_consent) {
-        return true;
-      } else {
-        return false;
-      }
+      return consentGiven || !include_consent;
     },
     data: { login_data: cont_login_data },
   };
@@ -222,11 +203,7 @@ const buildPrimaryTimeline = () => {
   var notConsented = {
     timeline: [not_consented],
     conditional_function: function () {
-      if (!consentGiven && include_consent) {
-        return true;
-      } else {
-        return false;
-      }
+      return !consentGiven && include_consent;
     },
   };
 

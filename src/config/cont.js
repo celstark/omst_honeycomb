@@ -31,6 +31,7 @@
 //-------------------- IMPORTS -------------------
 
 // import { orderfile } from '../components/Login';
+import { format } from  "../App/components/Login.jsx";
 
 // importing each unique trial stimulus sets
 import { ts2x3_1_1_1 } from './jsOrders/cMST_Imbal2x3_orders_1_1_1';
