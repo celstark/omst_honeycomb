@@ -79,7 +79,7 @@ var include_pcon;
 var include_instr;
 
 var trial_stim;
-var OMSTBlock = deepCopy(defaultBlockSettings);
+var omstBlock1 = deepCopy(defaultBlockSettings);
 
 var consent_login_data;
 var demog_login_data;
@@ -220,7 +220,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
 
     // load exptBlock conditions from timeline variables
     // in /config/experiment.js
-    OMSTBlock = loadOMSTBlock(trial_stim, stim_set);
+    omstBlock1 = loadOMSTBlock(trial_stim, stim_set);
 
     // refresh trails based on Login options
     console.log("refreshing trials");
@@ -547,7 +547,7 @@ export {
   selfpaced,
   orderfile,
   trial_stim,
-  OMSTBlock,
+  omstBlock1,
   consent_login_data,
   demog_login_data,
   pcon_login_data,

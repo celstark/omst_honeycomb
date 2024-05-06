@@ -16,6 +16,7 @@
 //                       added var exptImage to include the set#Image
 //                       objects (previously in /trials/testTrial) and
 //                       edit image name for each set (now tlv.stimulus)
+//        5/5/24 (CELS): Renamed exptBlock to omstBlock
 //
 //   --------------------
 //   This file contains a function that defines the experiment's changing 
@@ -116,14 +117,14 @@ function loadOMSTBlock (trial_stim, stim_set) {
   }
 
   //----------------------- 3 ----------------------
-  //-------------- EXPERIMENT BLOCK ----------------
+  //------------ oMST EXPERIMENT BLOCK --------------
 
   // create copy of default settings
-  var exptBlock1 = deepCopy(defaultBlockSettings);
+var omstBlock = deepCopy(defaultBlockSettings);
 
-  exptBlock1.conditions = tlv; //set the conditions of the trials to the array
+omstBlock.conditions = tlv; //set the conditions of the trials to the array
 
-return exptBlock1;
+return omstBlock;
 }
 
 //----------------------- 4 ----------------------
