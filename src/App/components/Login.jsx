@@ -50,7 +50,9 @@ import Form from "react-bootstrap/Form";
 
 import { deepCopy } from "../../lib/utils";
 
-import { writeOrderfile, loadOrderfile } from "../../config/cont";
+import { loadOrder } from "../../config/cont";
+//import { getOrderfilename, loadOrderfile, loadOrder } from "../../config/cont";
+
 import { loadOMSTBlock } from "../../config/experiment";
 import { defaultBlockSettings } from "../../config/main";
 
@@ -69,6 +71,7 @@ var sublist = "1";
 var twochoice;
 var selfpaced;
 var orderfile = "./jsOrders/cMST_Imbal2_orders_1_1_1";
+var orderfile_mstt = ""; // Used in test phase of study-test
 var resp_mode = "button";
 var format = "omst";
 var lang;
@@ -79,6 +82,7 @@ var include_pcon;
 var include_instr;
 
 var trial_stim;
+var trial_stim_mstt = false;
 var omstBlock = deepCopy(defaultBlockSettings);
 
 var consent_login_data;
@@ -212,11 +216,19 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
 
     include_instr = includeInstr;
     console.log("include instr =" + includeInstr);
-
     // load trial stim from jsOrders file
     // both writeOrderfile and loadOrderfil defined in /config/cont.js
-    orderfile = writeOrderfile(stim_set, sublist);
-    trial_stim = loadOrderfile(orderfile);
+    // For study-test, orderfile = study, orderfile2 = test
+    const ofvals = loadOrder(format, stim_set, sublist);
+    orderfile = ofvals[0];
+    trial_stim = ofvals[1];
+
+    //    orderfile = getOrderfilename(stim_set, sublist);
+    //    trial_stim = loadOrderfile(orderfile);
+    if (format !== "omst") {
+      // A study-test mode
+      orderfile_mstt = orderfile.replace("_p1_", "_p2_");
+    }
 
     // load exptBlock conditions from timeline variables
     // in /config/experiment.js
@@ -546,7 +558,9 @@ export {
   twochoice,
   selfpaced,
   orderfile,
+  orderfile_mstt,
   trial_stim,
+  trial_stim_mstt,
   omstBlock,
   consent_login_data,
   demog_login_data,

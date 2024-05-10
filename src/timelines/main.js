@@ -109,11 +109,11 @@ const jsPsychOptions = {
 // The instance of jsPsych passed in will include jsPsychOptions above, plus other options needed by Honeycomb.
 
 const buildTimeline = () => (config.USE_MTURK ? mturkTimeline : buildPrimaryTimeline());
-
+// CELS: Note, since this is a const, not a function, we need things to be var, not let IIRC
 const buildPrimaryTimeline = () => {
   const primaryTimeline = [];
   // conditional timeline if consent form is included
-  let incl_consent = {
+  var incl_consent = {
     timeline: [consent_trial],
     conditional_function: function () {
       return include_consent;
