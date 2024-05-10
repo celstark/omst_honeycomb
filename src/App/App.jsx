@@ -45,7 +45,7 @@ function App() {
    */
   useEffect(() => {
     // For testing and debugging purposes
-    console.log(config);
+    //console.log(config);
 
     // If on desktop
     if (config.USE_ELECTRON) {
