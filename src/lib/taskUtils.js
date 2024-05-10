@@ -8,8 +8,11 @@ const generateStartingOpts = (blockSettings) => {
     // Repeat each starting condition the same number of times
     return _.range(blockSettings.repeats_per_condition).map(() => c);
   });
-
-  return _.shuffle(_.flatten(startingOptions));
+  if (blockSettings.randomize_order) {
+    return _.shuffle(_.flatten(startingOptions));
+  } else {
+    return _.flatten(startingOptions);
+  }
 };
 
 export { generateStartingOpts };

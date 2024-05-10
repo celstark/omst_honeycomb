@@ -120,11 +120,9 @@ function loadOMSTBlock (trial_stim, stim_set) {
   //------------ oMST EXPERIMENT BLOCK --------------
 
   // create copy of default settings
-var omstBlock = deepCopy(defaultBlockSettings);
-
-omstBlock.conditions = tlv; //set the conditions of the trials to the array
-
-return omstBlock;
+  var omstBlock = deepCopy(defaultBlockSettings);
+  omstBlock.conditions = tlv; //set the conditions of the trials to the array
+  return omstBlock;
 }
 
 //----------------------- 4 ----------------------

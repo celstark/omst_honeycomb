@@ -68,6 +68,7 @@ const USE_EEG = process.env.REACT_APP_USE_EEG === "true" && USE_ELECTRON; // whe
 const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === "true" && USE_ELECTRON; // whether or not the photodiode is in use
 
 const defaultBlockSettings = {
+  randomize_order: false, // Need this or to have it in config.json?
   // FIX -- this really is vestigial
   conditions: ["a", "b", "c"],
   repeats_per_condition: 1, // number of times every condition is repeated

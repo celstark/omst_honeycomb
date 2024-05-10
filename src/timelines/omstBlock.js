@@ -32,8 +32,9 @@ import { generateStartingOpts } from "../lib/taskUtils";
 
 const setupomstBlock = (blockSettings) => {
   // initialize block with starting options that set up looped trials
+  //blockSettings.randomize_order=false;
+  // This next line was doing the shuffling - make sure your blockSettings.randomizer_order is false
   const startingOpts = generateStartingOpts(blockSettings);
-
   const blockDetails = {
     block_earnings: 0.0,
     optimal_earnings: 0.0,
