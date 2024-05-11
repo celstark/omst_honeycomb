@@ -17,6 +17,7 @@
 //                       objects (previously in /trials/testTrial) and
 //                       edit image name for each set (now tlv.stimulus)
 //        5/5/24 (CELS): Renamed exptBlock to omstBlock
+//        5/11/24 (CELS): Wrote helper function for getImageName and streamlined
 //
 //   --------------------
 //   This file contains a function that defines the experiment's changing 
@@ -40,6 +41,19 @@ import {
   set6Images,
 } from '../lib/utils';
 
+function getImageName(imagename, stim_set) {
+  // CELS: helper function we'll use a few times to return the base image name
+  // These come in as things like Set 1_rs/153a.jpg and need to become /static/media/153a.95b34cd0b497afc6341d.jpg 
+  // The SetX_rs bits are already gone here in Electron, replaced by that random string, but our goal is to 
+  if (stim_set == '1') { return set1Images[imagename.replace('Set 1_rs/', '')]; } 
+  else if (stim_set == '2') { return set2Images[imagename.replace('Set 2_rs/', '')]; } 
+  else if (stim_set == '3') { return set3Images[imagename.replace('Set 3_rs/', '')]; } 
+  else if (stim_set == '4') { return set4Images[imagename.replace('Set 4_rs/', '')]; } 
+  else if (stim_set == '5') { return set5Images[imagename.replace('Set 5_rs/', '')]; } 
+  else if (stim_set == '6') { return set6Images[imagename.replace('Set 6_rs/', '')]; } 
+  return 'Unknown';
+}
+
 //----------------------- 2 ----------------------
 //---------- TIMELINE VARIABLE FUNCTION-----------
 
@@ -55,13 +69,13 @@ function loadOMSTBlock (trial_stim, stim_set) {
   console.log('Building up the ' + ntrials + ' trials');
   for (var i = 0; i < ntrials; i++) {
     // in corr_resp: 0=old, 1=sim, 2=new
-    let trial_info = trial_stim[i]; // added "let"
+    let this_trial = trial_stim[i]; // added "let"
     let tr_type = 'foil';
     let cresp = 'n';
-    if (trial_info.correct_resp == 0) {
+    if (this_trial.correct_resp == 0) {
       tr_type = 'target';
       cresp = 'o';
-    } else if (trial_info.correct_resp == 1) {
+    } else if (this_trial.correct_resp == 1) {
       tr_type = 'lure';
       if (twochoice == 1) {
         cresp = 'n';
@@ -70,43 +84,54 @@ function loadOMSTBlock (trial_stim, stim_set) {
       }
     }
     let lure_bin = 0; // We may or may not have this in the order file
-    if (trial_info.lbin && trial_info.lbin !== 'undefined') {
-      lure_bin = trial_info.lbin;
+    if (this_trial.lbin && this_trial.lbin !== 'undefined') {
+      lure_bin = this_trial.lbin;
     }
     // keycode 'n' (for 1 and 2) = 78, 'y' (for 0)=89
     // keycode 'n' (for 1 and 2) = 78, 'y' (for 0)=89, i=73, o=79
     //let obj={stimulus: trial_info.image, data: {condition: tr_type, correct_response: cresp, lbin:lure_bin}}
 
-    // initialize exptImage var
-    var exptImage;
-
     // Assign exptImage to the right path for the selected stim set
-    if (stim_set == '1') {
-      // Delete the Set X_rs from the image name
-      trial_stim[i].image = trial_stim[i].image.replace('Set 1_rs/', '');
-      exptImage = set1Images[trial_info.image];
-    } 
-    else if (stim_set == '2') {
-      trial_stim[i].image = trial_stim[i].image.replace('Set 2_rs/', '');
-      exptImage = set2Images[trial_info.image];
-    } 
-    else if (stim_set == '3') {
-      trial_stim[i].image = trial_stim[i].image.replace('Set 3_rs/', '');
-      exptImage = set3Images[trial_info.image];
-    } 
-    else if (stim_set == '4') {
-      trial_stim[i].image = trial_stim[i].image.replace('Set 4_rs/', '');
-      exptImage = set4Images[trial_info.image];
-    } 
-    else if (stim_set == '5') {
-      trial_stim[i].image = trial_stim[i].image.replace('Set 5_rs/', '');
-      exptImage = set5Images[trial_info.image];
-    } 
-    else if (stim_set == '6') {
-      trial_stim[i].image = trial_stim[i].image.replace('Set 6_rs/', '');
-      exptImage = set6Images[trial_info.image];
-    }
+    const exptImage=getImageName(this_trial.image,stim_set);
     
+    // create the timeline variable object
+    let obj = {
+      stimulus: exptImage,
+      data: { condition: tr_type, correct_response: cresp, lbin: lure_bin },
+    };
+    //console.log('DBG:',exptImage, this_trial.image)
+    //console.log(i + '  bin: ' + lure_bin)
+    tlv.push(obj); // add it to the array of timeline variables
+  }
+
+  //----------------------- 3 ----------------------
+  //------------ oMST EXPERIMENT BLOCK --------------
+
+  // create copy of default settings
+  var omstBlock = deepCopy(defaultBlockSettings);
+  omstBlock.conditions = tlv; //set the conditions of the trials to the array
+  return omstBlock;
+}
+
+
+function loadMSTSBlock (trial_stim, stim_set) {
+  // Study phase of the classic version
+  // We just have stim and cond in the order file
+  // Copied / modified version of loadOMSTBlock
+  var tlv = [];
+  var ntrials = trial_stim.length;
+  let DEBUGMODE = 0;
+  if (DEBUGMODE == 1) {
+    ntrials = 20;
+  }
+  console.log('MSTS - building up the ' + ntrials + ' trials');
+  for (var i = 0; i < ntrials; i++) {
+    // in corr_resp: 0=old, 1=sim, 2=new
+    let this_trial = trial_stim[i]; // added "let"
+    let tr_type = 'SR';
+    // Assign exptImage to the right path for the selected stim set
+    const exptImage=getImageName(this_trial.image,stim_set);
+   
     // create the timeline variable object
     let obj = {
       stimulus: exptImage,
@@ -124,8 +149,7 @@ function loadOMSTBlock (trial_stim, stim_set) {
   omstBlock.conditions = tlv; //set the conditions of the trials to the array
   return omstBlock;
 }
-
 //----------------------- 4 ----------------------
 //--------------------- EXPORT -------------------
 
-export { loadOMSTBlock as loadOMSTBlock };
+export { loadOMSTBlock, loadMSTSBlock };
