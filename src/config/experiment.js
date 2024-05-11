@@ -62,14 +62,14 @@ function getImageName(imagename, stim_set) {
 function loadOMSTBlock (trial_stim, stim_set) {
   var tlv = [];
   var ntrials = trial_stim.length;
-  let DEBUGMODE = 0;
+  const DEBUGMODE = 0;
   if (DEBUGMODE == 1) {
     ntrials = 20;
   }
-  console.log('Building up the ' + ntrials + ' trials');
+  console.log('oMST - Building up the ' + ntrials + ' trials');
   for (var i = 0; i < ntrials; i++) {
     // in corr_resp: 0=old, 1=sim, 2=new
-    let this_trial = trial_stim[i]; // added "let"
+    const this_trial = trial_stim[i]; 
     let tr_type = 'foil';
     let cresp = 'n';
     if (this_trial.correct_resp == 0) {
@@ -87,9 +87,6 @@ function loadOMSTBlock (trial_stim, stim_set) {
     if (this_trial.lbin && this_trial.lbin !== 'undefined') {
       lure_bin = this_trial.lbin;
     }
-    // keycode 'n' (for 1 and 2) = 78, 'y' (for 0)=89
-    // keycode 'n' (for 1 and 2) = 78, 'y' (for 0)=89, i=73, o=79
-    //let obj={stimulus: trial_info.image, data: {condition: tr_type, correct_response: cresp, lbin:lure_bin}}
 
     // Assign exptImage to the right path for the selected stim set
     const exptImage=getImageName(this_trial.image,stim_set);
@@ -104,9 +101,6 @@ function loadOMSTBlock (trial_stim, stim_set) {
     tlv.push(obj); // add it to the array of timeline variables
   }
 
-  //----------------------- 3 ----------------------
-  //------------ oMST EXPERIMENT BLOCK --------------
-
   // create copy of default settings
   var omstBlock = deepCopy(defaultBlockSettings);
   omstBlock.conditions = tlv; //set the conditions of the trials to the array
@@ -120,36 +114,81 @@ function loadMSTSBlock (trial_stim, stim_set) {
   // Copied / modified version of loadOMSTBlock
   var tlv = [];
   var ntrials = trial_stim.length;
-  let DEBUGMODE = 0;
+  const DEBUGMODE = 0;
   if (DEBUGMODE == 1) {
     ntrials = 20;
   }
   console.log('MSTS - building up the ' + ntrials + ' trials');
   for (var i = 0; i < ntrials; i++) {
     // in corr_resp: 0=old, 1=sim, 2=new
-    let this_trial = trial_stim[i]; // added "let"
-    let tr_type = 'SR';
+    const this_trial = trial_stim[i]; 
+    const tr_type = this_trial.cond;
     // Assign exptImage to the right path for the selected stim set
     const exptImage=getImageName(this_trial.image,stim_set);
-   
     // create the timeline variable object
     let obj = {
       stimulus: exptImage,
       data: { condition: tr_type, correct_response: cresp, lbin: lure_bin },
     };
+    tlv.push(obj); // add it to the array of timeline variables
+  }
+
+  var mstsBlock = deepCopy(defaultBlockSettings);
+  mstsBlock.conditions = tlv; //set the conditions of the trials to the array
+  return mstsBlock;
+}
+
+function loadMSTTBlock (trial_stim, stim_set) {
+  var tlv = [];
+  var ntrials = trial_stim.length;
+  const DEBUGMODE = 0;
+  if (DEBUGMODE == 1) {
+    ntrials = 20;
+  }
+  console.log('MSTT - Building up the ' + ntrials + ' trials');
+  for (var i = 0; i < ntrials; i++) {
+    // in corr_resp: 0=old, 1=sim, 2=new
+    const this_trial = trial_stim[i]; 
+    let tr_type = 'foil';  // Yes, the order files have these, but I'm trying to keep things parallel with oMST (CELS)
+    let cresp = 'n';
+    if (this_trial.cond == 'TR') {
+      tr_type = 'target';
+      cresp = 'o';
+    } else if (this_trial.cond == 'TL') {
+      tr_type = 'lure';
+      if (twochoice == 1) {
+        cresp = 'n';
+      } else {
+        cresp = 's';
+      }
+    }
+    let lure_bin = 0; // We may or may not have this in the order file
+    if (this_trial.lbin && this_trial.lbin !== 'undefined') {
+      lure_bin = this_trial.lbin;
+    }
+
+    // Assign exptImage to the right path for the selected stim set
+    const exptImage=getImageName(this_trial.image,stim_set);
+    
+    // create the timeline variable object
+    let obj = {
+      stimulus: exptImage,
+      data: { condition: tr_type, correct_response: cresp, lbin: lure_bin },
+    };
+    //console.log('DBG:',exptImage, this_trial.image)
     //console.log(i + '  bin: ' + lure_bin)
     tlv.push(obj); // add it to the array of timeline variables
   }
 
-  //----------------------- 3 ----------------------
-  //------------ oMST EXPERIMENT BLOCK --------------
-
   // create copy of default settings
-  var omstBlock = deepCopy(defaultBlockSettings);
-  omstBlock.conditions = tlv; //set the conditions of the trials to the array
-  return omstBlock;
+  var msttBlock = deepCopy(defaultBlockSettings);
+  msttBlock.conditions = tlv; //set the conditions of the trials to the array
+  return msttBlock;
 }
+
+
+
 //----------------------- 4 ----------------------
 //--------------------- EXPORT -------------------
 
-export { loadOMSTBlock, loadMSTSBlock };
+export { loadOMSTBlock, loadMSTSBlock, loadMSTTBlock };
