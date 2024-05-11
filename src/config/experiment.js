@@ -18,6 +18,7 @@
 //                       edit image name for each set (now tlv.stimulus)
 //        5/5/24 (CELS): Renamed exptBlock to omstBlock
 //        5/11/24 (CELS): Wrote helper function for getImageName and streamlined
+//                        Added functions loadMSTSBlock and loadMSTTBlock
 //
 //   --------------------
 //   This file contains a function that defines the experiment's changing 
