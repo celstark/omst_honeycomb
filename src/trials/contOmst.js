@@ -167,7 +167,7 @@ var instr_stim = function () {
 
 var instr_trial = {};
 
-function refresh_cont_trials() {
+function refresh_omst_trials() {
   instr_trial = {
     type: resp_mode == "button" ? jsPsychHtmlButtonResponse : jsPsychHtmlKeyboardResponse,
     choices: instr_choice,
@@ -298,4 +298,4 @@ var dataCalcFunction = (data) => {
 //----------------------- 4 ----------------------
 //--------------------- EXPORTS -------------------
 
-export { refresh_cont_trials, omst_preload, instr_trial, debrief_block, dataCalcFunction, retstr };
+export { refresh_omst_trials, omst_preload, instr_trial, debrief_block, dataCalcFunction, retstr };

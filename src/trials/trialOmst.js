@@ -94,7 +94,7 @@ var trial_choices = function () {
 // Keyboard version and button version
 
 // Keyboard version
-export function keyContTrial(config, options) {
+export function omst_keyTrial(config, options) {
   // set default trial parameters for keyboard response
   const defaults = {
     responseType: jsPsychImageKeyboardResponse,
@@ -162,7 +162,7 @@ export function keyContTrial(config, options) {
 }
 
 // Button version
-export function buttonContTrial(config, options) {
+export function omst_buttonTrial(config, options) {
   const defaults = {
     // set default trial parameters for button response
     responseType: jsPsychImageButtonResponse,

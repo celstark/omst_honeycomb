@@ -156,8 +156,8 @@ function loadOrder(format, stim_set, sublist, phase=1) {
   let key=format+"_"+stim_set+"_"+phase+"_"+sublist;
   console.log('loadOrder called with key=',key)
   let vals=codes.get(key);
-  console.log('val0',vals[0]);
-  console.log('val1',vals[1][0]);
+  //console.log('val0',vals[0]);
+  //console.log('val1',vals[1][0]);
   return vals
 }
 

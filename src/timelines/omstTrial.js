@@ -41,7 +41,7 @@ import { config } from "../config/main";
 import { stim_set, selfpaced, orderfile, resp_mode } from "../App/components/Login";
 
 // default settings for a contOmst trial
-import { keyContTrial, buttonContTrial } from "../trials/trialCont";
+import { omst_keyTrial, omst_buttonTrial } from "../trials/trialOmst";
 
 //----------------------- 2 ----------------------
 //-------------------- TIMELINE ------------------
@@ -49,13 +49,14 @@ import { keyContTrial, buttonContTrial } from "../trials/trialCont";
 // sets up a basic trial in the contOmst, gets repeated for each element of the trial_stim array in testBlock
 
 // initialize timeline
-var timeline = [];
+//var timeline = [];  // TODO: Can this be moved inside omstTrial?
 
 const omstTrial = (blockSettings, blockDetails, tlv) => {
+  var timeline = [];
   // if keyboard response, load stimulus and data specifications for keyboard trials into timeline
   if (resp_mode == "keyboard") {
     timeline = [
-      keyContTrial(config, {
+      omst_keyTrial(config, {
         image: function () {
           return tlv.stimulus;
         },
@@ -81,7 +82,7 @@ const omstTrial = (blockSettings, blockDetails, tlv) => {
   // if button response response, load stimulus and data specifications for keyboard trials into timeline
   else {
     timeline = [
-      buttonContTrial(config, {
+      omst_buttonTrial(config, {
         image: function () {
           return tlv.stimulus;
         },

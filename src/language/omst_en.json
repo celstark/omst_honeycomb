@@ -175,6 +175,22 @@
     },
     "ty": "Thank You"
   },
+  "msts": {
+    "key": {
+      "trial_prompt": "Would you normally see this indoors (<b>v</b>) or outdoors (<b>v</b>)?",
+      "trial_choices": {
+        "indoors": "v",
+        "outdoors": "n"
+      }
+    },
+    "button": {
+      "trial_prompt": "Would you normally see this <i>indoors</i? or <i>outdoors</i>?",
+      "trial_choices": {
+        "indoors": "Indoors",
+        "outdoors": "Outdoors"
+     }
+    }
+  },
   "end": {
     "nc": "Consent not given. The experiment has ended.",
     "ty": "Thank you for your participation in the experiment. You may close this window if you are not redirected"

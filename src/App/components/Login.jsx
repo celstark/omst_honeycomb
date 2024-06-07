@@ -33,6 +33,7 @@
 //        8/9/23  (AGH): updated for new 2x3 orderfiles, removed trialorder
 //                       state var and changed run to "sublist"
 //        5/1/24 (CELS): Added "Format" option for oMST vs Classic-Full vs Classic-half
+//        5/11/24 (CELS): Added bits for msts and mstt
 //
 //   --------------------
 //   This file creates a Login screen that logs in the participant
@@ -53,12 +54,13 @@ import { deepCopy } from "../../lib/utils";
 import { loadOrder } from "../../config/cont";
 //import { getOrderfilename, loadOrderfile, loadOrder } from "../../config/cont";
 
-import { loadOMSTBlock } from "../../config/experiment";
+import { loadOMSTBlock, loadMSTSBlock, loadMSTTBlock } from "../../config/experiment";
 import { defaultBlockSettings } from "../../config/main";
 
 import { refresh_pcon_trials } from "../../trials/pcon_demos";
 import { refresh_instr_trials } from "../../trials/instructions";
-import { refresh_cont_trials } from "../../trials/contOmst";
+import { refresh_omst_trials } from "../../trials/contOmst";
+// TODO - add in the refresh_msts and refresh_mtt
 
 import { getFormattedDate } from "../../lib/utils";
 
@@ -84,7 +86,8 @@ var include_instr;
 var trial_stim;
 var trial_stim_mstt = false;
 var omstBlock = deepCopy(defaultBlockSettings);
-
+var mstsBlock = deepCopy(defaultBlockSettings);
+var msttBlock = deepCopy(defaultBlockSettings);
 var consent_login_data;
 var demog_login_data;
 var pcon_login_data;
@@ -225,19 +228,24 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
 
     //    orderfile = getOrderfilename(stim_set, sublist);
     //    trial_stim = loadOrderfile(orderfile);
-    if (format !== "omst") {
+    if (format == "omst") {
+      omstBlock = loadOMSTBlock(trial_stim, stim_set);
+      refresh_omst_trials();
+    } else {
       // A study-test mode
+      mstsBlock = loadMSTSBlock(trial_stim, stim_set);
       orderfile_mstt = orderfile.replace("_p1_", "_p2_");
+      const ofvals_mstt = loadOrder(format, stim_set, sublist, 2);
+      orderfile_mstt = ofvals_mstt[0];
+      trial_stim_mstt = ofvals_mstt[1];
+      msttBlock = loadMSTTBlock(trial_stim_mstt, stim_set);
+      // TODO - refresh the msts and mstt()
     }
 
     // load exptBlock conditions from timeline variables
     // in /config/experiment.js
-    omstBlock = loadOMSTBlock(trial_stim, stim_set);
 
-    // refresh trails based on Login options
-    console.log("refreshing trials");
     refresh_instr_trials();
-    refresh_cont_trials();
     refresh_pcon_trials();
 
     // Save the user-selected options to localStorage
@@ -562,6 +570,8 @@ export {
   trial_stim,
   trial_stim_mstt,
   omstBlock,
+  mstsBlock,
+  msttBlock,
   consent_login_data,
   demog_login_data,
   pcon_login_data,

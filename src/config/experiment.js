@@ -46,6 +46,7 @@ function getImageName(imagename, stim_set) {
   // CELS: helper function we'll use a few times to return the base image name
   // These come in as things like Set 1_rs/153a.jpg and need to become /static/media/153a.95b34cd0b497afc6341d.jpg 
   // The SetX_rs bits are already gone here in Electron, replaced by that random string, but our goal is to 
+  //console.log('getImageName: ',imagename);
   if (stim_set == '1') { return set1Images[imagename.replace('Set 1_rs/', '')]; } 
   else if (stim_set == '2') { return set2Images[imagename.replace('Set 2_rs/', '')]; } 
   else if (stim_set == '3') { return set3Images[imagename.replace('Set 3_rs/', '')]; } 
@@ -119,17 +120,18 @@ function loadMSTSBlock (trial_stim, stim_set) {
   if (DEBUGMODE == 1) {
     ntrials = 20;
   }
-  console.log('MSTS - building up the ' + ntrials + ' trials');
+  console.log('MSTS - building up the ' + ntrials + ' trials for set ' + stim_set);
+  //console.log(trial_stim);
   for (var i = 0; i < ntrials; i++) {
     // in corr_resp: 0=old, 1=sim, 2=new
     const this_trial = trial_stim[i]; 
     const tr_type = this_trial.cond;
     // Assign exptImage to the right path for the selected stim set
-    const exptImage=getImageName(this_trial.image,stim_set);
+    const exptImage=getImageName(this_trial.stim,stim_set);
     // create the timeline variable object
     let obj = {
       stimulus: exptImage,
-      data: { condition: tr_type, correct_response: cresp, lbin: lure_bin },
+      data: { condition: tr_type },
     };
     tlv.push(obj); // add it to the array of timeline variables
   }
@@ -169,7 +171,7 @@ function loadMSTTBlock (trial_stim, stim_set) {
     }
 
     // Assign exptImage to the right path for the selected stim set
-    const exptImage=getImageName(this_trial.image,stim_set);
+    const exptImage=getImageName(this_trial.stim,stim_set);
     
     // create the timeline variable object
     let obj = {
