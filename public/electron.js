@@ -27,7 +27,7 @@
 const { app, BrowserWindow, dialog } = require("electron");
 const path = require("path");
 const ipc = require("electron").ipcMain;
-const _ = require("lodash");
+//const _ = require("lodash");
 const fs = require("fs-extra");
 const log = require("electron-log");
 const fsExtra = require("fs-extra"); // 7/24/23 (AGH) ADDED
@@ -47,7 +47,9 @@ let mainWindow;
 const saveDataAndQuit = () => {
   const dcode = today.getTime();
   if (stream) {
-    stream.end("]");
+    if (stream.writable) {
+      stream.end("]");
+    }
     stream.on("finish", () => {
       if (preSavePath && savePath) {
         const filename = `pid_${participantID}_${dcode}.json`; // Generate a unique filename using the current timestamp
@@ -66,7 +68,9 @@ const saveDataAndQuit = () => {
   }
   if (stream_csv) {
     // CELS - added
-    stream_csv.end("\n");
+    if (stream_csv.writable) {
+      stream_csv.end("\n");
+    }
     stream_csv.on("finish", () => {
       if (preSavePath_csv && savePath) {
         const filename = `pid_${participantID}_${dcode}.csv`; // Generate a unique filename using the current timestamp
@@ -413,9 +417,9 @@ process.on("uncaughtException", (error) => {
   log.error(error);
 
   // this isn't dev, throw up a dialog
-  if (!process.env.ELECTRON_START_URL) {
-    dialog.showMessageBoxSync(mainWindow, { type: "error", message: error, title: "Task Error" });
-  }
+  //if (!process.env.ELECTRON_START_URL) {
+  //  dialog.showMessageBoxSync(mainWindow, { type: "error", message: error, title: "Task Error" });
+  //}
 });
 
 // This method will be called when Electron has finished
@@ -451,12 +455,16 @@ app.on("will-quit", () => {
       stream.end("]");
     }
     stream = false;
-
+    if (stream_csv.writable) {
+      stream_csv.end("\n");
+    }
+    stream_csv = false;
     // copy file to config location
     //console.log('  will-quit, copyFileSync bit...')
     fs.mkdir(savePath, { recursive: true }, (err) => {
       log.error(err);
       fs.copyFileSync(preSavePath, getFullPath(`pid_${participantID}_${today.getTime()}.json`));
+      fs.copyFileSync(preSavePath_csv, getFullPath(`pid_${participantID}_${today.getTime()}.csv`));
     });
   }
 });
