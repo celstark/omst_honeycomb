@@ -284,8 +284,8 @@ var pconDataCalcFunction = (data) => {
   let corr_targs = targets.filter({ correct: true });
   let corr_foils = foils.filter({ correct: true });
 
-  let hits = Math.round((corr_targs.count() / targets.count()) * 100);
-  let crs = Math.round((corr_foils.count() / foils.count()) * 100);
+  let hits = Math.round(corr_targs.count() / targets.count());
+  let crs = Math.round(corr_foils.count() / foils.count());
   let p_fa = 0.0;
   let p_hit = 0.0;
   if (corr_targs.count() == 0) {
@@ -311,7 +311,8 @@ var pconDataCalcFunction = (data) => {
 
   let dpTF = invNormcdf(p_hit) - invNormcdf(p_fa);
 
-  var retstr = "HR, " + hits + ", CR rate, " + crs + ", d'T:F, " + dpTF.toFixed(3);
+  var retstr =
+    "HR, " + hits.toFixed(3) + ", CR rate, " + crs.toFixed(3) + ", d'T:F, " + dpTF.toFixed(3);
   data.summary = retstr;
   console.log("retstr:" + retstr);
   return retstr;
