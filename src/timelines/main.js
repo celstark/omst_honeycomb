@@ -92,9 +92,8 @@ import {
   side_by_side2,
   outtro,
 } from "../trials/instructions";
-import { omst_preload, instr_trial, debrief_block } from "../trials/contOmst";
+import { omst_preload, instr_trial, debrief_block, omst_feedback } from "../trials/contOmst";
 import setupomstBlock from "./omstBlock";
-import { omst_feedback } from "../trials/contOmst";
 import { end_message } from "../trials/end";
 
 //----------------------- 2 ----------------------
