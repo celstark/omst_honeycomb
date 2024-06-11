@@ -31,6 +31,7 @@ import _ from "lodash";
 // Access package name and version so we can store these as facts with task data.
 const taskName = packageInfo.name;
 const taskVersion = packageInfo.version;
+console.log("Task version", taskVersion);
 
 // As of jspsych 7, we instantiate jsPsych where needed instead of importing it globally.
 // The instance here gives access to utils in jsPsych.turk, for awareness of the mturk environment, if any.
