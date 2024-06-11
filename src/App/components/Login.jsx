@@ -32,6 +32,7 @@
 //                       checkConfigOptions)
 //        8/9/23  (AGH): updated for new 2x3 orderfiles, removed trialorder
 //                       state var and changed run to "sublist"
+//       6/10/24 (CELS): Added feedback option
 //
 //   --------------------
 //   This file creates a Login screen that logs in the participant
@@ -75,6 +76,7 @@ var include_consent;
 var include_demog;
 var include_pcon;
 var include_instr;
+var include_feedback;
 
 var trial_stim;
 var exptBlock1 = deepCopy(defaultBlockSettings);
@@ -104,6 +106,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
   const [includeDemog, setDemog] = useState(false);
   const [includePcon, setPcon] = useState(false);
   const [includeInstr, setInstr] = useState(false);
+  const [includeFeedback, setFeedback] = useState(false);
   const [showExperimenterView, setShowExperimenterView] = useState(false); // Toggle for experimenter view
 
   // Function to check and retrieve the stored options from localStorage
@@ -121,6 +124,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     const storedDemog = localStorage.getItem(`${studyId}_demog`);
     const storedPcon = localStorage.getItem(`${studyId}_pcon`);
     const storedInstr = localStorage.getItem(`${studyId}_instr`);
+    const storedFeedback = localStorage.getItem(`${studyId}_feedback`);
 
     // Set the stored options as the initial state if available
     setStimset(storedStimset || "1");
@@ -133,6 +137,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     setDemog(storedDemog == "true");
     setPcon(storedPcon == "true");
     setInstr(storedInstr == "true");
+    setFeedback(storedFeedback == "true");
   }, [studyId]); // Only run this effect when studyId change
 
   // Function to log in participant
@@ -205,6 +210,9 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     include_instr = includeInstr;
     console.log("include instr =" + includeInstr);
 
+    include_feedback = includeFeedback;
+    console.log("include feedback =" + includeFeedback);
+
     // load trial stim from jsOrders file
     // both writeOrderfile and loadOrderfil defined in /config/cont.js
     orderfile = writeOrderfile(stim_set, sublist);
@@ -231,6 +239,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     localStorage.setItem(`${studyId}_demog`, includeDemog);
     localStorage.setItem(`${studyId}_pcon`, includePcon);
     localStorage.setItem(`${studyId}_instr`, includeInstr);
+    localStorage.setItem(`${studyId}_feedback`, includeFeedback);
 
     // load login options to be recorded in data file
     var login_data = {
@@ -243,6 +252,7 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
       include_demog: include_demog,
       include_pcon: include_pcon,
       include_instr: include_instr,
+      include_feedback: include_feedback,
       twochoice: twochoice,
       selfpaced: selfpaced,
     };
@@ -427,6 +437,16 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
                     />
                   </Form.Group>
                 </div>
+                <div className="checkbox-option">
+                  <Form.Group controlId="feedback">
+                    <Form.Check
+                      type="checkbox"
+                      label="Feedback"
+                      checked={includeFeedback}
+                      onChange={(e) => setFeedback(e.target.checked)}
+                    />
+                  </Form.Group>
+                </div>
               </div>
 
               <Button
@@ -518,6 +538,7 @@ export {
   include_demog,
   include_pcon,
   include_instr,
+  include_feedback,
   twochoice,
   selfpaced,
   orderfile,

@@ -18,6 +18,7 @@
 //        8/1/23 (AGH):  added pconDataCalcFunction to on_finish in
 //                       in combinedOptions to add pcon data summary
 //                       to the data file
+//       6/10/24 (CELS): Passing jsPsych to buildTimeline
 //
 //   --------------------
 //   This file holds the experiment, adds properties and builds the
@@ -95,7 +96,7 @@ function JsPsychExperiment({
   }, [participantId, studyId, taskVersion]);
 
   // Build our jspsych experiment timeline (in this case a Honeycomb demo, you could substitute your own here).
-  const timeline = buildTimeline(jsPsych);
+  const timeline = buildTimeline(jsPsych, studyId, participantId);
 
   // Set up event and lifecycle callbacks to start and stop jspsych.
   // Inspiration from jspsych-react: https://github.com/makebrainwaves/jspsych-react/blob/master/src/index.js

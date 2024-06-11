@@ -19,6 +19,8 @@
     "@jspsych/plugin-fullscreen": "^1.2.0",
     "@jspsych/plugin-html-button-response": "^1.1.1",
     "@jspsych/plugin-html-keyboard-response": "^1.1.1",
+    "@jspsych/plugin-canvas-button-response": "^1.1.1",
+    "@jspsych/plugin-canvas-keyboard-response": "^1.1.1",
     "@jspsych/plugin-image-button-response": "^1.1.1",
     "@jspsych/plugin-image-keyboard-response": "^1.1.2",
     "@jspsych/plugin-instructions": "^1.1.3",

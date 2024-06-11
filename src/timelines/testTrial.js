@@ -50,7 +50,7 @@ import { keyContTrial, buttonContTrial } from "../trials/trialCont";
 // initialize timeline
 var timeline = [];
 
-const testTrial = (blockSettings, blockDetails, tlv) => {
+const testTrial = (tlv) => {
   // if keyboard response, load stimulus and data specifications for keyboard trials into timeline
   if (resp_mode == "keyboard") {
     timeline = [

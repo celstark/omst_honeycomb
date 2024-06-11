@@ -28,6 +28,7 @@
 //                       data of the first included trial
 //                       added pcon trials
 //        10/28/23 (CELS): Set to pre-load the oMST as well
+//        6/10/24 (CELS): Adding feedback option and cleanup
 //
 //   --------------------
 //   This file builds the primaryTimeline from all of the trials.
@@ -39,7 +40,7 @@
 //----------------------- 1 ----------------------
 //-------------------- IMPORTS -------------------
 
-import { config } from "../config/main";
+//import { config } from "../config/main";
 
 // Login options
 import {
@@ -47,6 +48,7 @@ import {
   include_demog,
   include_pcon,
   include_instr,
+  include_feedback,
   exptBlock1,
   consent_login_data,
   demog_login_data,
@@ -88,7 +90,7 @@ import {
   side_by_side2,
   outtro,
 } from "../trials/instructions";
-import { omst_preload, instr_trial, debrief_block } from "../trials/contOmst";
+import { omst_preload, instr_trial, debrief_block, omst_feedback } from "../trials/contOmst";
 import testBlock from "./testBlock";
 import { end_message } from "../trials/end";
 
@@ -106,9 +108,12 @@ const jsPsychOptions = {
 // Honeycomb will call this function for us after the subject logs in, and run the resulting timeline.
 // The instance of jsPsych passed in will include jsPsychOptions above, plus other options needed by Honeycomb.
 
-const buildTimeline = () => (config.USE_MTURK ? mturkTimeline : buildPrimaryTimeline());
+//const buildTimeline = () => (config.USE_MTURK ? mturkTimeline : buildPrimaryTimeline());
 
-const buildPrimaryTimeline = () => {
+//const buildPrimaryTimeline = () => {
+function buildTimeline(jsPsych, studyID, participantID) {
+  console.log(`Building timeline for participant ${participantID} on study ${studyID}`);
+
   const primaryTimeline = [];
 
   // conditional timeline if consent form is included
@@ -190,6 +195,18 @@ const buildPrimaryTimeline = () => {
     data: { login_data: instr_login_data },
   };
 
+  // conditional timeline if feedback is included at the end
+  const incl_feedback = (jsPsych) => ({
+    timeline: [omst_feedback(jsPsych)],
+    conditional_function: function () {
+      if (include_feedback) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  });
+
   // conditional timeline that runs the experiment if consent is given
   var consented = {
     timeline: [
@@ -200,7 +217,8 @@ const buildPrimaryTimeline = () => {
       // continuous omst
       omst_preload,
       instr_trial, // instructions
-      testBlock(exptBlock1), // looping trials
+      testBlock(exptBlock1, jsPsych), // looping trials
+      incl_feedback(jsPsych),
       debrief_block, // thank you
 
       end_message, // final thank you message
@@ -232,20 +250,7 @@ const buildPrimaryTimeline = () => {
   // push conditional consent and notconsented timelines to primary timeline
   primaryTimeline.push(incl_consent, consented, notConsented);
   return primaryTimeline;
-};
-
-// for future mturk use??
-const mturkTimeline = [
-  //preamble,
-  //countdown({ message: lang.countdown.message1 }),
-  //taskBlock(tutorialBlock),
-  //countdown({ message: lang.countdown.message2 }),
-  //taskBlock(exptBlock1),
-  // showMessage(config, {
-  //   duration: 5000,
-  //   message: lang.task.end,
-  // }),
-];
+}
 
 //----------------------- 4 ----------------------
 //-------------------- EXPORTS -------------------

@@ -29,18 +29,19 @@ import { generateStartingOpts } from "../lib/taskUtils";
 
 // testBlock
 
-const testBlock = (blockSettings) => {
+const testBlock = (blockSettings, jsPsych) => {
   // initialize block with starting options that set up looped trials
   const startingOpts = generateStartingOpts(blockSettings);
 
-  const blockDetails = {
-    block_earnings: 0.0,
-    optimal_earnings: 0.0,
-    continue_block: true,
-  };
+  // const blockDetails = {
+  //   block_earnings: 0.0,
+  //   optimal_earnings: 0.0,
+  //   continue_block: true,
+  // };
 
   // timeline = loop through trials
-  const timeline = startingOpts.map((tlv) => testTrial(blockSettings, blockDetails, tlv));
+  console.dir(jsPsych); // remove
+  const timeline = startingOpts.map((tlv) => testTrial(tlv));
 
   const blockStart = {
     type: htmlKeyboardResponse,
@@ -55,6 +56,10 @@ const testBlock = (blockSettings) => {
 
   return {
     type: htmlKeyboardResponse,
+    on_finish: function (data) {
+      console.log("testBlock finished");
+      console.log(data);
+    },
     timeline,
   };
 };
