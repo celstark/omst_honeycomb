@@ -7,6 +7,7 @@
 //
 //   Changes:
 //        6/20/23 (AGH): removed language selection to /trials/selectLanguage.js
+//        5/9/24 (CELS): Added bit to fix the order of the oMST
 //
 //   --------------------
 //   This is the main configuration file where universal and default settings
@@ -68,7 +69,7 @@ const USE_EEG = process.env.REACT_APP_USE_EEG === "true" && USE_ELECTRON; // whe
 const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === "true" && USE_ELECTRON; // whether or not the photodiode is in use
 
 const defaultBlockSettings = {
-  randomize_order: false, // Need this or to have it in config.json?
+  randomize_order: false,
   // FIX -- this really is vestigial
   conditions: ["a", "b", "c"],
   repeats_per_condition: 1, // number of times every condition is repeated
