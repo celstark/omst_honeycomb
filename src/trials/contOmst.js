@@ -218,7 +218,7 @@ const omst_feedback = (jsPsych) => ({
     let foils = validTrials.filter({ condition: "foil" });
     let lure_sim = lures.filter({ resp: "s" });
     let foil_sim = foils.filter({ resp: "s" });
-    trial.ldi = (lure_sim.count() / lures.count() - foil_sim.count() / foils.count()).toFixed(2);
+    trial.ldi = lure_sim.count() / lures.count() - foil_sim.count() / foils.count();
     trial.zscore = (trial.ldi - (0.9688 - 0.006756 * trial.subjAge)) / 0.1753;
     console.log("LDI ", trial.ldi);
     //console.log(data)
@@ -238,8 +238,9 @@ const omst_feedback = (jsPsych) => ({
     ctx.fillStyle = grd;
     ctx.fillRect(0, 30, 600, 160);
 
-    // Draw a line based on the random number
-    var xPos = ((this.zscore + 3) / 6) * 600; // Scale the random number to canvas width
+    let ldi = this.ldi.toFixed(2);
+    let zscore = Math.min(Math.max(this.zscore, -2.95), 2.95);
+    var xPos = ((zscore + 3) / 6) * 600; // Scale the random number to canvas width
     //console.log(ldi,zscore);
     //console.log(xPos);
     ctx.beginPath();
@@ -262,7 +263,7 @@ const omst_feedback = (jsPsych) => ({
     //console.log('width',ctx.measureText(ldi.toString()))
     //let txtx = xPos - ctx.measureText(ldi.toString()).width / 2;
     //console.log(txtx)
-    ctx.fillText(this.ldi.toString(), xPos - ctx.measureText(this.ldi.toString()).width / 2, 18);
+    ctx.fillText(ldi.toString(), xPos - ctx.measureText(ldi.toString()).width / 2, 18);
   },
 });
 
