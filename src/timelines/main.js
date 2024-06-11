@@ -31,6 +31,7 @@
 //        5/5/24 (CELS): Changed testBlock/trial to omstBlock/Trial
 //        5/6/24 (CELS): Cleanup some logic
 //        6/10/24 (CELS): Adding feedback option and cleanup
+//        6/11/24 (CELS): Reorganization by grouping trials into timelines
 //
 //   --------------------
 //   This file builds the primaryTimeline from all of the trials.
@@ -64,34 +65,12 @@ import { consent_trial, consentGiven, not_consented } from "../trials/consent_tr
 import { demogform } from "../trials/demographics";
 
 // pcon
-import {
-  pcon_preload,
-  instr1_trial,
-  demo1_trial,
-  instr2_trial,
-  demo2_trial,
-  instr3_trial,
-  pcon_end,
-} from "../trials/pcon_demos";
+import { pcon_preload, pcon_end, pconinst_TL } from "../trials/pcon_demos";
 import { pconBlock1 } from "../config/pcon_config";
 import pconBlock from "./pconBlock";
 
 // contomst
-import {
-  intro,
-  new1,
-  new2,
-  new3,
-  repeat1,
-  lure1,
-  side_by_side1,
-  new4,
-  new5,
-  repeat2,
-  lure2,
-  side_by_side2,
-  outtro,
-} from "../trials/instructions";
+import { omstinst_TL } from "../trials/omst_instructions.js";
 import { omst_preload, instr_trial, debrief_block, omst_feedback } from "../trials/contOmst";
 import setupomstBlock from "./omstBlock";
 import { end_message } from "../trials/end";
@@ -114,11 +93,16 @@ const jsPsychOptions = {
 
 //const buildPrimaryTimeline = () => {
 function buildTimeline(jsPsych, studyID, participantID) {
+  // This makes heavy use of the conditional timelines to get the optional bits done.
+  // TL;DR is that each phase gets its own timeline.  The conditional_function, if evaluating
+  // to true, makes that phase active in the timeline.  If false, it gets skipped.  We use
+  // the existing flags, include_XXX, as that conditional.
   console.log(`Building timeline for participant ${participantID} on study ${studyID}`);
 
   const primaryTimeline = [];
+
   // conditional timeline if consent form is included
-  var incl_consent = {
+  var optTL_consent = {
     timeline: [consent_trial],
     conditional_function: function () {
       return include_consent;
@@ -128,7 +112,7 @@ function buildTimeline(jsPsych, studyID, participantID) {
   };
 
   // conditional timeline if demog form is included
-  var incl_demog = {
+  var optTL_demog = {
     timeline: [demogform],
     conditional_function: function () {
       return include_demog;
@@ -138,17 +122,12 @@ function buildTimeline(jsPsych, studyID, participantID) {
   };
 
   // conditional timeline if pcon is included
-  var incl_pcon = {
-    timeline: [
-      pcon_preload,
-      instr1_trial, // instructions and demos
-      demo1_trial,
-      instr2_trial,
-      demo2_trial,
-      instr3_trial,
-      pconBlock(pconBlock1), // loop through test trials
-      pcon_end, // ty message
-    ],
+  let pcon_TL = pconinst_TL;
+  pcon_TL.unshift(pcon_preload);
+  pcon_TL.push(pconBlock(pconBlock1));
+  pcon_TL.push(pcon_end);
+  var optTL_pcon = {
+    timeline: pcon_TL,
     conditional_function: function () {
       return include_pcon;
     },
@@ -157,22 +136,8 @@ function buildTimeline(jsPsych, studyID, participantID) {
   };
 
   // conditional timeline if instructions are included
-  var incl_instr = {
-    timeline: [
-      intro,
-      new1,
-      new2,
-      new3,
-      repeat1,
-      lure1,
-      side_by_side1,
-      new4,
-      new5,
-      repeat2,
-      lure2,
-      side_by_side2,
-      outtro,
-    ],
+  var optTL_instr = {
+    timeline: omstinst_TL,
     conditional_function: function () {
       return include_instr;
     },
@@ -195,9 +160,9 @@ function buildTimeline(jsPsych, studyID, participantID) {
   // conditional timeline that runs the experiment if consent is given
   var consented = {
     timeline: [
-      incl_demog, // demographics form
-      incl_pcon, // perceptual control task
-      incl_instr, // instructions
+      optTL_demog, // demographics form
+      optTL_pcon, // perceptual control task
+      optTL_instr, // instructions
 
       // continuous omst
       omst_preload,
@@ -227,7 +192,7 @@ function buildTimeline(jsPsych, studyID, participantID) {
   };
 
   // push conditional consent and notconsented timelines to primary timeline
-  primaryTimeline.push(incl_consent, consented, notConsented);
+  primaryTimeline.push(optTL_consent, consented, notConsented);
   return primaryTimeline;
 }
 

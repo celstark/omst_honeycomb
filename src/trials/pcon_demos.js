@@ -12,6 +12,7 @@
 //                       modified side by side display stimuli
 //                       (instr2_stim and instr3_stim)
 //        8/11/23 (AGH): changed trial_txt to trial_text for consistency
+//        6/11/24 (CELS): Reorganization by grouping trials into timelines
 //
 //   --------------------
 //   This file includes the instruction and demo trials of the perceptual
@@ -135,18 +136,19 @@ var pcon_preload = {
 };
 
 //initiate trials to be loaded within the refresh function
-var instr1_trial = {};
-var demo1_trial = {};
-var instr2_trial = {};
-var demo2_trial = {};
-var instr3_trial = {};
+var pcon_instr1_trial = {};
+var pcon_demo1_trial = {};
+var pcon_instr2_trial = {};
+var pcon_demo2_trial = {};
+var pcon_instr3_trial = {};
 var pcon_end = {};
+var pconinst_TL = [];
 
 // refresh function called on Login once options for resp_mode and lang are set
 function refresh_pcon_trials() {
   console.log("...refreshing pcon trials");
 
-  instr1_trial = {
+  pcon_instr1_trial = {
     type: resp_mode == "button" ? jsPsychHtmlButtonResponse : jsPsychHtmlKeyboardResponse,
     choices: instr_choice,
     prompt: instr1_prompt,
@@ -156,7 +158,7 @@ function refresh_pcon_trials() {
     data: { task: phasename },
   };
 
-  demo1_trial = {
+  pcon_demo1_trial = {
     timeline: [
       {
         type: jsPsychHtmlKeyboardResponse,
@@ -198,7 +200,7 @@ function refresh_pcon_trials() {
     ],
   };
 
-  instr2_trial = {
+  pcon_instr2_trial = {
     type: resp_mode == "button" ? jsPsychHtmlButtonResponse : jsPsychHtmlKeyboardResponse,
     choices: instr_choice,
     prompt: instr2_prompt,
@@ -208,7 +210,7 @@ function refresh_pcon_trials() {
     data: { task: phasename },
   };
 
-  demo2_trial = {
+  pcon_demo2_trial = {
     timeline: [
       {
         type: jsPsychHtmlKeyboardResponse,
@@ -250,7 +252,7 @@ function refresh_pcon_trials() {
     ],
   };
 
-  instr3_trial = {
+  pcon_instr3_trial = {
     type: resp_mode == "button" ? jsPsychHtmlButtonResponse : jsPsychHtmlKeyboardResponse,
     choices: instr_choice,
     prompt: instr3_prompt,
@@ -267,6 +269,16 @@ function refresh_pcon_trials() {
     response_ends_trial: false,
     data: { task: phasename },
   };
+
+  pconinst_TL = [
+    pcon_instr1_trial, // instructions and demos
+    pcon_demo1_trial,
+    pcon_instr2_trial,
+    pcon_demo2_trial,
+    pcon_instr3_trial,
+  ];
+
+  console.log("refreshed pcondemo trials");
 }
 
 // pcon data summary function called on experiment end to include the summary in the data file
@@ -321,14 +333,4 @@ var pconDataCalcFunction = (data) => {
 //----------------------- 4 ----------------------
 //--------------------- EXPORTS -------------------
 
-export {
-  pcon_preload,
-  refresh_pcon_trials,
-  instr1_trial,
-  demo1_trial,
-  instr2_trial,
-  demo2_trial,
-  instr3_trial,
-  pcon_end,
-  pconDataCalcFunction,
-};
+export { pcon_preload, refresh_pcon_trials, pcon_end, pconDataCalcFunction, pconinst_TL };

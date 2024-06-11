@@ -59,7 +59,7 @@ import { loadOMSTBlock, loadMSTSBlock, loadMSTTBlock } from "../../config/experi
 import { defaultBlockSettings } from "../../config/main";
 
 import { refresh_pcon_trials } from "../../trials/pcon_demos";
-import { refresh_instr_trials } from "../../trials/instructions";
+import { refresh_instr_trials } from "../../trials/omst_instructions";
 import { refresh_omst_trials } from "../../trials/contOmst";
 // TODO - add in the refresh_msts and refresh_mtt
 

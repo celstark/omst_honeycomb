@@ -27,6 +27,8 @@
 //        8/1/23  (AGH): modified side-by-side stimuli and prompts for better
 //                       formatting; CategorizeMultipleImage(Keyboard/Buttons)
 //                       no longer necessary
+//       6/11/24 (CELS): Restructured here so that we only export a timeline
+//                       rather than individual trials
 //
 //   --------------------
 //   These trials are the instruction trials that explain to the
@@ -48,7 +50,7 @@ import { jsPsychCategorizeImageButtons } from "./uniquePlugins/plugin-categorize
 
 // importing languages, images object, and response-mode
 import { images } from "../lib/utils.js";
-import { lang, resp_mode } from "../App/components/Login";
+import { lang, resp_mode } from "../App/components/Login.jsx";
 
 //----------------------- 2 ----------------------
 //----------------- HELPER METHODS ---------------
@@ -219,8 +221,13 @@ var repeat2 = {};
 var lure2 = {};
 var side_by_side2 = {};
 var outtro = {};
+var omstinst_TL = [];
 
 // function to refresh trials, called when Login options are set
+// This really is a critical aspect of how things work.  We can't know at launch
+// things like keyboard vs. button responses.  So, we start off with blank / empty
+// trials (above) and define them in refresh_instr_trials().  Note, that's also
+// why they need to be vars.
 
 function refresh_instr_trials() {
   console.log("...refreshing instr trials");
@@ -396,26 +403,26 @@ function refresh_instr_trials() {
     data: { task: phasename },
   };
 
+  omstinst_TL = [
+    intro,
+    new1,
+    new2,
+    new3,
+    repeat1,
+    lure1,
+    side_by_side1,
+    new4,
+    new5,
+    repeat2,
+    lure2,
+    side_by_side2,
+    outtro,
+  ];
+
   console.log("refreshed instr trials");
 }
 
 //----------------------- 4 ----------------------
 //-------------------- EXPORTS -------------------
-// export the trials to be imported to the main timeline
 
-export {
-  refresh_instr_trials,
-  intro,
-  new1,
-  new2,
-  new3,
-  repeat1,
-  lure1,
-  side_by_side1,
-  new4,
-  new5,
-  repeat2,
-  lure2,
-  side_by_side2,
-  outtro,
-};
+export { refresh_instr_trials, omstinst_TL };
