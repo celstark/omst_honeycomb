@@ -51,7 +51,7 @@ import { omst_keyTrial, omst_buttonTrial } from "../trials/trialOmst";
 // initialize timeline
 //var timeline = [];  // TODO: Can this be moved inside omstTrial?
 
-const omstTrial = (blockSettings, blockDetails, tlv) => {
+const omstTrial = (tlv) => {
   var timeline = [];
   // if keyboard response, load stimulus and data specifications for keyboard trials into timeline
   if (resp_mode == "keyboard") {

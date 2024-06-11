@@ -41,6 +41,8 @@
 import jsPsychHtmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import jsPsychHtmlButtonResponse from "@jspsych/plugin-html-button-response";
 import jsPsychPreload from "@jspsych/plugin-preload";
+import jsPsychCanvasButtonResponse from "@jspsych/plugin-canvas-button-response";
+import jsPsychCanvasKeyboardResponse from "@jspsych/plugin-canvas-keyboard-response";
 
 import { twochoice, lang, resp_mode } from "../App/components/Login";
 
@@ -193,6 +195,78 @@ var debrief_block = {
   data: { task: "oMSTCont" },
 };
 
+// -------- graphical feedback ---------
+const omst_feedback = (jsPsych) => ({
+  type: resp_mode == "button" ? jsPsychCanvasButtonResponse : jsPsychCanvasKeyboardResponse, // TODO: Adapt this later for keyboard
+  choices: instr_choice,
+  canvas_size: [200, 600],
+  on_start: function (trial) {
+    trial.subjAge = 70; // TODO:  Will eventually get these numbers from the demog-form
+    // Try to compute the LDI.  The data should be here by now
+    let data = jsPsych.data.get();
+    if (data === undefined) {
+      trial.ldi = 0.0;
+      trial.zscore = 0.0;
+      console.log("NO DATA FOUND");
+      return;
+    }
+    let validTrials = data.filterCustom(function (trial) {
+      return trial.resp !== null;
+    });
+    //console.dir(validTrials);
+    let lures = validTrials.filter({ condition: "lure" });
+    let foils = validTrials.filter({ condition: "foil" });
+    let lure_sim = lures.filter({ resp: "s" });
+    let foil_sim = foils.filter({ resp: "s" });
+    trial.ldi = lure_sim.count() / lures.count() - foil_sim.count() / foils.count();
+    trial.zscore = (trial.ldi - (0.9688 - 0.006756 * trial.subjAge)) / 0.1753;
+    console.log("LDI ", trial.ldi);
+    //console.log(data)
+  },
+  prompt: lang.cont.ty,
+  stimulus: function (c) {
+    var ctx = c.getContext("2d");
+    ctx.globalCompositeOperation = "source-over";
+    //var randomNumber=-1.5;
+    // Create gradient
+    var grd = ctx.createLinearGradient(0, 0, 150, 0);
+    grd.addColorStop(0, "red");
+    grd.addColorStop(0.6, "yellow");
+    grd.addColorStop(1, "green");
+
+    // Fill with gradient
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 30, 600, 160);
+
+    let ldi = this.ldi.toFixed(2);
+    let zscore = Math.min(Math.max(this.zscore, -2.95), 2.95);
+    var xPos = ((zscore + 3) / 6) * 600; // Scale the random number to canvas width
+    //console.log(ldi,zscore);
+    //console.log(xPos);
+    ctx.beginPath();
+    ctx.moveTo(xPos, 30); // main line
+    ctx.lineTo(xPos, 190);
+    ctx.moveTo(xPos - 10, 20); // top arrow
+    ctx.lineTo(xPos, 30);
+    ctx.lineTo(xPos + 10, 20);
+    ctx.moveTo(xPos - 10, 200); // bottom arrow
+    ctx.lineTo(xPos, 190);
+    ctx.lineTo(xPos + 10, 200);
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = "rgb(0 0 255 / 50%)";
+    ctx.stroke();
+
+    ctx.font = "18px sans-serif";
+    ctx.fillStyle = "black";
+    //ctx.textAlign('center');  // shoot - don't seem to have these
+    //ctx.textBaseline('top');
+    //console.log('width',ctx.measureText(ldi.toString()))
+    //let txtx = xPos - ctx.measureText(ldi.toString()).width / 2;
+    //console.log(txtx)
+    ctx.fillText(ldi.toString(), xPos - ctx.measureText(ldi.toString()).width / 2, 18);
+  },
+});
+
 var retstr;
 
 var dataCalcFunction = (data) => {
@@ -298,4 +372,12 @@ var dataCalcFunction = (data) => {
 //----------------------- 4 ----------------------
 //--------------------- EXPORTS -------------------
 
-export { refresh_omst_trials, omst_preload, instr_trial, debrief_block, dataCalcFunction, retstr };
+export {
+  refresh_omst_trials,
+  omst_preload,
+  instr_trial,
+  omst_feedback,
+  debrief_block,
+  dataCalcFunction,
+  retstr,
+};

@@ -455,10 +455,10 @@ app.on("will-quit", () => {
       stream.end("]");
     }
     stream = false;
-
     if (stream_csv.writable) {
       stream_csv.end("\n");
     }
+    stream_csv = false;
     // copy file to config location
     //console.log('  will-quit, copyFileSync bit...')
     fs.mkdir(savePath, { recursive: true }, (err) => {

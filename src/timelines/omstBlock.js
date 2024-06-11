@@ -30,19 +30,21 @@ import { generateStartingOpts } from "../lib/taskUtils";
 
 // testBlock
 
-const setupomstBlock = (blockSettings) => {
+const setupomstBlock = (blockSettings, jsPsych) => {
   // initialize block with starting options that set up looped trials
   //blockSettings.randomize_order=false;
   // This next line was doing the shuffling - make sure your blockSettings.randomizer_order is false
   const startingOpts = generateStartingOpts(blockSettings);
-  const blockDetails = {
-    block_earnings: 0.0,
-    optimal_earnings: 0.0,
-    continue_block: true,
-  };
+
+  // const blockDetails = {
+  //   block_earnings: 0.0,
+  //   optimal_earnings: 0.0,
+  //   continue_block: true,
+  // };
 
   // timeline = loop through trials
-  const timeline = startingOpts.map((tlv) => omstTrial(blockSettings, blockDetails, tlv));
+  console.dir(jsPsych); // remove
+  const timeline = startingOpts.map((tlv) => omstTrial(tlv));
 
   const blockStart = {
     type: htmlKeyboardResponse,
@@ -57,6 +59,10 @@ const setupomstBlock = (blockSettings) => {
 
   return {
     type: htmlKeyboardResponse,
+    on_finish: function (data) {
+      console.log("testBlock finished");
+      console.log(data);
+    },
     timeline,
   };
 };
