@@ -28,6 +28,9 @@ import jsPsychSurveyHtmlForm from "@jspsych/plugin-survey-html-form";
 //--------------------- TRIAL --------------------
 
 // demographics survey trial
+//lang.demog.name +
+//      '</b> <input name="fullname" type="text" required /></p> \
+//      <p> <b>' +
 var demogform = {
   type: jsPsychSurveyHtmlForm,
   preamble: function () {
@@ -37,9 +40,6 @@ var demogform = {
     return (
       '<div id ="demogform"> \
       <p><b>' +
-      lang.demog.name +
-      '</b> <input name="fullname" type="text" required /></p> \
-      <p> <b>' +
       lang.demog.dob +
       '</b> <input name="dob" type="text" required /></p> \
       <p> <b>' +
