@@ -324,7 +324,7 @@ body,
 #consenttext {
   font-family: 'Open Sans', 'Arial', sans-serif;
   text-align: left;
-  font-size: 16px;
+  font-size: 18px;
   color: #666;
   margin: 50px;
   margin-bottom: 10px;
@@ -335,7 +335,7 @@ body,
 ul {
   font-family: 'Open Sans', 'Arial', sans-serif;
   text-align: left;
-  font-size: 16px;
+  font-size: 20px;
   color: #666;
   margin: 10px;
 }
