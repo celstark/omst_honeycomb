@@ -192,7 +192,7 @@ function refresh_pcon_trials() {
         //stimulus_duration: 2000,
         trial_duration: null,
         response_ends_trial: true,
-        stimulus: images["pprac1b.jpg"],
+        stimulus: images["pprac1a.jpg"],
         data: { task: phasename },
       },
     ],
