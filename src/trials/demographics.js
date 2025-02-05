@@ -41,7 +41,7 @@ var demogform = {
       '<div id ="demogform"> \
       <p><b>' +
       lang.demog.age +
-      '</b> <input name="age" type="text" required /></p> \
+      '</b> <input name="dob" type="text" required /></p> \
       <p> <b>' +
       lang.demog.gender.prompt +
       '</b>\
