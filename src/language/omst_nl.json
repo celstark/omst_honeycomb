@@ -92,7 +92,7 @@
       "instr2_prompt": "Druk op <i>OK</i> om verder te gaan",
       "instr3_prompt": "Klaar om de test te beginnen? Druk op <i>OK</i> om te starten",
       "trial_txt_sd": "<i>Dezelfde</i> of <i>Verschillend</i>?",
-      "trial_txt": "<i>Same</i> or <i>Similar</i>?",
+      "trial_txt": "<i>Dezelfde</i> of <i>Vergelijkbaar</i>?",
       "trial_choices": {
         "same": "Dezelfde",
         "dif_sd": "Verschillend",
