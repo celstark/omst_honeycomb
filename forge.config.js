@@ -8,8 +8,8 @@ module.exports = {
   packagerConfig: {
     asar: true,
     icon: "assets/icons/icon",
-    name: "omst_honeycomb_update",
-    appBundleId: "com.uci.omst_honeycomb_update",
+    name: "omst_honeycomb",
+    appBundleId: "com.uci.omst_honeycomb",
   },
   makers: [
     {
