@@ -47,19 +47,21 @@ import {
   include_consent,
   include_demog,
   include_pcon,
+  include_pairwise,
   include_instr,
   include_feedback,
   exptBlock1,
   consent_login_data,
   demog_login_data,
   pcon_login_data,
+  pairwise_login_data,
   instr_login_data,
   cont_login_data,
 } from "../App/components/Login.jsx";
 
 // consent, demog
-import { consent_trial, consentGiven, not_consented } from "../trials/consent_trial";
-import { demogform } from "../trials/demographics";
+import { createConsentTrial, consentGiven, not_consented } from "../trials/consent_trial";
+import { createDemogForm } from "../trials/demographics";
 
 // pcon
 import {
@@ -70,12 +72,25 @@ import {
   demo2_trial,
   instr3_trial,
   pcon_end,
+  refresh_pcon_trials,
 } from "../trials/pcon_demos";
 import { pconBlock1 } from "../config/pcon_config";
-import pconBlock from "./pconBlock";
+
+// pairwise
+import {
+  pairwise_preload,
+  pairwise_instr1_trial,
+  pairwise_demo1_trial,
+  pairwise_instr2_trial,
+  pairwise_demo2_trial,
+  pairwise_instr3_trial,
+  pairwise_end,
+  refresh_pairwise_trials,
+} from "../trials/pairwise_demos";
 
 // contomst
 import {
+  preload,
   intro,
   new1,
   new2,
@@ -88,11 +103,14 @@ import {
   repeat2,
   lure2,
   side_by_side2,
-  outtro,
+  outro,
+  refresh_instr_trials,
 } from "../trials/instructions";
 import { omst_preload, instr_trial, debrief_block, omst_feedback } from "../trials/contOmst";
-import testBlock from "./testBlock";
 import { end_message } from "../trials/end";
+import testBlock from "./testBlock";
+import pconBlock from "./pconBlock";
+import pairwiseBlock from "./pairwiseBlock";
 
 //----------------------- 2 ----------------------
 //-------------------- OPTIONS -------------------
@@ -112,13 +130,28 @@ const jsPsychOptions = {
 
 //const buildPrimaryTimeline = () => {
 function buildTimeline(jsPsych, studyID, participantID) {
+  console.log("jsPsych object:", jsPsych);
+  console.log("jsPsych type:", typeof jsPsych);
+  console.log("jsPsych.run exists:", typeof jsPsych?.run);
   console.log(`Building timeline for participant ${participantID} on study ${studyID}`);
 
+  refresh_instr_trials(jsPsych);
+  refresh_pcon_trials();
+  refresh_pairwise_trials();
+  console.log("include_consent:", include_consent);
+  console.log("include_demog:", include_demog);
+  console.log("include_pcon:", include_pcon); // ← Is this true?
+  console.log("include pairwise:", include_pairwise);
+  console.log("include_instr:", include_instr);
+  console.log("include_feedback:", include_feedback);
+
+  console.log("instr1_trial:", instr1_trial); // ← What does this object look like?
+  console.log("demo1_trial:", demo1_trial);
   const primaryTimeline = [];
 
   // conditional timeline if consent form is included
   var incl_consent = {
-    timeline: [consent_trial],
+    timeline: [createConsentTrial()],
     conditional_function: function () {
       if (include_consent) {
         return true;
@@ -132,7 +165,7 @@ function buildTimeline(jsPsych, studyID, participantID) {
 
   // conditional timeline if demog form is included
   var incl_demog = {
-    timeline: [demogform],
+    timeline: [createDemogForm()],
     conditional_function: function () {
       if (include_demog) {
         return true;
@@ -167,9 +200,33 @@ function buildTimeline(jsPsych, studyID, participantID) {
     data: { login_data: pcon_login_data },
   };
 
+  // conditional timeline if pairwise is included
+  var incl_pairwise = {
+    timeline: [
+      pairwise_preload,
+      pairwise_instr1_trial, // instructions and demos
+      pairwise_demo1_trial,
+      pairwise_instr2_trial,
+      pairwise_demo2_trial,
+      pairwise_instr3_trial,
+      pairwiseBlock(pconBlock1), // loop through test trials
+      pairwise_end, // ty message
+    ],
+    conditional_function: function () {
+      if (include_pairwise) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    // if this is the first included trial, add login options to data here
+    data: { login_data: pairwise_login_data },
+  };
+
   // conditional timeline if instructions are included
   var incl_instr = {
     timeline: [
+      preload,
       intro,
       new1,
       new2,
@@ -182,7 +239,7 @@ function buildTimeline(jsPsych, studyID, participantID) {
       repeat2,
       lure2,
       side_by_side2,
-      outtro,
+      outro, // ← Add test trial here to check if jsPsych is working before the main experiment trials
     ],
     conditional_function: function () {
       if (include_instr) {
@@ -212,6 +269,7 @@ function buildTimeline(jsPsych, studyID, participantID) {
     timeline: [
       incl_demog, // demographics form
       incl_pcon, // perceptual control task
+      incl_pairwise, // pairwise perceptual control task
       incl_instr, // instructions
 
       // continuous omst

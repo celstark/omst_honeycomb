@@ -27,6 +27,7 @@
 //                       within text file)
 //        8/1/23 (AGH):  moved invNormcdf function to utils, now imported
 //        10/28/23 (CELS): Added preloading
+//        3/10/26 (GES): updated to allow modern graphics
 //
 //   --------------------
 //   This file includes the continuous oMST instructions and debrief trials
@@ -39,14 +40,25 @@
 //-------------------- IMPORTS -------------------
 
 import jsPsychHtmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
-import jsPsychHtmlButtonResponse from "@jspsych/plugin-html-button-response";
+//import jsPsychHtmlButtonResponse from "@jspsych/plugin-html-button-response";
 import jsPsychPreload from "@jspsych/plugin-preload";
 import jsPsychCanvasButtonResponse from "@jspsych/plugin-canvas-button-response";
 import jsPsychCanvasKeyboardResponse from "@jspsych/plugin-canvas-keyboard-response";
+//import jsPsychImageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
+//import jsPsychImageButtonResponse from "@jspsych/plugin-image-button-response";
 
-import { twochoice, lang, resp_mode } from "../App/components/Login";
+import "./css/contOmst.css";
 
-import { invNormcdf } from "../lib/utils";
+import { twochoice, lang, resp_mode, classic_graphics } from "../App/components/Login";
+
+import {
+  invNormcdf,
+  setupButtonListeners,
+  cleanupButtonListeners,
+  getDeviceType,
+  drawHTMLText,
+  preloadPressedImages,
+} from "../lib/utils";
 
 // <script>
 // function waitFor(conditionFunction) {
@@ -125,9 +137,42 @@ import { invNormcdf } from "../lib/utils";
 //---------------- HELPER METHODS ----------------
 // helper methods that setup prompts and response options based on keyboard/button and 2/3 choices
 
+const preload_fnames = [];
+
+preload_fnames.push(
+  "./assets/blank_blue.png",
+  "./assets/blank_blue_pressed.png",
+  "./assets/blank_green.png",
+  "./assets/blank_green_pressed.png",
+  "./assets/blank_red.png",
+  "./assets/blank_red_pressed.png",
+  "./assets/brain.png",
+  "./assets/images/Set1_rs/080a.jpg",
+  ...Array.from({ length: 11 }, (_, i) => `./assets/star${i}.png`)
+);
+
 var omst_preload = {
   type: jsPsychPreload,
+  images: preload_fnames,
+  show_progress_bar: true,
+  show_detailed_erros: true,
+  continue_after_error: true,
   auto_preload: true,
+  on_load: function () {
+    preloadPressedImages();
+    const container = document.querySelector(".jspsych-content");
+    if (container) {
+      container.classList.add("cont-omst");
+    }
+    assignVars();
+  },
+  on_error: function (fname) {
+    console.log("FAILED  " + fname);
+  },
+  on_finish: function (data) {
+    console.log("Preload success? " + data.success);
+    console.log("Failed on " + data.failed_images.length);
+  },
 };
 
 var instr_choice = function () {
@@ -140,9 +185,9 @@ var instr_choice = function () {
 
 var instr_prompt = function () {
   if (resp_mode == "button") {
-    return "<p>" + lang.cont.button.instr_prompt + "</p>";
+    return "<p class='prompt_text'>" + lang.cont.button.instr_prompt + "</p>";
   } else {
-    return "<p>" + lang.cont.key.instr_prompt + "</p>";
+    return "<p class='prompt_text'>" + lang.cont.key.instr_prompt + "</p>";
   }
 };
 
@@ -163,6 +208,31 @@ var instr_stim = function () {
 };
 
 //----------------------- 3 ----------------------
+//--------------------CONSTANTS--------------------
+
+let device = {};
+let smallScreen = {};
+let canvasWidth = {};
+let canvasHeight = {};
+let classicGraphics = {};
+
+function assignVars() {
+  preloadPressedImages();
+  device = getDeviceType();
+  smallScreen = device[2];
+  canvasWidth = window.innerWidth * 0.9;
+  canvasHeight = smallScreen ? window.innerHeight * 0.75 : window.innerHeight * 0.7;
+  console.log("Canvas width: " + canvasWidth + ", Canvas height: " + canvasHeight);
+  console.log("Window width: " + window.innerWidth + ", Window height: " + window.innerHeight);
+  classicGraphics = JSON.parse(classic_graphics);
+  if (classicGraphics) {
+    document.body.classList.add("classic");
+  } else {
+    document.body.classList.remove("classic");
+  }
+}
+
+//----------------------- 4 ----------------------
 //--------------------- TRIALS -------------------
 
 //-------------instructions-------------
@@ -170,14 +240,74 @@ var instr_stim = function () {
 var instr_trial = {};
 
 function refresh_cont_trials() {
+  assignVars();
   instr_trial = {
-    type: resp_mode == "button" ? jsPsychHtmlButtonResponse : jsPsychHtmlKeyboardResponse,
+    type: resp_mode == "button" ? jsPsychCanvasButtonResponse : jsPsychCanvasKeyboardResponse,
     choices: instr_choice,
-    prompt: instr_prompt,
+    prompt: instr_prompt(),
     margin_horizontal: "40px",
     margin_vertical: "20px",
-    //        button_html: '<button style="font-size: 150%" class="jspsych-btn">%choice%</button>',
-    stimulus: instr_stim,
+    canvas_size: smallScreen
+      ? [canvasHeight * 0.6, canvasWidth]
+      : [canvasHeight * 0.65, canvasWidth],
+    button_html: classicGraphics
+      ? `
+        <div class="image-btn-wrapper">
+          <input type="image" src="./assets/blank_button.png"
+                class="image-btn" style="">
+          <svg class="image-btn-text" viewBox="0 0 266 160">
+            <text x="50%" y="50%">%choice%</text>
+          </svg>
+        </div>
+      `
+      : `
+        <div class="image-btn-wrapper">
+          <input type="image" src="./assets/blank_green.png"
+                class="image-btn" style="">
+          <svg class="image-btn-text" viewBox="0 0 266 160">
+            <text class="text-stroke" x="50%" y="50%">%choice%</text>
+            <text class="text-fill" x="50%" y="50%">%choice%</text>
+          </svg>
+        </div>
+      `,
+
+    stimulus: function (c) {
+      console.log("instr stim " + instr_stim());
+      console.log("instr prompt " + instr_prompt());
+      const ctx = c.getContext("2d");
+      const width = c.width;
+      const height = c.height;
+      const stimHTML = instr_stim();
+
+      // Background
+      ctx.fillStyle = classicGraphics ? "#ffffff" : "#fff9e0";
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.save();
+
+      if (["kr", "nl", "ru"].includes(lang)) {
+        drawHTMLText(ctx, stimHTML, canvasWidth / 2, height * 0.2, 64, device, classicGraphics);
+      } else {
+        drawHTMLText(ctx, stimHTML, canvasWidth / 2, height * 0.2, 64, device, classicGraphics);
+      }
+
+      ctx.restore();
+    },
+    on_load: function () {
+      console.log("Canvas Size", canvasWidth, canvasHeight * 0.65);
+      const container = document.querySelector(".jspsych-content");
+      if (container) {
+        container.classList.add("cont-omst");
+        container.classList.add("ready");
+        container.classList.remove("pcon-demos");
+        container.classList.remove("instructions");
+      }
+      setupButtonListeners();
+    },
+
+    on_finish: function () {
+      cleanupButtonListeners();
+    },
     // add task name to data collection
     data: { task: "oMSTCont" },
   };
@@ -189,7 +319,7 @@ var debrief_block = {
   type: jsPsychHtmlKeyboardResponse,
   trial_duration: 500,
   stimulus: function () {
-    return lang.cont.ty;
+    return `<p class="prompt_text">${lang.cont.ty}</p>`;
   },
   // add task name to data collection
   data: { task: "oMSTCont" },
@@ -223,7 +353,7 @@ const omst_feedback = (jsPsych) => ({
     console.log("LDI ", trial.ldi);
     //console.log(data)
   },
-  prompt: lang.cont.ty,
+  prompt: `<p class="prompt_text">${lang.cont.ty}</p>`,
   stimulus: function (c) {
     var ctx = c.getContext("2d");
     ctx.globalCompositeOperation = "source-over";
@@ -265,6 +395,34 @@ const omst_feedback = (jsPsych) => ({
     //console.log(txtx)
     ctx.fillText(ldi.toString(), xPos - ctx.measureText(ldi.toString()).width / 2, 18);
   },
+  button_html: classicGraphics
+    ? `
+        <div class="image-btn-wrapper">
+          <input type="image" src="./assets/blank_button.png"
+                class="image-btn" style="">
+          <svg class="image-btn-text" viewBox="0 0 266 160">
+            <text x="50%" y="50%">%choice%</text>
+          </svg>
+        </div>
+      `
+    : `
+        <div class="image-btn-wrapper">
+          <input type="image" src="./assets/blank_green.png"
+                class="image-btn" style="">
+          <svg class="image-btn-text" viewBox="0 0 266 160">
+            <text class="text-stroke" x="50%" y="50%">%choice%</text>
+            <text class="text-fill" x="50%" y="50%">%choice%</text>
+          </svg>
+        </div>
+      `,
+  on_load: function () {
+    setupButtonListeners();
+  },
+  on_finish: function () {
+    cleanupButtonListeners();
+  },
+  // add task name to data collection
+  data: { task: "oMSTContFeedback" },
 });
 
 var retstr;

@@ -2,13 +2,15 @@
 //
 //   File: trialPcon.js               Folder: trials
 //
-//   Author: Craig Stark, Audrey Hempel
+//   Author: Craig Stark, Audrey Hempel, Gavin Stark
 //   --------------------
 //
 //   Changes:
 //        7/31/23 (AGH): initial convert from pcon.html into honeycomb
 //                       template
 //        8/11/23 (AGH): changed trial_txt to trial_text for consistency
+//        2/11/26 (GES): Modernized assets
+//        3/10/26 (GES): updated to allow modern graphics
 //
 //   --------------------
 //   This file contains the default options for the two variable
@@ -23,12 +25,21 @@
 //-------------------- IMPORTS -------------------
 
 import jsPsychImageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
-import jsPsychImageButtonResponse from "@jspsych/plugin-image-button-response";
+import jsPsychCanvasButtonResponse from "@jspsych/plugin-canvas-button-response";
+import jsPsychCanvasKeyboardResponse from "@jspsych/plugin-canvas-keyboard-response";
 
 import $ from "jquery";
 
 //import { resp_mode } from '../trials/selectRespType';
-import { lang, resp_mode } from "../App/components/Login";
+import { preload } from "react-dom";
+import { lang, resp_mode, classic_graphics, language } from "../App/components/Login";
+import {
+  getDeviceType,
+  roundRect,
+  setupButtonListeners,
+  cleanupButtonListeners,
+  preloadPressedImages,
+} from "../lib/utils";
 
 //----------------------- 2 ----------------------
 //----------------- HELPER METHODS ---------------
@@ -37,9 +48,9 @@ import { lang, resp_mode } from "../App/components/Login";
 
 var trial_prompt = function () {
   if (resp_mode == "button") {
-    return "<p>" + lang.pcon.button.trial_txt + "</p>";
+    return lang.pcon.button.trial_txt;
   } else {
-    return "<p>" + lang.pcon.key.trial_txt + "</p>";
+    return lang.pcon.key.trial_txt;
   }
 };
 
@@ -50,8 +61,29 @@ var trial_choices = function () {
     return [`${lang.pcon.key.trial_choices.same}`, `${lang.pcon.key.trial_choices.dif}`];
   }
 };
-
 //----------------------- 3 ----------------------
+//-------------------- CONSTANTS ------------------
+let device = {};
+let smallScreen = {};
+let canvasWidth = {};
+let canvasHeight = {};
+let classicGraphics = {};
+
+function assignVars() {
+  preloadPressedImages();
+  device = getDeviceType();
+  smallScreen = device[2];
+  canvasWidth = window.innerWidth * 0.9;
+  canvasHeight = smallScreen ? window.innerHeight * 0.7 : window.innerHeight * 0.7;
+  classicGraphics = JSON.parse(classic_graphics);
+  if (classicGraphics) {
+    document.body.classList.add("classic");
+  } else {
+    document.body.classList.remove("classic");
+  }
+}
+
+//----------------------- 4 ----------------------
 //-------------------- TRIALS --------------------
 
 //-------------------- INITIAL -------------------
@@ -59,19 +91,16 @@ var trial_choices = function () {
 // image is the only param that changes
 
 export function trialPcon(config, options) {
+  assignVars();
   // set default trial parameters for keyboard response
   const defaults = {
-    responseType: jsPsychImageKeyboardResponse,
-    stimulusHeight: 400,
-    stimulusWidth: 400,
+    responseType: jsPsychCanvasKeyboardResponse,
     choices: "NO_KEYS",
     trialDuration: 2000,
     responseEndsTrial: false,
     image: "", // image will be different for each
   };
   const {
-    stimulusHeight,
-    stimulusWidth,
     //choices,
     trialDuration,
     responseEndsTrial,
@@ -80,17 +109,48 @@ export function trialPcon(config, options) {
 
   // return defaults
   return {
-    type: jsPsychImageKeyboardResponse,
-    stimulus: image,
-    choices: trial_choices,
+    type: jsPsychCanvasKeyboardResponse,
+
+    // Canvas stimulus
+    stimulus: function (c) {
+      const ctx = c.getContext("2d");
+      const width = c.width;
+      const height = c.height;
+      const stimImg = new Image();
+      const framePadding = 20;
+      const radius = 25;
+
+      stimImg.onload = function () {
+        const imgWidth = smallScreen ? canvasHeight * 0.8 : stimImg.width * 1.2;
+        const imgHeight = smallScreen ? canvasHeight * 0.8 : stimImg.height * 1.2;
+        const x = (width - imgWidth) / 2;
+        const y = (height - imgHeight) / 2;
+
+        ctx.fillStyle = "#ffffff";
+        ctx.strokeStyle = "#5d2514";
+        ctx.lineWidth = 15;
+        if (!classicGraphics) {
+          roundRect(
+            ctx,
+            x - framePadding,
+            y - framePadding,
+            imgWidth + 2 * framePadding,
+            imgHeight + 2 * framePadding,
+            radius
+          );
+          ctx.fill();
+          ctx.stroke();
+        }
+
+        ctx.drawImage(stimImg, x, y, imgWidth, imgHeight);
+      };
+      stimImg.src = image();
+      console.log("stimulus function ran, image src set to:", image());
+    },
+    choices: "NO_KEYS",
+    canvas_size: [canvasHeight, canvasWidth],
     trial_duration: trialDuration,
     response_ends_trial: responseEndsTrial,
-    on_load: () => {
-      $("#jspsych-image-keyboard-response-stimulus").addClass("image");
-      $("#jspsych-image-keyboard-response-stimulus").height(stimulusHeight);
-      $("#jspsych-image-keyboard-response-stimulus").width(stimulusWidth);
-      $("html").css("cursor", "none");
-    },
   };
 }
 
@@ -102,11 +162,9 @@ export function trialPcon(config, options) {
 export function keyPconTrial(config, options) {
   // set default trial parameters for keyboard response
   const defaults = {
-    responseType: jsPsychImageKeyboardResponse,
-    stimulusHeight: 400,
-    stimulusWidth: 400,
+    type: jsPsychCanvasKeyboardResponse,
     choices: trial_choices,
-    prompt: trial_prompt,
+    prompt: trial_prompt(),
     stimulusDuration: 2000,
     trialDuration: null,
     responseEndsTrial: true,
@@ -115,8 +173,6 @@ export function keyPconTrial(config, options) {
     data: "", // image and data will be different for each
   };
   const {
-    stimulusHeight,
-    stimulusWidth,
     //choices,
     prompt,
     stimulusDuration,
@@ -129,20 +185,56 @@ export function keyPconTrial(config, options) {
 
   // return defaults
   return {
-    type: jsPsychImageKeyboardResponse,
-    stimulus: image,
+    type: jsPsychCanvasKeyboardResponse,
+    stimulus: function (c) {
+      const ctx = c.getContext("2d");
+      const width = c.width;
+      const height = c.height;
+      const stimImg = new Image();
+      const stimPath = image();
+      const framePadding = 20;
+      const radius = 25;
+
+      stimImg.onload = function () {
+        const imgWidth = smallScreen ? canvasHeight * 0.8 : stimImg.width * 1.2;
+        const imgHeight = smallScreen ? canvasHeight * 0.8 : stimImg.height * 1.2;
+        const x = (width - imgWidth) / 2;
+        const y = (height - imgHeight) / 2; // shift up slightly
+
+        ctx.fillStyle = "#ffffff";
+        ctx.strokeStyle = "#5d2514";
+        ctx.lineWidth = 15;
+        if (!classicGraphics) {
+          console.log("drawing rounded rectangle with params:", {
+            x: x - framePadding,
+            y: y - framePadding,
+            width: imgWidth + 2 * framePadding,
+            height: imgHeight + 2 * framePadding,
+            radius: radius,
+          });
+          roundRect(
+            ctx,
+            x - framePadding,
+            y - framePadding,
+            imgWidth + 2 * framePadding,
+            imgHeight + 2 * framePadding,
+            radius
+          );
+          ctx.fill();
+          ctx.stroke();
+        }
+
+        ctx.drawImage(stimImg, x, y, imgWidth, imgHeight);
+      };
+      stimImg.src = stimPath;
+    },
     choices: trial_choices,
-    prompt: prompt,
+    prompt: `<p class="prompt_text">${prompt}</p>`,
     stimulus_duration: stimulusDuration,
+    canvas_size: [canvasHeight * 0.95, canvasWidth],
     trial_duration: trialDuration,
     response_ends_trial: responseEndsTrial,
     name: name,
-    on_load: () => {
-      $("#jspsych-image-keyboard-response-stimulus").addClass("image");
-      $("#jspsych-image-keyboard-response-stimulus").height(stimulusHeight);
-      $("#jspsych-image-keyboard-response-stimulus").width(stimulusWidth);
-      $("html").css("cursor", "none");
-    },
     on_finish: function (data) {
       // same = button 0 = 's'
       // different = button 1 = 'd'
@@ -165,11 +257,9 @@ export function keyPconTrial(config, options) {
 export function buttonPconTrial(config, options) {
   // set default trial parameters for button response
   const defaults = {
-    responseType: jsPsychImageButtonResponse,
-    stimulusHeight: 400,
-    stimulusWidth: 400,
+    responseType: jsPsychCanvasButtonResponse,
     choices: trial_choices,
-    prompt: trial_prompt,
+    prompt: trial_prompt(),
     stimulusDuration: 2000,
     trialDuration: null,
     responseEndsTrial: true,
@@ -178,8 +268,6 @@ export function buttonPconTrial(config, options) {
     data: "", // image and data will be different for each
   };
   const {
-    stimulusHeight,
-    stimulusWidth,
     //choices,
     prompt,
     stimulusDuration,
@@ -192,21 +280,99 @@ export function buttonPconTrial(config, options) {
 
   // return defaults
   return {
-    type: jsPsychImageButtonResponse,
-    stimulus: image,
+    type: jsPsychCanvasButtonResponse,
+    stimulus: function (c) {
+      const ctx = c.getContext("2d");
+      const width = c.width;
+      const height = c.height;
+      const stimImg = new Image();
+      const stimPath = image();
+      const framePadding = 20;
+      const radius = 25;
+
+      stimImg.onload = function () {
+        const imgWidth = smallScreen ? canvasHeight * 0.8 : stimImg.width * 1.2;
+        const imgHeight = smallScreen ? canvasHeight * 0.8 : stimImg.height * 1.2;
+        const x = (width - imgWidth) / 2;
+        const y = (height - imgHeight) / 2;
+
+        ctx.fillStyle = "#ffffff";
+        ctx.strokeStyle = "#5d2514";
+        ctx.lineWidth = 15;
+        if (!classicGraphics) {
+          console.log("drawing rounded rectangle with params:", {
+            x: x - framePadding,
+            y: y - framePadding,
+            width: imgWidth + 2 * framePadding,
+            height: imgHeight + 2 * framePadding,
+            radius: radius,
+          });
+          roundRect(
+            ctx,
+            x - framePadding,
+            y - framePadding,
+            imgWidth + 2 * framePadding,
+            imgHeight + 2 * framePadding,
+            radius
+          );
+          ctx.fill();
+          ctx.stroke();
+        }
+
+        ctx.drawImage(stimImg, x, y, imgWidth, imgHeight);
+      };
+      stimImg.src = stimPath;
+    },
     choices: trial_choices,
-    prompt: prompt,
+    prompt: `<p class="prompt_text">${prompt}</p>`,
     stimulus_duration: stimulusDuration,
+    canvas_size: [canvasHeight * 0.95, canvasWidth],
     trial_duration: trialDuration,
     response_ends_trial: responseEndsTrial,
     name: name,
-    on_load: () => {
-      $("#jspsych-image-button-response-stimulus").addClass("image");
-      $("#jspsych-image-button-response-stimulus").height(stimulusHeight);
-      $("#jspsych-image-button-response-stimulus").width(stimulusWidth);
-      $("html").css("cursor", "auto");
+    button_html: classicGraphics
+      ? [
+          `<div class="image-btn-wrapper">
+          <input type="image" src="./assets/blank_button.png"
+                class="image-btn">
+          <svg class="image-btn-text ${language}" viewBox="0 0 266 160">
+            <text x="50%" y="50%">%choice%</text>
+          </svg>
+        </div>`,
+
+          `<div class="image-btn-wrapper">
+          <input type="image" src="./assets/blank_button.png"
+                class="image-btn">
+          <svg class="image-btn-text ${language}" viewBox="0 0 266 160">
+            <text x="50%" y="50%">%choice%</text>
+          </svg>
+        </div>`,
+        ]
+      : [
+          `<div class="image-btn-wrapper">
+          <input type="image" src="./assets/blank_green.png"
+                class="image-btn">
+          <svg class="image-btn-text ${language}" viewBox="0 0 266 160">
+            <text class="text-stroke" x="50%" y="50%">%choice%</text>
+            <text class="text-fill" x="50%" y="50%">%choice%</text>
+          </svg>
+        </div>`,
+
+          `<div class="image-btn-wrapper">
+          <input type="image" src="./assets/blank_blue.png"
+                class="image-btn">
+          <svg class="image-btn-text ${language}" viewBox="0 0 266 160">
+            <text class="text-stroke" x="50%" y="50%">%choice%</text>
+            <text class="text-fill" x="50%" y="50%">%choice%</text>
+          </svg>
+        </div>`,
+        ],
+    on_load: function () {
+      setupButtonListeners();
     },
+
     on_finish: function (data) {
+      cleanupButtonListeners();
       // same = button 0 = 's'
       // different = button 1 = 'd'
       let resp = null;

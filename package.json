@@ -1,97 +1,96 @@
 {
-  "name": "omst",
-  "description": "desktop version of the online omst",
+  "name": "omst_honeycomb_update",
+  "description": "Updated version of the oMST task using Honeycomb.",
   "author": {
     "name": "Stark Lab",
     "email": "starklab@uci.edu",
     "url": "https://faculty.sites.uci.edu/starklab/"
   },
-  "version": "1.0.5",
-  "hcversion": "3.2.3",
+  "honeycombVersion": "3.4.1",
+  "version": "1.0.0",
+  "repository": "https://github.com/GavinStark87/omst_honeycomb_update",
   "license": "MIT",
   "private": true,
-  "main": "public/electron.js",
+  "main": "public/electron/main.js",
   "homepage": ".",
-  "repository": "https://github.com/celstark/omst_honeycomb",
   "dependencies": {
-    "@brown-ccv/behavioral-task-trials": "^2.0.0",
-    "@fortawesome/fontawesome-free": "^6.4.2",
-    "@jspsych/plugin-fullscreen": "^1.2.0",
-    "@jspsych/plugin-html-button-response": "^1.1.1",
-    "@jspsych/plugin-html-keyboard-response": "^1.1.1",
-    "@jspsych/plugin-canvas-button-response": "^1.1.1",
-    "@jspsych/plugin-canvas-keyboard-response": "^1.1.1",
-    "@jspsych/plugin-image-button-response": "^1.1.1",
-    "@jspsych/plugin-image-keyboard-response": "^1.1.2",
-    "@jspsych/plugin-instructions": "^1.1.3",
-    "@jspsych/plugin-preload": "^1.1.2",
-    "@jspsych/plugin-animation": "^1.1.2",
-    "@jspsych/plugin-categorize-image": "^1.1.1",
-    "@jspsych/plugin-survey-html-form": "^1.0.2",
-    "@jspsych/plugin-survey-multi-choice": "^1.1.1",
-    "@jspsych/plugin-survey-multi-select": "^1.1.1",
-    "@jspsych/plugin-video-button-response": "^1.1.1",
-    "@jspsych/plugin-video-keyboard-response": "^1.1.2",
-    "bootstrap": "^5.2.0-beta1",
-    "electron-log": "^4.4.8",
-    "electron-squirrel-startup": "^1.0.0",
-    "execa": "^8.0.1",
-    "firebase": "^10.1.0",
-    "fs-extra": "^11.1.1",
-    "jquery": "^3.4.1",
-    "jspsych": "^7.2.3",
+    "@brown-ccv/behavioral-task-trials": "^2.0.2",
+    "@fortawesome/fontawesome-free": "^7.0.1",
+    "@jspsych/plugin-animation": "^1.1.3",
+    "@jspsych/plugin-audio-keyboard-response": "^1.1.3",
+    "@jspsych/plugin-call-function": "^1.1.3",
+    "@jspsych/plugin-canvas-button-response": "^1.1.3",
+    "@jspsych/plugin-canvas-keyboard-response": "^1.1.3",
+    "@jspsych/plugin-categorize-image": "^2.1.0",
+    "@jspsych/plugin-fullscreen": "^1.2.1",
+    "@jspsych/plugin-html-button-response": "^1.2.0",
+    "@jspsych/plugin-html-keyboard-response": "^1.1.3",
+    "@jspsych/plugin-image-keyboard-response": "^1.1.3",
+    "@jspsych/plugin-initialize-camera": "^1.0.2",
+    "@jspsych/plugin-instructions": "^1.1.4",
+    "@jspsych/plugin-preload": "^1.1.3",
+    "@jspsych/plugin-survey": "^1.0.1",
+    "@jspsych/plugin-survey-html-form": "^1.0.3",
+    "bootstrap": "^5.3.8",
+    "electron-log": "^5.4.3",
+    "electron-squirrel-startup": "^1.0.1",
+    "execa": "^9.6.0",
+    "firebase": "^12.3.0",
+    "fs-extra": "^11.3.2",
+    "jquery": "^4.0.0",
+    "jspsych": "^7.3.4",
     "lodash": "^4.17.19",
-    "react": "^16.8.6",
-    "react-bootstrap": "^1.6.1",
-    "react-dom": "^16.8.6",
-    "react-scripts": "5.0.1",
-    "wait-on": "^7.0.1"
+    "prop-types": "^15.8.1",
+    "react": "^19.1.1",
+    "react-bootstrap": "^2.10.10",
+    "react-dom": "^19.1.1",
+    "react-scripts": "^5.0.1",
+    "serialport": "^13.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.28.4",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@electron-forge/cli": "^6.0.0-beta.64",
-    "@electron-forge/maker-deb": "^6.0.0-beta.64",
-    "@electron-forge/maker-dmg": "^6.0.0-beta.64",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.64",
-    "@inquirer/prompts": "^3.0.3",
-    "chai": "^4.2.0",
-    "concurrently": "^8.2.1",
-    "cross-env": "^7.0.3",
+    "@electron-forge/cli": "^7.9.0",
+    "@electron-forge/maker-deb": "^7.9.0",
+    "@electron-forge/maker-dmg": "^7.9.0",
+    "@electron-forge/maker-squirrel": "^7.9.0",
+    "@electron-forge/maker-zip": "^7.9.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.9.0",
+    "@inquirer/prompts": "^7.8.6",
+    "baseline-browser-mapping": "^2.9.16",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.0.0",
     "cz-conventional-changelog": "^3.2.0",
-    "dotenv-cli": "^7.0.0",
-    "electron": "^27.0.1",
-    "eslint": "^8.38.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-prettier": "^5.0.0",
-    "firebase-admin": "^11.0.1",
-    "firebase-tools": "^12.4.7",
-    "husky": "^8.0.3",
-    "lint-staged": "^15.0.2",
+    "dotenv-cli": "^10.0.0",
+    "electron": "^38.1.2",
+    "eslint": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-react": "^7.37.5",
+    "firebase-admin": "^13.5.0",
+    "firebase-tools": "^14.17.0",
+    "globals": "^16.4.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.1",
+    "prettier": "^3.6.2",
     "require-context.macro": "^1.1.1",
-    "wait-on": "^7.0.1"
+    "wait-on": "^9.0.1"
   },
   "scripts": {
-    "postinstall": "node version.mjs && npm run rebuild",
-    "cli": "node cli.mjs",
-    "commit": "git-cz",
-    "lint": "eslint .",
-    "format": "eslint --fix .",
-    "test": "react-scripts test",
-    "prepare": "husky install",
-    "firebase:emulators:start": "firebase emulators:start --import emulator_data",
-    "firebase:emulators:save": "firebase emulators:export emulator_data",
-    "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
-    "start:browser": "cross-env IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
+    "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" react-scripts start",
+    "start:browser": "react-scripts start",
     "start:electron": "wait-on http://127.0.0.1:3000 && cross-env ELECTRON_START_URL=\"http://127.0.0.1:3000\" electron .",
     "dev": "concurrently -k npm:start npm:start:electron",
-    "dev:firebase": "dotenv -e env/.env.firebase npm run start:browser",
     "dev:home": "dotenv -e env/.env.home npm run dev",
     "dev:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run dev",
     "dev:clinic": "dotenv -e env/.env.clinic npm run dev",
     "dev:clinic:video": "dotenv -e env/.env.clinic dotenv -e env/.env.video npm run dev",
     "dev:turk-prolific": "dotenv -e env/.env.turk-prolific npm run dev",
-    "prebuild": "electron-rebuild",
-    "build": "cross-env CI=false react-scripts build",
+    "dev:firebase": "dotenv -e env/.env.firebase npm run start:browser",
+    "firebase:emulators:start": "firebase emulators:start --import emulator_data",
+    "firebase:emulators:save": "firebase emulators:export emulator_data",
+    "prebuild": "npm run rebuild",
+    "build": "react-scripts build",
     "build:home": "dotenv -e env/.env.home npm run build",
     "build:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run build",
     "build:clinic": "dotenv -e env/.env.clinic npm run build",
@@ -99,11 +98,18 @@
     "build:firebase": "dotenv -e env/.env.firebase npm run build",
     "build:turk-prolific": "dotenv -e env/.env.turk-prolific npm run build",
     "rebuild": "electron-rebuild",
-    "package:windows": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
-    "package:linux": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-deb",
-    "package:mac-intel": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-dmg",
-    "package:mac": "react-scripts build && electron-forge make --arch universal --targets @electron-forge/maker-dmg"
-
+    "package": "npm run build && electron-forge make",
+    "package:windows": "npm run package -- --arch x64 --targets @electron-forge/maker-squirrel",
+    "package:linux": "npm run package -- --arch x64 --targets @electron-forge/maker-deb",
+    "package:mac": "npm run package --  --arch x64,arm64 --targets @electron-forge/maker-dmg",
+    "package:mac:intel": "npm run package --  --arch x64 --targets @electron-forge/maker-dmg",
+    "package:mac:apple-silicon": "npm run package --  --arch arm64 --targets @electron-forge/maker-dmg",
+    "cli": "node cli.js",
+    "commit": "git-cz",
+    "format": "prettier --write .",
+    "lint": "eslint .",
+    "postinstall": "node version.js && npm run rebuild",
+    "prepare": "husky"
   },
   "browserslist": {
     "production": [
@@ -112,6 +118,7 @@
       "not op_mini all"
     ],
     "development": [
+      "last 1 electron version",
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
@@ -120,40 +127,12 @@
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
-    },
-    "forge": {
-      "packagerConfig": {
-        "asar": true,
-        "icon": "./public/MST"
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {
-            "icon": "./assets/icons/mac/icon.icns"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-dmg",
-          "config": {
-            "icon": "./public/icon_orig.icns",
-            "overwrite": true
-          },
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "iconUrl": "https://raw.githubusercontent.com/celstark/omst_honeycomb/oMST/public/MST.ico",
-            "setupIcon": "./public/MST.ico"
-          }
-        }
-      ]
     }
   },
   "lint-staged": {
+    "*": [
+      "prettier --ignore-unknown --write"
+    ],
     "**/*.{js,jsx}": [
       "eslint --fix"
     ]

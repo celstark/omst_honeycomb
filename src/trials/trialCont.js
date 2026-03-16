@@ -17,6 +17,7 @@
 //                       deleted cursor block for button trial
 //        7/27/23 (AGH): added paragraph markers to param functions (previously
 //                       within text file)
+//        3/10/26 (GES): updated to allow modern graphics
 //
 //   --------------------
 //
@@ -30,13 +31,29 @@
 //----------------------- 1 ----------------------
 //-------------------- IMPORTS -------------------
 
-import jsPsychImageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
-import jsPsychImageButtonResponse from "@jspsych/plugin-image-button-response";
+import jsPsychCanvasButtonResponse from "@jspsych/plugin-canvas-button-response";
+import jsPsychCanvasKeyboardResponse from "@jspsych/plugin-canvas-keyboard-response";
+import jsPsychPreload from "@jspsych/plugin-preload";
 
 import $ from "jquery";
 
 //import { resp_mode } from '../trials/selectRespType';
-import { twochoice, selfpaced, lang, resp_mode } from "../App/components/Login";
+import {
+  twochoice,
+  selfpaced,
+  lang,
+  resp_mode,
+  classic_graphics,
+  language,
+} from "../App/components/Login";
+import {
+  setupButtonListeners,
+  cleanupButtonListeners,
+  getDeviceType,
+  drawHTMLText,
+  roundRect,
+  preloadPressedImages,
+} from "../lib/utils";
 
 //----------------------- 2 ----------------------
 //----------------- HELPER METHODS ---------------
@@ -89,33 +106,98 @@ var trial_choices = function () {
   }
 };
 
+//--------------------CONSTANTS--------------------
+let device = {};
+let smallScreen = {};
+let canvasWidth = {};
+let canvasHeight = {};
+let classicGraphics = {};
+
+function assignVars() {
+  preloadPressedImages();
+  device = getDeviceType();
+  smallScreen = device[2];
+  canvasWidth = window.innerWidth * 0.9;
+  canvasHeight = smallScreen ? window.innerHeight * 0.7 : window.innerHeight * 0.7;
+  classicGraphics = JSON.parse(classic_graphics);
+  if (classicGraphics) {
+    document.body.classList.add("classic");
+  } else {
+    document.body.classList.remove("classic");
+  }
+}
+const stars_12 = true; // for now
+let num_correct = 0;
+
+const brain = new Image();
+brain.src = "./assets/brain.png";
+
+const starImgs = Array.from({ length: 11 }, (_, i) => {
+  let img = new Image();
+  img.src = `./assets/star${i}.png`;
+  return img;
+});
+
 //----------------------- 3 ----------------------
 //-------------------- TRIALS --------------------
+
+const preload_fnames = [];
+
+preload_fnames.push(
+  "./assets/blank_blue.png",
+  "./assets/blank_blue_pressed.png",
+  "./assets/blank_green.png",
+  "./assets/blank_green_pressed.png",
+  "./assets/blank_red.png",
+  "./assets/blank_red_pressed.png",
+  "./assets/brain.png",
+  "./assets/images/Set1_rs/080a.jpg",
+  ...Array.from({ length: 11 }, (_, i) => `./assets/star${i}.png`)
+);
+
+var preload = {
+  type: jsPsychPreload,
+  images: preload_fnames, // since we use a timeline variable, we can't use the simple "trials"
+  show_progress_bar: true,
+  show_detailed_erros: true,
+  continue_after_error: true,
+  on_load: function () {
+    preloadPressedImages();
+  },
+  on_error: function (fname) {
+    console.log("FAILED  " + fname);
+  },
+  on_finish: function (data) {
+    console.log("Preload success? " + data.success);
+    console.log("Failed on " + data.failed_images.length);
+  },
+};
+
+export function preloadContTrial() {
+  return preload;
+}
+
 // Keyboard version and button version
 
 // Keyboard version
 export function keyContTrial(config, options) {
   // set default trial parameters for keyboard response
   const defaults = {
-    responseType: jsPsychImageKeyboardResponse,
-    stimulusDuration: 2000,
+    responseType: jsPsychCanvasKeyboardResponse,
+    STIMULUS_DURATION: 2000,
     trialDuration: selfpaced == 1 ? null : 2500,
     postTrialGap: 500,
-    stimulusHeight: 400,
-    stimulusWidth: 400,
-    trialChoices: trial_choices,
-    prompt: trial_prompt,
+    trialChoices: trial_choices(),
+    prompt: trial_prompt(),
     responseEndsTrial: true,
 
     image: "", // image and data will be different for each
     data: "", // iteration of the trial so their default is blank
   };
   const {
-    stimulusDuration,
+    STIMULUS_DURATION,
     trialDuration,
     postTrialGap,
-    stimulusHeight,
-    stimulusWidth,
     trialChoices,
     prompt,
     responseEndsTrial,
@@ -124,21 +206,200 @@ export function keyContTrial(config, options) {
   } = { ...defaults, ...options };
 
   // return defaults
+  assignVars();
   return {
-    type: jsPsychImageKeyboardResponse,
-    prompt: prompt,
-    stimulus: image,
+    type: jsPsychCanvasKeyboardResponse,
+    stimulus: function (c) {
+      const ctx = c.getContext("2d");
+      const width = c.width;
+      const height = c.height;
+      const stimImg = new Image();
+      const stimPath = image();
+      const totalStars = stars_12 ? 12 : 6;
+      const maxFill = 10; // star1–star10
+      const starSize = Math.min(width, height) * 0.15;
+      const spacing = starSize * 0.25;
+      const framePadding = 20;
+      const radius = 25;
+      const brainScale = smallScreen ? 0.15 : 0.2;
+
+      function drawScene() {
+        // === Progress info (stars/brain) ===
+        let textBounds;
+        let promptFontSize;
+
+        if (smallScreen) {
+          if (lang == "nl" || lang == "ru") promptFontSize = 36;
+          else if (lang == "kr") promptFontSize = 28;
+          else promptFontSize = 40;
+        } else {
+          promptFontSize = 42;
+        }
+
+        const textStartY = smallScreen ? height * 0.08 : height * 0.08;
+        textBounds = drawHTMLText(
+          ctx,
+          prompt,
+          canvasWidth / 2,
+          textStartY,
+          promptFontSize,
+          device,
+          classicGraphics
+        );
+
+        return textBounds;
+      }
+
+      stimImg.onload = async function () {
+        console.log("✅ Image loaded!");
+        console.log("naturalWidth:", stimImg.naturalWidth);
+        console.log("naturalHeight:", stimImg.naturalHeight);
+        console.log("width:", stimImg.width);
+        console.log("height:", stimImg.height);
+        console.log("complete:", stimImg.complete);
+        const textBounds = await drawScene();
+        console.log("textBounds:", textBounds);
+
+        // *** CALCULATE AVAILABLE SPACE ***
+        const topMargin = 15;
+        const bottomMargin = 30; // Space above buttons
+        const imageTopY = textBounds.endY + topMargin;
+        const availableHeight = height - imageTopY - bottomMargin;
+        const progress = num_correct;
+        const availableWidth = width * 0.8;
+
+        // *** SCALE IMAGE TO FIT AVAILABLE SPACE ***
+        const imgAspectRatio = stimImg.width / stimImg.height;
+        let scaledWidth, scaledHeight;
+
+        // Try fitting by height first
+        scaledHeight = availableHeight - 2 * framePadding;
+
+        scaledWidth = scaledHeight * imgAspectRatio;
+        //console.log("scaled height", scaledHeight);
+        //console.log("scaled width", scaledWidth);
+
+        // If too wide, fit by width instead
+        if (scaledWidth > availableWidth - 2 * framePadding) {
+          scaledWidth = availableWidth - 2 * framePadding;
+          scaledHeight = scaledWidth / imgAspectRatio;
+        }
+
+        // *** POSITION IMAGE CENTERED IN AVAILABLE SPACE ***
+        const x = (width - scaledWidth) / 2;
+        const y = imageTopY + (availableHeight - scaledHeight - 2 * framePadding) / 2;
+        console.log("Image position x:", x, "y:", y);
+        console.log("canvas height: ", canvasHeight);
+        // Draw frame and image
+        ctx.fillStyle = "#ffffff";
+        ctx.strokeStyle = "#5d2514";
+        ctx.lineWidth = 15;
+        if (!classicGraphics) {
+          roundRect(
+            ctx,
+            x - framePadding,
+            y - framePadding,
+            scaledWidth + 2 * framePadding,
+            scaledHeight + 2 * framePadding,
+            radius
+          );
+        }
+        ctx.fill();
+        ctx.stroke();
+        ctx.drawImage(stimImg, x, y, scaledWidth, scaledHeight);
+
+        // Store for setTimeout clear
+        stimImg._renderInfo = { x, y, scaledWidth, scaledHeight };
+
+        // Draw stars and brain
+        const step =
+          Math.floor(
+            ((progress % (maxFill * (stars_12 ? 1 : 2))) + (stars_12 ? 0 : 1)) / (stars_12 ? 1 : 2)
+          ) || 0;
+        const fullStars = Math.floor(progress / (stars_12 ? 1 : 2) / maxFill);
+        const fillLevel = step;
+        const currentLevel = Math.min(fillLevel, 10);
+
+        console.log("Drawing stars and brain for desktop");
+        const leftX = smallScreen ? 10 : 40;
+        const leftStartY = height * 0.25;
+
+        // draw full stars
+        for (let i = 0; i < fullStars; i++) {
+          const star = starImgs[10];
+          const posY = leftStartY + (i % (stars_12 ? 3 : 2)) * (starSize + spacing);
+          star.onload = function () {
+            ctx.drawImage(
+              star,
+              leftX + Math.floor(i / (stars_12 ? 3 : 2)) * (starSize + spacing),
+              posY,
+              starSize,
+              starSize
+            );
+          };
+          if (star.complete) {
+            ctx.drawImage(
+              star,
+              leftX + Math.floor(i / (stars_12 ? 3 : 2)) * (starSize + spacing),
+              posY,
+              starSize,
+              starSize
+            );
+          }
+        }
+
+        // draw current star
+        const currentStar = starImgs[currentLevel];
+        const activeStarScale = 1.75;
+        const activeStarSize = starSize * activeStarScale;
+        const brainW = brain.width * brainScale;
+        const brainH = brain.height * brainScale;
+        const brainX = width - brainW - 60;
+        const brainY = height * 0.55;
+
+        const starX = brainX + brainW / 2 - activeStarSize / 2;
+        const starY = brainY - activeStarSize * 1.2;
+
+        ctx.drawImage(brain, brainX, brainY, brainW, brainH);
+        currentStar.onload = function () {
+          ctx.drawImage(currentStar, starX, starY, activeStarSize, activeStarSize);
+        };
+        if (currentStar.complete)
+          ctx.drawImage(currentStar, starX, starY, activeStarSize, activeStarSize);
+      };
+      stimImg.src = stimPath;
+
+      // After stimulus duration, remove only the image + its frame
+      const startTime = performance.now();
+      function checkAndClear() {
+        if (performance.now() - startTime >= STIMULUS_DURATION) {
+          const { x, y, scaledWidth, scaledHeight } = stimImg._renderInfo;
+          console.log("clearRect values:");
+          console.log("  x:", x, "minus padding/lineWidth:", x - framePadding - ctx.lineWidth);
+          console.log("  y:", y, "minus padding/lineWidth:", y - framePadding - ctx.lineWidth);
+          console.log("  width:", scaledWidth + 2 * framePadding + ctx.lineWidth * 2);
+          console.log("  height:", scaledHeight + 2 * framePadding + ctx.lineWidth * 2);
+          console.log("  framePadding:", framePadding);
+          console.log("  ctx.lineWidth:", ctx.lineWidth);
+          const ctx2 = c.getContext("2d");
+          ctx2.clearRect(
+            x - framePadding - ctx2.lineWidth,
+            y - framePadding - ctx2.lineWidth,
+            scaledWidth + 2 * framePadding + ctx2.lineWidth * 2,
+            scaledHeight + 2 * framePadding + ctx2.lineWidth * 2
+          );
+          console.log("Cleared rectangle");
+        } else {
+          requestAnimationFrame(checkAndClear);
+        }
+      }
+      requestAnimationFrame(checkAndClear);
+    },
     choices: trialChoices,
-    stimulus_duration: stimulusDuration,
     trial_duration: trialDuration,
     post_trial_gap: postTrialGap,
     response_ends_trial: responseEndsTrial,
-    on_load: () => {
-      $("#jspsych-image-keyboard-response-stimulus").addClass("image");
-      $("#jspsych-image-keyboard-response-stimulus").height(stimulusHeight);
-      $("#jspsych-image-keyboard-response-stimulus").width(stimulusWidth);
-      $("html").css("cursor", "none");
-    },
+    canvas_size: [canvasHeight, canvasWidth],
     on_finish: function (data) {
       // set up data collection properties
       // yes = button 0 = 'y' = keycode 89
@@ -156,6 +417,11 @@ export function keyContTrial(config, options) {
       }
       data.correct = resp == data.correct_response;
       data.resp = resp;
+      if (data.correct) {
+        num_correct++;
+      }
+
+      cleanupButtonListeners();
     },
     data: data,
   };
@@ -165,26 +431,22 @@ export function keyContTrial(config, options) {
 export function buttonContTrial(config, options) {
   const defaults = {
     // set default trial parameters for button response
-    responseType: jsPsychImageButtonResponse,
-    stimulusDuration: 2000,
+    responseType: jsPsychCanvasButtonResponse,
+    STIMULUS_DURATION: 2000,
     trialDuration: selfpaced == 1 ? null : 2500,
     postTrialGap: 500,
-    marginHorizontal: "8px",
-    marginVertical: "20px",
     stimulusHeight: 400,
     stimulusWidth: 400,
     trialChoices: trial_choices,
-    prompt: trial_prompt,
+    prompt: trial_prompt(),
     responseEndsTrial: true,
     image: "", // image and data will be different for each
     data: "", // iteration of the trial so their default is blank
   };
   const {
-    stimulusDuration,
+    STIMULUS_DURATION,
     trialDuration,
     postTrialGap,
-    marginHorizontal,
-    marginVertical,
     stimulusHeight,
     stimulusWidth,
     trialChoices,
@@ -195,18 +457,239 @@ export function buttonContTrial(config, options) {
   } = { ...defaults, ...options };
 
   // return defaults
+  assignVars();
   return {
-    type: jsPsychImageButtonResponse,
-    prompt: prompt,
-    stimulus: image,
+    type: jsPsychCanvasButtonResponse,
+    stimulus: function (c) {
+      const ctx = c.getContext("2d");
+      const width = c.width;
+      const height = c.height;
+      const stimImg = new Image();
+      const stimPath = image();
+      console.log("Loading image from path:", stimPath);
+      console.log("Image value:", image);
+      const totalStars = stars_12 ? 12 : 6;
+      const maxFill = 10; // star1–star10
+      const starSize = Math.min(width, height) * 0.15;
+      const spacing = starSize * 0.25;
+      const framePadding = 20;
+      const radius = 25;
+      const brainScale = smallScreen ? 0.15 : 0.2;
+
+      function drawScene() {
+        // === Progress info (stars/brain) ===
+        const progress = num_correct;
+        let textBounds;
+        let promptFontSize;
+
+        if (smallScreen) {
+          if (lang == "nl" || lang == "ru") promptFontSize = 36;
+          else if (lang == "kr") promptFontSize = 28;
+          else promptFontSize = 40;
+        } else {
+          promptFontSize = 42;
+        }
+
+        const textStartY = smallScreen ? height * 0.08 : height * 0.08;
+        textBounds = drawHTMLText(
+          ctx,
+          prompt,
+          canvasWidth / 2,
+          textStartY,
+          promptFontSize,
+          device,
+          classicGraphics
+        );
+
+        return textBounds;
+      }
+
+      stimImg.onload = async function () {
+        console.log("✅ Image loaded!");
+        console.log("naturalWidth:", stimImg.naturalWidth);
+        console.log("naturalHeight:", stimImg.naturalHeight);
+        console.log("width:", stimImg.width);
+        console.log("height:", stimImg.height);
+        console.log("complete:", stimImg.complete);
+        const textBounds = await drawScene();
+        console.log("textBounds:", textBounds);
+
+        // *** CALCULATE AVAILABLE SPACE ***
+        const topMargin = 15;
+        const bottomMargin = 30; // Space above buttons
+        const imageTopY = textBounds.endY + topMargin;
+        const availableHeight = height - imageTopY - bottomMargin;
+        const progress = num_correct;
+        console.log("textBounds.endY:", textBounds.endY);
+        console.log("imageTopY:", imageTopY);
+        console.log("availableHeight:", availableHeight);
+        const availableWidth = width * 0.8;
+
+        // *** SCALE IMAGE TO FIT AVAILABLE SPACE ***
+        const imgAspectRatio = stimImg.naturalWidth / stimImg.naturalHeight;
+        console.log("Image aspect ratio:", imgAspectRatio);
+        let scaledWidth, scaledHeight;
+
+        // Try fitting by height first
+        scaledHeight = availableHeight - 2 * framePadding;
+
+        scaledWidth = scaledHeight * imgAspectRatio;
+        console.log("scaled height", scaledHeight);
+        console.log("scaled width", scaledWidth);
+
+        // If too wide, fit by width instead
+        if (scaledWidth > availableWidth - 2 * framePadding) {
+          scaledWidth = availableWidth - 2 * framePadding;
+          scaledHeight = scaledWidth / imgAspectRatio;
+        }
+
+        // *** POSITION IMAGE CENTERED IN AVAILABLE SPACE ***
+        const x = (width - scaledWidth) / 2;
+        const y = imageTopY + (availableHeight - scaledHeight - 2 * framePadding) / 2;
+        console.log("Image position x:", x, "y:", y);
+        console.log("canvas height: ", canvasHeight);
+
+        // Draw frame and image
+        ctx.fillStyle = "#ffffff";
+        ctx.strokeStyle = "#5d2514";
+        ctx.lineWidth = 15;
+        if (!classicGraphics) {
+          roundRect(
+            ctx,
+            x - framePadding,
+            y - framePadding,
+            scaledWidth + 2 * framePadding,
+            scaledHeight + 2 * framePadding,
+            radius
+          );
+        }
+        ctx.fill();
+        ctx.stroke();
+        console.log("stim Image", stimImg);
+        ctx.drawImage(stimImg, x, y, scaledWidth, scaledHeight);
+
+        // Store for setTimeout clear
+        stimImg._renderInfo = { x, y, scaledWidth, scaledHeight };
+        console.log("stimImg render info", stimImg._renderInfo);
+
+        // After stimulus duration, remove only the image + its frame
+        const startTime = performance.now();
+        function checkAndClear() {
+          if (performance.now() - startTime >= STIMULUS_DURATION) {
+            const { x, y, scaledWidth, scaledHeight } = stimImg._renderInfo;
+            console.log("clearRect values:");
+            console.log("  x:", x, "minus padding/lineWidth:", x - framePadding - ctx.lineWidth);
+            console.log("  y:", y, "minus padding/lineWidth:", y - framePadding - ctx.lineWidth);
+            console.log("  width:", scaledWidth + 2 * framePadding + ctx.lineWidth * 2);
+            console.log("  height:", scaledHeight + 2 * framePadding + ctx.lineWidth * 2);
+            console.log("  framePadding:", framePadding);
+            console.log("  ctx.lineWidth:", ctx.lineWidth);
+            const ctx2 = c.getContext("2d");
+            ctx2.clearRect(
+              x - framePadding - ctx2.lineWidth,
+              y - framePadding - ctx2.lineWidth,
+              scaledWidth + 2 * framePadding + ctx2.lineWidth * 2,
+              scaledHeight + 2 * framePadding + ctx2.lineWidth * 2
+            );
+            console.log("Cleared rectangle");
+          } else {
+            requestAnimationFrame(checkAndClear);
+          }
+        }
+        requestAnimationFrame(checkAndClear);
+
+        // Draw stars and brain
+        const step =
+          Math.floor(
+            ((progress % (maxFill * (stars_12 ? 1 : 2))) + (stars_12 ? 0 : 1)) / (stars_12 ? 1 : 2)
+          ) || 0;
+        const fullStars = Math.floor(progress / (stars_12 ? 1 : 2) / maxFill);
+        const fillLevel = step;
+        const currentLevel = Math.min(fillLevel, 10);
+
+        if (!classicGraphics) {
+          console.log("Drawing stars and brain for desktop");
+          const leftX = smallScreen ? 10 : 40;
+          const leftStartY = height * 0.25;
+
+          // draw full stars
+          for (let i = 0; i < fullStars; i++) {
+            const star = starImgs[10];
+            const posY = leftStartY + (i % (stars_12 ? 3 : 2)) * (starSize + spacing);
+            star.onload = function () {
+              ctx.drawImage(
+                star,
+                leftX + Math.floor(i / (stars_12 ? 3 : 2)) * (starSize + spacing),
+                posY,
+                starSize,
+                starSize
+              );
+            };
+            if (star.complete) {
+              ctx.drawImage(
+                star,
+                leftX + Math.floor(i / (stars_12 ? 3 : 2)) * (starSize + spacing),
+                posY,
+                starSize,
+                starSize
+              );
+            }
+          }
+
+          // draw current star
+          const currentStar = starImgs[currentLevel];
+          const activeStarScale = 1.75;
+          const activeStarSize = starSize * activeStarScale;
+          const brainW = brain.width * brainScale;
+          const brainH = brain.height * brainScale;
+          const brainX = width - brainW - 60;
+          const brainY = height * 0.55;
+
+          const starX = brainX + brainW / 2 - activeStarSize / 2;
+          const starY = brainY - activeStarSize * 1.2;
+
+          ctx.drawImage(brain, brainX, brainY, brainW, brainH);
+          currentStar.onload = function () {
+            ctx.drawImage(currentStar, starX, starY, activeStarSize, activeStarSize);
+          };
+          if (currentStar.complete)
+            ctx.drawImage(currentStar, starX, starY, activeStarSize, activeStarSize);
+        }
+      };
+      stimImg.src = stimPath;
+    },
     choices: trialChoices,
-    stimulus_duration: stimulusDuration,
     trial_duration: trialDuration,
     post_trial_gap: postTrialGap,
     response_ends_trial: responseEndsTrial,
-    margin_horizontal: marginHorizontal,
-    margin_vertical: marginVertical,
+    button_html: classicGraphics
+      ? trialChoices().map(
+          (txt) => `
+        <div class="image-btn-wrapper">
+          <input type="image" src="./assets/blank_button.png"
+                class="image-btn">
+          <svg class="image-btn-text ${language}" viewBox="0 0 266 160">
+            <text x="50%" y="50%">${txt}</text>
+          </svg>
+        </div>
+      `
+        )
+      : trialChoices().map(
+          (txt, i) => `
+        <div class="image-btn-wrapper">
+          <input type="image" src="./assets/blank_${twochoice ? ["red", "blue"][i] : ["red", "green", "blue"][i]}.png"
+                class="image-btn">
+          <svg class="image-btn-text ${language}" viewBox="0 0 266 160">
+            <text class="text-stroke" x="50%" y="50%">${txt}</text>
+            <text class="text-fill" x="50%" y="50%">${txt}</text>
+          </svg>
+        </div>
+      `
+        ),
+    canvas_size: [canvasHeight, canvasWidth],
     on_load: () => {
+      console.log("trial choices:", trialChoices);
+      setupButtonListeners();
       $("#jspsych-image-button-response-stimulus").addClass("image");
       $("#jspsych-image-button-response-stimulus").height(stimulusHeight);
       $("#jspsych-image-button-response-stimulus").width(stimulusWidth);
@@ -228,6 +711,11 @@ export function buttonContTrial(config, options) {
       }
       data.correct = resp == data.correct_response;
       data.resp = resp;
+      if (data.correct) {
+        num_correct++;
+      }
+
+      cleanupButtonListeners();
     },
     data: data,
   };

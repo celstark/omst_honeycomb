@@ -2,7 +2,7 @@
 //
 //   File: Login.js               Folder: components
 //
-//   Author: Honeycomb, Craig Stark, Audrey Hempel
+//   Author: Honeycomb, Craig Stark, Audrey Hempel, Gavin Stark
 //   --------------------
 //
 //   Changes:
@@ -33,6 +33,7 @@
 //        8/9/23  (AGH): updated for new 2x3 orderfiles, removed trialorder
 //                       state var and changed run to "sublist"
 //       6/10/24 (CELS): Added feedback option
+//       2/17/26 (GES): Added classic graphics option
 //
 //   --------------------
 //   This file creates a Login screen that logs in the participant
@@ -48,17 +49,19 @@ import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
-import { deepCopy } from "../../lib/utils";
+import PropTypes from "prop-types";
+
+import { set } from "lodash";
+import { deepCopy, getFormattedDate } from "../../lib/utils";
 
 import { writeOrderfile, loadOrderfile } from "../../config/cont";
 import { loadExptBlock1 } from "../../config/experiment";
 import { defaultBlockSettings } from "../../config/main";
 
 import { refresh_pcon_trials } from "../../trials/pcon_demos";
+import { refresh_pairwise_trials } from "../../trials/pairwise_demos";
 import { refresh_instr_trials } from "../../trials/instructions";
 import { refresh_cont_trials } from "../../trials/contOmst";
-
-import { getFormattedDate } from "../../lib/utils";
 
 //----------------------- 2 ----------------------
 //------------------- VARIABLES ------------------
@@ -70,11 +73,13 @@ var twochoice;
 var selfpaced;
 var orderfile = "./jsOrders/cMST_Imbal2_orders_1_1_1";
 var resp_mode = "button";
+var classic_graphics = false;
 var lang;
 var language;
 var include_consent;
 var include_demog;
 var include_pcon;
+var include_pairwise;
 var include_instr;
 var include_feedback;
 
@@ -84,6 +89,7 @@ var exptBlock1 = deepCopy(defaultBlockSettings);
 var consent_login_data;
 var demog_login_data;
 var pcon_login_data;
+var pairwise_login_data;
 var instr_login_data;
 var cont_login_data;
 
@@ -99,12 +105,14 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
   const [chooseStimset, setStimset] = useState("1");
   const [chooseSublist, setSublist] = useState("1");
   const [chooseRespmode, setRespmode] = useState("button");
+  const [classicGraphics, setClassicGraphics] = useState(false);
   const [chooseLang, setLang] = useState("English");
   const [chooseTwochoice, setTwochoice] = useState(false);
   const [chooseSelfpaced, setSelfpaced] = useState(false);
   const [includeConsent, setConsent] = useState(false);
   const [includeDemog, setDemog] = useState(false);
   const [includePcon, setPcon] = useState(false);
+  const [includePairwise, setPairwise] = useState(false);
   const [includeInstr, setInstr] = useState(false);
   const [includeFeedback, setFeedback] = useState(false);
   const [showExperimenterView, setShowExperimenterView] = useState(false); // Toggle for experimenter view
@@ -118,11 +126,13 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     const storedSublist = localStorage.getItem(`${studyId}_sublist`);
     const storedRespmode = localStorage.getItem(`${studyId}_respmode`);
     const storedLang = localStorage.getItem(`${studyId}_lang`);
+    const storedClassicGraphics = localStorage.getItem(`${studyId}_classicGraphics`);
     const storedTwochoice = localStorage.getItem(`${studyId}_twochoice`);
     const storedSelfpaced = localStorage.getItem(`${studyId}_selfpaced`);
     const storedConsent = localStorage.getItem(`${studyId}_consent`);
     const storedDemog = localStorage.getItem(`${studyId}_demog`);
     const storedPcon = localStorage.getItem(`${studyId}_pcon`);
+    const storedPairwise = localStorage.getItem(`${studyId}_pairwise`);
     const storedInstr = localStorage.getItem(`${studyId}_instr`);
     const storedFeedback = localStorage.getItem(`${studyId}_feedback`);
 
@@ -131,11 +141,13 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     setSublist(storedSublist || "1");
     setRespmode(storedRespmode || "button");
     setLang(storedLang || "English");
+    setClassicGraphics(storedClassicGraphics === "true");
     setTwochoice(storedTwochoice == "true");
     setSelfpaced(storedSelfpaced == "true");
     setConsent(storedConsent == "true");
     setDemog(storedDemog == "true");
     setPcon(storedPcon == "true");
+    setPairwise(storedPairwise == "true");
     setInstr(storedInstr == "true");
     setFeedback(storedFeedback == "true");
   }, [studyId]); // Only run this effect when studyId change
@@ -166,6 +178,9 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     resp_mode = chooseRespmode;
     console.log("respmode = " + chooseRespmode);
 
+    classic_graphics = classicGraphics;
+    console.log("classic graphics = " + classicGraphics);
+
     // [lang='']: Which language file? (default = English)
     if (chooseLang == "Spanish") {
       lang = require("../../language/omst_es.json");
@@ -175,6 +190,8 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
       lang = require("../../language/omst_cn.json");
     } else if (chooseLang == "Russian") {
       lang = require("../../language/omst_ru.json");
+    } else if (chooseLang == "Dutch") {
+      lang = require("../../language/omst_nl.json");
     } else {
       lang = require("../../language/omst_en.json");
     }
@@ -207,6 +224,9 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     include_pcon = includePcon;
     console.log("include pcon =" + includePcon);
 
+    include_pairwise = includePairwise;
+    console.log("include pairwise =" + includePairwise);
+
     include_instr = includeInstr;
     console.log("include instr =" + includeInstr);
 
@@ -227,17 +247,20 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
     refresh_instr_trials();
     refresh_cont_trials();
     refresh_pcon_trials();
+    refresh_pairwise_trials();
 
     // Save the user-selected options to localStorage
     localStorage.setItem(`${studyId}_stimset`, chooseStimset);
     localStorage.setItem(`${studyId}_sublist`, chooseSublist);
     localStorage.setItem(`${studyId}_respmode`, chooseRespmode);
+    localStorage.setItem(`${studyId}_classicGraphics`, classicGraphics);
     localStorage.setItem(`${studyId}_lang`, chooseLang);
     localStorage.setItem(`${studyId}_twochoice`, chooseTwochoice);
     localStorage.setItem(`${studyId}_selfpaced`, chooseSelfpaced);
     localStorage.setItem(`${studyId}_consent`, includeConsent);
     localStorage.setItem(`${studyId}_demog`, includeDemog);
     localStorage.setItem(`${studyId}_pcon`, includePcon);
+    localStorage.setItem(`${studyId}_pairwise`, includePairwise);
     localStorage.setItem(`${studyId}_instr`, includeInstr);
     localStorage.setItem(`${studyId}_feedback`, includeFeedback);
 
@@ -247,10 +270,12 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
       stimset: stim_set,
       sublist: sublist,
       respmode: resp_mode,
+      classicGraphics: classic_graphics,
       language: language,
       include_consent: include_consent,
       include_demog: include_demog,
       include_pcon: include_pcon,
+      include_pairwise: include_pairwise,
       include_instr: include_instr,
       include_feedback: include_feedback,
       twochoice: twochoice,
@@ -265,11 +290,15 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
         console.log("overwrite: login data at pcon");
         pcon_login_data = login_data;
         if (!include_pcon) {
-          console.log("overwrite: login data at instr");
-          instr_login_data = login_data;
-          if (!include_instr) {
-            console.log("overwrite: login data at cont");
-            cont_login_data = login_data;
+          console.log("overwrite: login data at pairwise");
+          pairwise_login_data = login_data;
+          if (!include_pairwise) {
+            console.log("overwrite: login data at instr");
+            instr_login_data = login_data;
+            if (!include_instr) {
+              console.log("overwrite: login data at cont");
+              cont_login_data = login_data;
+            }
           }
         }
       }
@@ -370,6 +399,22 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
                         <option value="Korean">한국인</option>
                         <option value="Chinese">中文</option>
                         <option value="Russian">Pyccкий</option>
+                        <option value="Dutch">Nederlands</option>
+                      </Form.Control>
+                    </Form.Group>
+                  </div>
+                </div>
+                <div className="graphics-options-container">
+                  <div className="graphics-options">
+                    <Form.Group controlId="graphics">
+                      <Form.Label>Graphics</Form.Label>
+                      <Form.Control
+                        as="select"
+                        value={classicGraphics}
+                        onChange={(e) => setClassicGraphics(e.target.value)}
+                      >
+                        <option value={false}>Neo</option>
+                        <option value={true}>Classic</option>
                       </Form.Control>
                     </Form.Group>
                   </div>
@@ -404,6 +449,16 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
                       label="Perceptual Control"
                       checked={includePcon}
                       onChange={(e) => setPcon(e.target.checked)}
+                    />
+                  </Form.Group>
+                </div>
+                <div className="checkbox-option">
+                  <Form.Group controlId="pairwise">
+                    <Form.Check
+                      type="checkbox"
+                      label="Pairwise Perceptual Control"
+                      checked={includePairwise}
+                      onChange={(e) => setPairwise(e.target.checked)}
                     />
                   </Form.Group>
                 </div>
@@ -492,7 +547,6 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
               </Form.Group>
               <Button
                 style={{ width: "100%" }}
-                block
                 size="lg"
                 type="submit"
                 disabled={participantId.length === 0 || studyId.length === 0}
@@ -525,6 +579,16 @@ function Login({ handleLogin, initialParticipantID, initialStudyID, validationFu
 }
 
 //----------------------- 5 ----------------------
+//------------------- PROP TYPES ------------------
+
+Login.propTypes = {
+  handleLogin: PropTypes.func.isRequired,
+  initialParticipantID: PropTypes.string,
+  initialStudyID: PropTypes.string,
+  validationFunction: PropTypes.func.isRequired,
+};
+
+//----------------------- 6 ----------------------
 //---------------------EXPORTS -------------------
 
 export {
@@ -532,11 +596,13 @@ export {
   stim_set,
   sublist,
   resp_mode,
+  classic_graphics,
   lang,
   language,
   include_consent,
   include_demog,
   include_pcon,
+  include_pairwise,
   include_instr,
   include_feedback,
   twochoice,
@@ -547,6 +613,7 @@ export {
   consent_login_data,
   demog_login_data,
   pcon_login_data,
+  pairwise_login_data,
   instr_login_data,
   cont_login_data,
 };

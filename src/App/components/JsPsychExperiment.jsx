@@ -32,13 +32,14 @@
 import { initJsPsych } from "jspsych";
 import React, { useEffect, useMemo, useRef } from "react";
 
+import PropTypes from "prop-types";
+
 import { config } from "../../config/main";
-import { initParticipant } from "../deployments/firebase";
 import { buildTimeline, jsPsychOptions } from "../../timelines/main";
 import { dataCalcFunction } from "../../trials/contOmst";
 import { pconDataCalcFunction } from "../../trials/pcon_demos";
 import { getFormattedDate } from "../../lib/utils";
-import { include_pcon } from "./Login";
+import { include_pcon, include_pairwise } from "./Login";
 
 //----------------------- 2 ----------------------
 //-------------------- JSPSYCH -------------------
@@ -64,15 +65,21 @@ function JsPsychExperiment({
     on_data_update: (data) => dataUpdateFunction(data),
     on_finish: (data) => {
       var pconsummary = null;
+      var pairwisesummary = null;
       if (include_pcon) {
         pconsummary = pconDataCalcFunction(data);
+      } else if (include_pairwise) {
+        pairwisesummary = pconDataCalcFunction(data);
       }
       const contsummary = dataCalcFunction(data);
-      const summary = { pconsummary, contsummary };
+      const summary = { pconsummary, pairwisesummary, contsummary };
       const end_date = getFormattedDate(new Date());
       dataUpdateFunction({ summary, end_date });
       const dataWithSummary = { ...data, summary, end_date };
-      dataFinishFunction(dataWithSummary);
+      console.log("type of dataWithSummary:", dataWithSummary);
+      console.log("type of data:", data);
+      console.log("type of data.get():", jsPsych.data.get());
+      dataFinishFunction(data);
     },
   };
 
@@ -82,9 +89,6 @@ function JsPsychExperiment({
     // Start date of the experiment - used as the UID
     // TODO 169: JsPsych has a built in timestamp function
     const startDate = new Date().toISOString();
-
-    // Write the initial record to Firestore
-    if (config.USE_FIREBASE) initParticipant(participantId, studyId, startDate);
 
     const jsPsych = initJsPsych(combinedOptions);
     // Add experiment properties into jsPsych directly
@@ -118,13 +122,20 @@ function JsPsychExperiment({
     return () => {
       window.removeEventListener("keyup", handleKeyEvent, true);
       window.removeEventListener("keydown", handleKeyEvent, true);
-      try {
-        jsPsych.endExperiment("Ended Experiment");
-      } catch (e) {
-        console.error("Experiment closed before unmount");
+      // Only end if the experiment is still running
+      if (jsPsych && typeof jsPsych.endExperiment === "function") {
+        try {
+          // Check if experiment is actually running before ending
+          if (jsPsych.data && jsPsych.data.get) {
+            jsPsych.endExperiment("Ended Experiment");
+          }
+        } catch {
+          // Silently catch if already ended - this is expected behavior
+          console.log("Experiment already ended");
+        }
       }
     };
-  });
+  }, []); // Empty dependency array ensures this runs only on mount and unmount.
 
   return (
     <div className="App">
@@ -134,6 +145,19 @@ function JsPsychExperiment({
 }
 
 //----------------------- 3 ----------------------
+//------------------- PROP TYPES ------------------
+
+JsPsychExperiment.propTypes = {
+  participantId: PropTypes.string.isRequired,
+  studyId: PropTypes.string.isRequired,
+  taskVersion: PropTypes.string.isRequired,
+  dataUpdateFunction: PropTypes.func.isRequired,
+  dataFinishFunction: PropTypes.func.isRequired,
+  height: PropTypes.string,
+  width: PropTypes.string,
+};
+
+//----------------------- 4 ----------------------
 //-------------------- EXPORTS -------------------
 
 export default JsPsychExperiment;

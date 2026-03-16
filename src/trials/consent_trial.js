@@ -12,6 +12,7 @@
 //        7/7/23 (AGH):  created not_consented for conditional timeline
 //        7/13/23 (AGH): added task data property to trials
 //        7/14/23 (AGH): added margin-vertical parameter to space buttons
+//        3/10/26 (GES): updated to allow modern graphics
 //
 //   --------------------
 //   This file creates a consent trial that displays a formatted
@@ -25,9 +26,11 @@
 //----------------------- 1 ----------------------
 //-------------------- IMPORTS -------------------
 
-import { lang } from "../App/components/Login";
 import jsPsychHtmlButtonResponse from "@jspsych/plugin-html-button-response";
 import jsPsychHtmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import { lang, classic_graphics, language } from "../App/components/Login";
+
+import { getDeviceType, setupButtonListeners, cleanupButtonListeners } from "../lib/utils";
 
 //----------------------- 2 ----------------------
 //----------------- HELPER METHODS ---------------
@@ -57,32 +60,78 @@ var irb_stim = function () {
 };
 
 var buttons = function () {
-  return [
-    '<div id="agreeButton">' + lang.consent.buttons.agree + "</div>",
-    '<div id="cancelButton">' + lang.consent.buttons.cancel + "</div>",
-  ];
+  return [lang.consent.buttons.agree, lang.consent.buttons.cancel];
 };
-
-//----------------------- 3 ----------------------
+///----------------------- 3 ----------------------
+//-------------------- CONSTANTS ------------------
+const device = getDeviceType();
+console.log("have device " + device);
+const smallScreen = device[2];
+console.log("smallScreen " + smallScreen);
+//----------------------- 4 ----------------------
 //--------------------- TRIALS -------------------
 
 // consent trial settup
 var consentGiven = null;
 
-var consent_trial = {
-  type: jsPsychHtmlButtonResponse,
-  stimulus: irb_stim,
-  choices: buttons,
-  margin_vertical: "20px",
-  data: { task: "consent" }, // add task name to data collection
-  on_finish: function (data) {
-    if (data.response == 0) {
-      consentGiven = true; //var used to run conditional timeline
-    } else {
-      consentGiven = false;
-    }
-  },
-};
+function createConsentTrial() {
+  const classicGraphics = JSON.parse(classic_graphics); // convert string to boolean
+  return {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: irb_stim,
+    choices: buttons,
+    margin_vertical: "20px",
+    data: { task: "consent" }, // add task name to data collection
+    on_load: function () {
+      setupButtonListeners();
+    },
+    on_finish: function (data) {
+      cleanupButtonListeners();
+      if (data.response == 0) {
+        consentGiven = true; //var used to run conditional timeline
+      } else {
+        consentGiven = false;
+      }
+    },
+    button_html: classicGraphics
+      ? [
+          `<div class="image-btn-wrapper" id="agreeButton"> 
+          <input type="image" src="./assets/blank_button.png"
+                class="image-btn">
+          <svg class="image-btn-text ${language}" viewBox="0 0 266 160">
+            <text x="50%" y="50%">%choice%</text>
+          </svg>
+        </div>`,
+
+          `<div class="image-btn-wrapper" id="cancelButton">
+          <input type="image" src="./assets/blank_button.png"
+                class="image-btn">
+          <svg class="image-btn-text ${language}" viewBox="0 0 266 160">
+            <text x="50%" y="50%">%choice%</text>
+          </svg>
+        </div>`,
+        ]
+      : [
+          `<div class="image-btn-wrapper" id="agreeButton">
+          <input type="image" src="./assets/blank_green.png"
+                class="image-btn">
+          <svg class="image-btn-text ${language}" viewBox="0 0 266 160">
+            <text class="text-stroke" x="50%" y="50%">%choice%</text>
+            <text class="text-fill" x="50%" y="50%">%choice%</text>
+          </svg>
+        </div>`,
+
+          `<div class="image-btn-wrapper" id="cancelButton">
+          <input type="image" src="./assets/blank_blue.png"
+                class="image-btn">
+          <svg class="image-btn-text ${language}" viewBox="0 0 266 160">
+            <text class="text-stroke" x="50%" y="50%">%choice%</text>
+            <text class="text-fill" x="50%" y="50%">%choice%</text>
+          </svg>
+        </div>`,
+        ],
+  };
+}
 
 // trial called in conditional timeline if participant does not consent
 var not_consented = {
@@ -97,4 +146,4 @@ var not_consented = {
 //----------------------- 4 ----------------------
 //-------------------- EXPORTS -------------------
 
-export { consent_trial, consentGiven, not_consented };
+export { createConsentTrial, consentGiven, not_consented };

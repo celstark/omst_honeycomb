@@ -20,7 +20,19 @@
 //   This file contains the general formatting for the app and some 
 //   selectors that format specific trials or pages.
 //
-/************************************************************************
+/************************************************************************/
+
+@font-face {
+  font-family: "Comic Relief";
+  src: url("../../public/assets/fonts/ComicRelief-Regular.woff2") format("woff2");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Comic Relief";
+  src: url("../../public/assets/fonts/ComicRelief-Bold.woff2") format("woff2");
+  font-weight: 700;
+}
 
 /*----------------------- 1 ----------------------*/
 /*-------------- GENERAL FORMATTING --------------*/
@@ -93,6 +105,14 @@ body,
   border-radius: 50%;
 }
 
+body {
+  background-color: #fff9e0 !important;
+}
+
+body.classic {
+  background-color: white !important;
+}
+
 /*----------------------- 2 ----------------------*/
 /*-------------- JSPSYCH FORMATTING---------------*/
 
@@ -139,18 +159,123 @@ body,
 }
 
 /* fonts and type */
- 
+
 .jspsych-display-element {
-  font-family: 'Open Sans', 'Arial', sans-serif;
+  font-family: "Open Sans", "Arial", sans-serif;
   font-size: 25px; /*changed from 18*/
   line-height: 1.6em;
 }
 
 /* Form elements like input fields and buttons */
 
-.jspsych-display-element input[type='text'] {
-  font-family: 'Open Sans', 'Arial', sans-serif;
+.jspsych-display-element input[type="text"] {
+  font-family: "Open Sans", "Arial", sans-serif;
   font-size: 14px;
+}
+
+.no-default-btn .jspsych-btn {
+  display: none !important;
+}
+
+/* Wrapper for radio + label */
+.radio-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+}
+
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: #fff8d6;
+  width: 22px;
+  height: 22px;
+  border: 3px solid #5d2b12;
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  margin: 0; /* remove default margin */
+}
+
+.classic input[type="radio"] {
+  background-color: white;
+  border-color: black;
+}
+
+/* Text label centered on radio button */
+input[type="radio"] + label,
+.radio-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  font-weight: bold;
+  color: #5d2b12;
+  pointer-events: none; /* allow clicking through to radio */
+  line-height: 1;
+  margin: 0;
+}
+
+.classic input[type="radio"] + label,
+.classic .radio-text {
+  color: black;
+}
+
+input[type="radio"]:checked::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  background: #5d2b12;
+  border-radius: 50%;
+}
+
+.classic input[type="radio"]:checked::after {
+  background: black;
+}
+
+.jspsych-display-element input[type="text"] {
+  height: 24px;
+  width: 240px;
+  font-size: 22px;
+  color: #5d2b12;
+  font-family: "Comic Relief", sans-serif;
+  border: 2px solid #5d2b12;
+  border-radius: 4px;
+  vertical-align: middle;
+  line-height: 1.2;
+}
+
+.classic .jspsych-display-element input[type="text"] {
+  font-family: "Open Sans", "Arial", sans-serif;
+  color: black;
+  border: 2px solid black;
+}
+
+.jspsych-display-element input[type="text"]:focus {
+  border: 2px solid #5d2b12;
+  border-color: #5d2b12;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.classic .jspsych-display-element input[type="text"]:focus {
+  border-color: black;
+}
+
+.jspsych-display-element input[type="text"]:focus-visible {
+  border: 2px solid #5d2b12;
+  border-color: #5d2b12;
+}
+
+.classic .jspsych-display-element input[type="text"]:focus-visible {
+  border-color: black;
 }
 
 /* borrowing Bootstrap style for btn elements, but combining styles a bit */
@@ -159,7 +284,7 @@ body,
   padding: 6px 12px;
   font-size: 30px;
   font-weight: 400;
-  font-family: 'Open Sans', 'Arial', sans-serif;
+  font-family: "Open Sans", "Arial", sans-serif;
   cursor: pointer;
   line-height: 1.4;
   text-align: center;
@@ -187,6 +312,113 @@ body,
   color: #aaa;
   border-color: #ccc;
   cursor: not-allowed;
+}
+
+.image-btn-wrapper {
+  display: inline-block;
+  position: relative;
+  margin: 0.5em;
+  margin-top: 20px !important;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.image-btn-wrapper.pressed .image-btn-text {
+  transform: translate(-50%, -40%);
+}
+
+.classic .image-btn-wrapper.pressed .image-btn-text {
+  transform: translate(-50%, -50%) !important;
+}
+
+.classic .image-btn-wrapper.pressed {
+  filter: brightness(85%);
+}
+
+.image-btn {
+  width: 15vw;
+  height: 10vw;
+  border: none;
+  display: block;
+  /* Remove tap highlight */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+  /* Remove touch delay */
+  touch-action: manipulation;
+
+  /* Prevent text selection */
+  -webkit-user-select: none;
+  user-select: none;
+
+  /* Prevent callout menu on long press */
+  -webkit-touch-callout: none;
+}
+
+.smallScreen .image-btn {
+  width: 15vw !important;
+  height: 10vw;
+}
+
+.image-btn-text {
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  width: 100%;
+  height: auto;
+}
+
+.classic .image-btn-text {
+  top: 50%;
+}
+
+.image-btn-text text {
+  font-family: "Comic Relief", sans-serif;
+  font-size: 2.6em;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.classic .image-btn-text text {
+  font-family: "Open Sans", "Arial", sans-serif;
+  letter-spacing: normal;
+  font-weight: normal;
+}
+
+.image-btn-text .text-stroke {
+  fill: none;
+  stroke: #5d2b12;
+  stroke-width: 10;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.image-btn-text .text-fill {
+  fill: #fff8d6;
+  stroke: none;
+}
+
+.image-btn-text.demo text {
+  font-size: 1.6em;
+}
+
+.prompt_text {
+  font-family: "Comic Relief", system-ui;
+  color: #5d2b12;
+  font-weight: normal;
+  line-height: 1.2;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+.classic .prompt_text {
+  font-family: "Open Sans", "Arial", sans-serif;
+  color: black;
 }
 
 /* jsPsych progress bar */
@@ -295,6 +527,26 @@ body,
   text-align: center;
 }
 
+.graphics-options-container {
+  display: flex;
+  gap: 50px;
+}
+
+.graphics-options {
+  display: flex;
+  gap: 50px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.graphics-options select {
+  width: 150px;
+}
+
+.graphics-options select option {
+  text-align: center;
+}
+
 .checkboxes-container {
   display: flex;
   gap: 6px;
@@ -314,15 +566,16 @@ body,
   top: 10px;
   left: 10px;
   background-color: transparent;
-  border-color: #ccc;
+  border-color: #666666;
   align-items: left;
+  color: #666666;
 }
 
 /*----------------------- 4 ----------------------*/
 /*----------------- CONSENT FORM -----------------*/
 
 #consenttext {
-  font-family: 'Open Sans', 'Arial', sans-serif;
+  font-family: "Open Sans", "Arial", sans-serif;
   text-align: left;
   font-size: 18px;
   color: #666;
@@ -333,7 +586,7 @@ body,
 
 #consenttext li,
 ul {
-  font-family: 'Open Sans', 'Arial', sans-serif;
+  font-family: "Open Sans", "Arial", sans-serif;
   text-align: left;
   font-size: 20px;
   color: #666;
@@ -342,15 +595,10 @@ ul {
 
 #agreeButton,
 #cancelButton {
-  color: #555;
-  font-size: 16px;
+  font-size: 0.5em;
   font-weight: bold;
-  background-color: #ccc;
-  border: solid 4px #ddd;
-  border-radius: 4px;
   padding: 0.5em 2em;
 }
-
 
 /*----------------------- 5 ----------------------*/
 /*----------------- DEMOGRAPHICS -----------------*/
@@ -372,5 +620,3 @@ ul {
   font-size: 18px;
   line-height: 1.6em;
 }
-
-

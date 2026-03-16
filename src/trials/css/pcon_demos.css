@@ -1,0 +1,49 @@
+.pcon-demos .image-btn-text text {
+  font-size: 1.5em;
+}
+
+.pcon-demos .image-btn-text.Korean text {
+  font-size: 1.4em;
+}
+
+.pcon-demos .image-btn-text.Russian text {
+  font-size: 1.1em;
+}
+
+.pcon-demos .image-btn-text.Dutch text {
+  font-size: 1em;
+}
+
+.classic .pcon-demos .image-btn-text.Dutch text,
+.classic .pcon-demos .image-btn-text.Russian text,
+.classic .pcon-demos .image-btn-text.Korean text {
+  font-size: 1.5em;
+}
+
+.smallScreen.pcon-demos .jspsych-categorize-image-buttons-stimulus {
+  width: 30vw;
+}
+
+.pcon-demos #jspsych-animation-image {
+  width: 30vw;
+  height: auto;
+}
+
+.smallScreen .pcon-demos #jspsych-animation-image {
+  width: 35vw;
+}
+
+.jspsych-content.pcon-demos {
+  height: 100svh;
+  width: 100svw;
+  justify-content: center !important;
+  align-content: center;
+}
+
+.jspsych-content.pcon-demos:not(.ready) {
+  visibility: hidden !important;
+}
+
+.jspsych-content.ready.pcon-demos {
+  visibility: visible !important;
+}

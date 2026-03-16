@@ -9,6 +9,7 @@
 //        7/10/23 (AGH): initial code converted from end.html
 //        7/13/23 (AGH): added task data property
 //        10/29/23 (CELS): Lets this actually end after 1s
+//        3/10/26 (GES): updated to allow modern graphics
 //
 //   --------------------
 //   This trial displayed the end thank you message at the conclusion
@@ -29,7 +30,7 @@ import { lang } from "../App/components/Login";
 var end_message = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: function () {
-    return lang.end.ty;
+    return `<p class="prompt_text">${lang.end.ty}</p>`;
   },
   trial_duration: 1000,
   response_ends_trial: true,

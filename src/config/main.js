@@ -21,9 +21,9 @@
 
 import { initJsPsych } from "jspsych";
 import { init } from "@brown-ccv/behavioral-task-trials";
+import _ from "lodash";
 import { getProlificId } from "../lib/utils";
 import packageInfo from "../../package.json";
-import _ from "lodash";
 
 //----------------------- 2 ----------------------
 //--------------- HONEYCOMB CONFIGS --------------
@@ -57,12 +57,11 @@ const turkUniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`; // ID of t
 let USE_ELECTRON = true;
 try {
   window.require("electron");
-} catch (error) {
+} catch {
   USE_ELECTRON = false;
 }
 
 const USE_PROLIFIC = (getProlificId() && !USE_MTURK) || false; // Whether or not the experiment is running with Prolific
-const USE_FIREBASE = process.env.REACT_APP_FIREBASE === "true"; // Whether or not the experiment is running in Firebase (web app)
 
 const USE_VOLUME = process.env.REACT_APP_VOLUME === "true"; // whether or not to ask the participant to adjust the volume
 const USE_CAMERA = process.env.REACT_APP_VIDEO === "true" && USE_ELECTRON; // whether or not to enable video
@@ -90,7 +89,6 @@ const config = init({
   USE_VOLUME,
   USE_CAMERA,
   USE_PROLIFIC,
-  USE_FIREBASE,
 });
 
 //----------------------- 3 ----------------------
@@ -113,7 +111,7 @@ try {
     // Override default task settings with settings from the config file
     require("./config.json")
   );
-} catch (error) {
+} catch {
   // Try will fail if require doesn't find the json file
   console.warn("Unable to load task settings from config.json");
 }

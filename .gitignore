@@ -5,6 +5,7 @@
 Brewfile.lock.json
 /.pnp
 .pnp.js
+.vite
 
 # Testing
 /coverage
@@ -23,10 +24,8 @@ Brewfile.lock.json
 
 # Versioning
 public/config/version.json
+public/version.json
 Brewfile.lock.json
-
-# Firebase private key
-**/firebase-service-account.json
 
 # Live data
 **/participant_responses
