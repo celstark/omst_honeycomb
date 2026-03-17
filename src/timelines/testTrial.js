@@ -40,7 +40,7 @@ import { config } from "../config/main";
 import { stim_set, selfpaced, orderfile, resp_mode } from "../App/components/Login";
 
 // default settings for a contOmst trial
-import { keyContTrial, buttonContTrial, preloadContTrial } from "../trials/trialCont";
+import { keyContTrial, buttonContTrial } from "../trials/trialCont";
 
 //----------------------- 2 ----------------------
 //-------------------- TIMELINE ------------------

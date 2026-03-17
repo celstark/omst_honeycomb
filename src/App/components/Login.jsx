@@ -51,7 +51,6 @@ import Form from "react-bootstrap/Form";
 
 import PropTypes from "prop-types";
 
-import { set } from "lodash";
 import { deepCopy, getFormattedDate } from "../../lib/utils";
 
 import { writeOrderfile, loadOrderfile } from "../../config/cont";

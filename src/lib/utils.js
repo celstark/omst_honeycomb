@@ -451,10 +451,6 @@ function cleanupButtonListeners() {
 function getDeviceType() {
   const width = window.innerWidth;
   const height = window.innerHeight;
-  const isPortrait = height > width;
-
-  // Calculate aspect ratio (always longer side / shorter side)
-  const aspectRatio = Math.max(width, height) / Math.min(width, height);
 
   const screenSize = Math.max(width, height);
   const laptop = [false, false, true];

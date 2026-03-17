@@ -46,7 +46,6 @@ import {
 } from "../lib/utils";
 
 import "./css/pcon_demos.css";
-import { preload } from "react-dom";
 
 //----------------------- 2 ----------------------
 //----------------- HELPER METHODS ---------------

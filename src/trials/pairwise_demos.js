@@ -21,7 +21,7 @@ import jsPsychCanvasKeyboardResponse from "@jspsych/plugin-canvas-keyboard-respo
 import jsPsychCanvasButtonResponse from "@jspsych/plugin-canvas-button-response";
 import jsPsychPreload from "@jspsych/plugin-preload";
 
-import { lang, resp_mode, classic_graphics, language } from "../App/components/Login";
+import { lang, resp_mode, classic_graphics } from "../App/components/Login";
 import {
   images,
   invNormcdf,
@@ -36,7 +36,6 @@ import {
 } from "../lib/utils";
 
 import "./css/pcon_demos.css";
-import { preload } from "react-dom";
 
 //----------------------- 2 ----------------------
 //----------------- HELPER METHODS ---------------
@@ -262,7 +261,6 @@ function makeSideBySideChoice(
       const imgR = new Image();
 
       // Star and brain setup
-      const totalStars = 5;
       const maxFill = 10; // star1–star10
       const starSize = Math.min(width, height) * 0.15;
       const spacing = starSize * 0.25;

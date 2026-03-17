@@ -5,7 +5,6 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
 
 import { config, taskVersion, turkUniqueId } from "../config/main";
-import { getProlificId } from "../lib/utils";
 import JsPsychExperiment from "./components/JsPsychExperiment";
 import { Login } from "./components/Login";
 

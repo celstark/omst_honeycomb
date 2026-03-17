@@ -24,14 +24,9 @@
 //----------------------- 1 ----------------------
 //-------------------- IMPORTS -------------------
 
-import jsPsychImageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
 import jsPsychCanvasButtonResponse from "@jspsych/plugin-canvas-button-response";
 import jsPsychCanvasKeyboardResponse from "@jspsych/plugin-canvas-keyboard-response";
 
-import $ from "jquery";
-
-//import { resp_mode } from '../trials/selectRespType';
-import { preload } from "react-dom";
 import { lang, resp_mode, classic_graphics, language } from "../App/components/Login";
 import {
   getDeviceType,

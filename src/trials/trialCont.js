@@ -215,7 +215,6 @@ export function keyContTrial(config, options) {
       const height = c.height;
       const stimImg = new Image();
       const stimPath = image();
-      const totalStars = stars_12 ? 12 : 6;
       const maxFill = 10; // star1–star10
       const starSize = Math.min(width, height) * 0.15;
       const spacing = starSize * 0.25;
@@ -468,7 +467,6 @@ export function buttonContTrial(config, options) {
       const stimPath = image();
       console.log("Loading image from path:", stimPath);
       console.log("Image value:", image);
-      const totalStars = stars_12 ? 12 : 6;
       const maxFill = 10; // star1–star10
       const starSize = Math.min(width, height) * 0.15;
       const spacing = starSize * 0.25;
@@ -478,7 +476,6 @@ export function buttonContTrial(config, options) {
 
       function drawScene() {
         // === Progress info (stars/brain) ===
-        const progress = num_correct;
         let textBounds;
         let promptFontSize;
 

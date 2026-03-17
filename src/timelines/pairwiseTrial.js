@@ -23,7 +23,6 @@ import jsPsychImageButtonResponse from "@jspsych/plugin-html-button-response";
 import jsPsychHtmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
 import { config } from "../config/main";
-import { images, getDeviceType } from "../lib/utils";
 
 import { lang, resp_mode } from "../App/components/Login";
 

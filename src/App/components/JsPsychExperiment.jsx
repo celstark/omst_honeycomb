@@ -34,7 +34,6 @@ import React, { useEffect, useMemo, useRef } from "react";
 
 import PropTypes from "prop-types";
 
-import { config } from "../../config/main";
 import { buildTimeline, jsPsychOptions } from "../../timelines/main";
 import { dataCalcFunction } from "../../trials/contOmst";
 import { pconDataCalcFunction } from "../../trials/pcon_demos";
@@ -86,10 +85,6 @@ function JsPsychExperiment({
   // Create the instance of jsPsych that we'll reuse within the scope of this JsPsychExperiment component.
   // As of jspsych 7, we create our own jspsych instance(s) where needed instead of importing one global instance.
   const jsPsych = useMemo(() => {
-    // Start date of the experiment - used as the UID
-    // TODO 169: JsPsych has a built in timestamp function
-    const startDate = new Date().toISOString();
-
     const jsPsych = initJsPsych(combinedOptions);
     // Add experiment properties into jsPsych directly
     jsPsych.data.addProperties({

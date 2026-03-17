@@ -25,7 +25,6 @@ import jsPsychCanvasKeyboardResponse from "@jspsych/plugin-canvas-keyboard-respo
 
 //import { resp_mode } from '../trials/selectRespType';
 import { lang, resp_mode } from "../App/components/Login";
-import { getDeviceType } from "../lib/utils";
 
 import { makeSideBySideChoice } from "./pairwise_demos";
 
